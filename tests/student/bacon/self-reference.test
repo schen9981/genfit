@@ -1,0 +1,13 @@
+INPUT
+mdb data/bacon/baconTesting.sqlite3
+connect "a" "a"
+connect "ac   b" "ac   b"
+connect "ba   ad     cd  daa" "ba   ad     cd  daa"
+connect "ab cbb" "ab cbb"
+OUTPUT
+db set to data/bacon/baconTesting.sqlite3
+a -> a : movie1
+ac   b -> ac   b :     movie 3
+ba   ad     cd  daa -> ba   ad     cd  daa : movie 7  
+ab cbb -> ab cbb : movie    5   
+END

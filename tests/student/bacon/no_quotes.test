@@ -1,0 +1,12 @@
+INPUT
+mdb data/bacon/baconTesting.sqlite3
+connect a a
+connect a "a
+connect a" a
+connect "a" a
+connect "a "a
+connect "a " a"
+OUTPUT
+db set to data/bacon/baconTesting.sqlite3
+ERROR:
+END

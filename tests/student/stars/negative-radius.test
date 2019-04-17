@@ -1,0 +1,7 @@
+INPUT
+stars data/stars/integer-coordinate-stars.csv
+radius -0.0001 31 -5.31 2
+OUTPUT
+Read 6 stars from data/stars/integer-coordinate-stars.csv
+ERROR:
+END

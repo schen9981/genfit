@@ -1,0 +1,8 @@
+INPUT
+mdb data/bacon/baconTestingsqlite3
+mdb data/bacon/aconTesting.sqlite3
+mdb data/bacon/baconTesing.sqlite3
+mdb data/bacon/baconTesting.sqlite
+OUTPUT
+ERROR:
+END

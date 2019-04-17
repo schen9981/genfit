@@ -1,0 +1,6 @@
+INPUT
+stars data/stars/extra-header-comma.csv
+stars data/stars/extra-comma-star.csv
+OUTPUT
+ERROR:
+END

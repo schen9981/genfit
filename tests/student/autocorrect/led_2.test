@@ -1,0 +1,21 @@
+INPUT
+corpus data/autocorrect/short-file2.txt
+smart off
+prefix off
+whitespace off
+led
+led 2
+led
+ac a
+ac abc a
+OUTPUT
+corpus data/autocorrect/short-file2.txt added
+led 0
+led 2
+ac a
+aa
+abc
+ac abc a
+abc abc
+abc aa
+END

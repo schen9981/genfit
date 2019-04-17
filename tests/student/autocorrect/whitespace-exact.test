@@ -1,0 +1,19 @@
+INPUT
+corpus data/autocorrect/whitespace.txt
+whitespace on
+whitespace
+ac    whitespace
+ac     white
+ac    ROCK . #  whitespace
+OUTPUT
+corpus data/autocorrect/whitespace.txt added
+whitespace on
+ac    whitespace
+whitespace
+white space
+ac     white
+white
+ac    ROCK . #  whitespace
+rock whitespace
+rock white space
+END

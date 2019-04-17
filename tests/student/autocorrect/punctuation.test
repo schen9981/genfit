@@ -1,0 +1,18 @@
+INPUT
+corpus data/autocorrect/punctuation-file.txt
+prefix on
+prefix
+ac rock     
+ac hel
+ac hello hel
+OUTPUT
+corpus data/autocorrect/punctuation-file.txt added
+prefix on
+ac rock     
+ac hel
+hello
+hellor
+ac hello hel
+hello hellor
+hello hello
+END

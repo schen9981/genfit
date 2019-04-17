@@ -1,0 +1,20 @@
+INPUT
+ac hello
+corpus data/autocorrect/short-file.txt
+ac hello
+ac hel
+prefix on
+ac hel
+ac rock
+OUTPUT
+ERROR:
+corpus data/autocorrect/short-file.txt added
+ac hello
+hello
+ac hel
+ac hel
+hello
+ac rock
+rock
+rockefeller
+END

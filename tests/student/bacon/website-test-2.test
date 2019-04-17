@@ -1,0 +1,7 @@
+INPUT
+mdb data/bacon/bacon.sqlite3
+connect "David S. Howard" "Sigourney Weaver"
+OUTPUT
+db set to data/bacon/bacon.sqlite3
+David S. Howard -/- Sigourney Weaver
+END

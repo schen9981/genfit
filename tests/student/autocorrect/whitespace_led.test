@@ -1,0 +1,25 @@
+INPUT
+corpus data/autocorrect/short-file3.txt
+smart off
+prefix off
+whitespace on
+led
+led 2
+led
+whitespace
+ac          who is rockEfeller
+ac what is rock
+ac what is rock.
+OUTPUT
+corpus data/autocorrect/short-file3.txt added
+led 0
+led 2
+whitespace on
+ac          who is rockEfeller
+who is rockefeller
+who is rock efeller
+ac what is rock
+what is rock
+what is rocker
+ac what is rock.
+END

@@ -1,0 +1,14 @@
+INPUT
+corpus data/autocorrect/dictionary.txt
+corpus data/autocorrect/sherlock.txt
+corpus data/autocorrect/split.txt
+corpus data/autocorrect/Split.txt
+corpus data/autocorrect/nonexistent_corpus.txt
+corpus data/autocorrect/sherlock.txt
+OUTPUT
+corpus data/autocorrect/dictionary.txt added
+corpus data/autocorrect/sherlock.txt added
+corpus data/autocorrect/split.txt added
+ERROR:
+corpus data/autocorrect/sherlock.txt added
+END

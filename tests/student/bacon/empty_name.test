@@ -1,0 +1,7 @@
+INPUT
+mdb data/bacon/baconTesting.sqlite3
+connect "a" ""
+OUTPUT
+db set to data/bacon/baconTesting.sqlite3
+a -/- 
+END

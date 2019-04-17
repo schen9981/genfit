@@ -1,0 +1,16 @@
+INPUT
+stars data/stars/stardata.csv
+neighbors 10 10 10 10
+OUTPUT
+Read 119617 stars from data/stars/stardata.csv
+15328
+118186
+118177
+118124
+118232
+118143
+118215
+13341
+118203
+118120
+END

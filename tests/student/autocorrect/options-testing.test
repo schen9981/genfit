@@ -1,0 +1,22 @@
+INPUT
+prefix on
+led 1
+lad 1
+prefix
+led
+smart off
+smart
+smart on
+smart
+whitespace on
+whiespace off
+whitespace
+OUTPUT
+ERROR:
+prefix on
+led 1
+smart off
+smart on
+ERROR:
+whitespace on
+END

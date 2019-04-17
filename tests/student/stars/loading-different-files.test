@@ -1,0 +1,32 @@
+INPUT
+stars data/stars/integer-coordinate-stars.csv
+neighbors 6 "origin"
+stars data/stars/stardata.csv
+neighbors 10 0 0 0
+radius -123 135 3 4
+stars data/stars/ten-star.csv
+neighbors 25.21 5 2 4
+neighbors -4 53.531 35.31 -87.54
+OUTPUT
+Read 6 stars from data/stars/integer-coordinate-stars.csv
+4
+2
+3
+6
+5
+Read 119617 stars from data/stars/stardata.csv
+0
+70667
+71454
+71457
+87666
+118721
+53879
+118080
+118081
+118442
+ERROR:
+Read 10 stars from data/stars/ten-star.csv
+ERROR:
+ERROR:
+END

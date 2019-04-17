@@ -1,0 +1,7 @@
+INPUT
+stars data/stars/integer-coordinate-stars.csv
+neighbors -1 0.5 0.5 0.5
+OUTPUT
+Read 6 stars from data/stars/integer-coordinate-stars.csv
+ERROR:
+END

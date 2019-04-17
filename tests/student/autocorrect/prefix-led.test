@@ -1,0 +1,30 @@
+INPUT
+corpus data/autocorrect/short-file4.txt
+prefix on
+prefix
+led
+led 2
+led
+ac whitespace version why COR         
+ac why COR
+ac CORRECT
+ac corkSCRew COriandER
+OUTPUT
+corpus data/autocorrect/short-file4.txt added
+prefix on
+led 0
+led 2
+ac whitespace version why COR         
+ac why COR
+why cor
+why corkscrew
+why cork
+why coriander
+why coriandersss
+ac CORRECT
+corrects
+tocorrect
+ac corkSCRew COriandER
+corkscrew coriander
+corkscrew coriandersss
+END
