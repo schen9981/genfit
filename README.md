@@ -57,3 +57,5 @@
 - [Mockup on Figma](https://www.figma.com/file/VXuln8CeXR70erBGeT1cFEJG/32-Project?node-id=0%3A1)
 - [Division of Labor / Timeline](https://docs.google.com/spreadsheets/d/1OWN33CeNc16XW-X88Psd4T2QJL3-ilRwOdC75Dx58dA/edit?usp=sharing)
 - [Design Presentation](https://docs.google.com/presentation/d/1zviuVzl7re2qmiTrRVGFfFSP_NIPcYs-lZduGGlGM2o/edit#slide=id.p)
+- [Database Specification](https://docs.google.com/document/d/1256H5GzGamovqu-EbeSGyK4_aDTekuVUkRvaVERIX44/edit?usp=sharing)
+- [Suggestion Algorithm](https://docs.google.com/document/d/1PP5dOV2Om5WxliSHFPjgrVw0VMiaq0QQqpl7k3li2Fs/edit?usp=sharing)
