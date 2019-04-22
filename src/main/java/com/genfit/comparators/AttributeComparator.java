@@ -4,5 +4,10 @@ import com.genfit.attribute.Attribute;
 
 import java.util.Comparator;
 
-public interface AttributeComparator<T extends Attribute> extends Comparator<T> {
+/**
+ * Generic Comparator for attributes.
+ *
+ * @param <T> Type that extends attribute
+ */
+interface AttributeComparator<T extends Attribute> extends Comparator<T> {
 }
