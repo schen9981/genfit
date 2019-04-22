@@ -4,7 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.genfit.attribute.Attribute;
+import com.genfit.attribute.ColorAttribute;
+import com.genfit.attribute.FormalityAttribute;
+import com.genfit.attribute.PatternAttribute;
+import com.genfit.attribute.TypeAttribute;
 import com.genfit.attribute.WeatherAttribute;
+import com.genfit.attribute.attributevals.Color;
+import com.genfit.attribute.attributevals.FormalityEnum;
+import com.genfit.attribute.attributevals.PatternEnum;
+import com.genfit.attribute.attributevals.TypeEnum;
+import com.genfit.attribute.attributevals.WeatherEnum;
 
 /**
  * Abstract class that wraps all the attribute/properties 
@@ -28,7 +37,7 @@ public abstract class ClosetComponent {
 	 * @param type - enum for type property
 	 */
 	public ClosetComponent(WeatherEnum weather, FormalityEnum formality, 
-			PatternEnum pattern, ColorEnum color, TypeEnum type) {
+			PatternEnum pattern, Color color, TypeEnum type) {
 		this.weather = new WeatherAttribute(weather);
 		this.formality = new FormalityAttribute(formality);
 		this.pattern = new PatternAttribute(pattern);
