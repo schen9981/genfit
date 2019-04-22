@@ -3,13 +3,16 @@ package com.genfit.suggester;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.genfit.attribute.Attribute;
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
 import com.genfit.attribute.WeatherAttribute;
+import com.genfit.clothing.Item;
 import com.genfit.clothing.Outfit;
+import com.genfit.database.DatabaseQueries;
 
 /**
  * Utility class that suggests new outfits based on suggested attributes.
@@ -29,26 +32,42 @@ public class OutfitSuggester {
    * 		to a list of values for the attributes
    * @return list of outfits to suggest
    */
-  private List<Outfit> suggestOutfits(Map<Class, List<Attribute>> attr) {
-	  List<Outfit> suggestions = new ArrayList<>();
+  public List<Outfit> suggestOutfits(Map<Class, List<Attribute>> attr) {
 	  
-	  // attribute values for weather
-	  List<Attribute> weather = attr.get(WeatherAttribute.class);
-	  // attribute values for formality
-	  List<Attribute> formality = attr.get(FormalityAttribute.class);
-	  // attribute values for pattern
-	  List<Attribute> pattern = attr.get(PatternAttribute.class);
-	  // attribute values for color
-	  List<Attribute> color = attr.get(ColorAttribute.class);
+	  // get the class that has the minimum number of attributes to query
+	  Class classToQuery = minAttrToQuery(attr);
 	  
-	  // find which list of attributes is the smallest, query on that one
+	  // create set of all other classes to query on (exclude min)
+	  Set<Class> otherClasses = attr.keySet();
+	  otherClasses.remove(classToQuery);
 	  
-	  // query database for all items that have that attribute
+	  // get list of items that have matching attributes of smallest query
+	  List<Item> match = DatabaseQueries.getItemsOfAttribute(attr.get(classToQuery));
 	  
 	  // sort through for the other attributes
+	  // TODO: write method for sorting through other attributes.
 	  
-	  // output suggestions
-	  
+	  List<Outfit> suggestions = new ArrayList<>();
 	  return suggestions;
   }
+  
+  /**
+   * Method that determines which class contains the minimum number of attributes.
+   * @param attr - map of attributes
+   * @return minimum class
+   */
+  public static Class minAttrToQuery(Map<Class, List<Attribute>> attr) {
+	  Class minClass = null;
+	  int minSize = Integer.MAX_VALUE;
+	  for (Class c : attr.keySet()) {
+		  int size = attr.get(c).size();
+		  if (size < minSize) {
+			  minSize = size;
+			  minClass = c;
+		  }
+	  }
+	  return minClass;
+  }
+  
+  
 }
