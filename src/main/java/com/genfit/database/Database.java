@@ -13,34 +13,39 @@ import com.genfit.clothing.Outfit;
 import com.genfit.proxy.ItemProxy;
 import com.genfit.proxy.OutfitProxy;
 import com.genfit.users.User;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
-public class DatabaseQueries {
+public class Database {
   Connection conn;
-
   private final String getUserInfoSQL = "SELECT * FROM user WHERE email=?;";
   private final String getItemInfoSQL = "SELECT * FROM item WHERE id=?;";
   private final String getOutfitInfoSQL = "SELECT * FROM outfit WHERE id=?;";
 //  private final String getItemsByUserIDSQL = "SELECT * FROM user_item,item WHERE user_item.user_id=? AND user_item.item_id=item.id;";
   private final String getItemsByUserIDSQL = "SELECT * FROM user_item WHERE user_id=?;";
   private final String getOutfitsByUserIDSQL = "SELECT * FROM user_outfit WHERE user_id=?;";
-
   private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
   private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
-
   private PreparedStatement getAllItemsByAttributesPrep;
 
+  private LoadingCache<String, User> userCache;
+  private LoadingCache<String, Item> itemCache;
+  private LoadingCache<String, Outfit> outfitCache;
 
-  public DatabaseQueries(Connection conn) {
+
+
+  public Database(Connection conn) {
     try {
       this.conn = conn;
       getUserInfoPrep = conn.prepareStatement(getUserInfoSQL);
@@ -49,8 +54,61 @@ public class DatabaseQueries {
       getItemsByUserIDPrep = conn.prepareStatement(getItemsByUserIDSQL);
       getOutfitsByUserIDPrep = conn.prepareStatement(getOutfitsByUserIDSQL);
     } catch (SQLException e) {
-
+      System.out.println("ERROR: SQLExeception when prepare statement" +
+          "in Database constructor");
     }
+    this.instantiateCacheLoader();
+  }
+
+
+  private void instantiateCacheLoader() {
+    final int maxSize = 10000;
+    final int expire =10;
+
+    this.userCache = CacheBuilder.newBuilder()
+        .maximumSize(maxSize)
+        .expireAfterWrite(expire, TimeUnit.MINUTES)
+        .build(
+            new CacheLoader<String, User>() {
+              @Override
+              public User load(String key) throws Exception {
+                return getUserInfo(key);
+              }
+            });
+
+    this.itemCache = CacheBuilder.newBuilder()
+        .maximumSize(maxSize)
+        .expireAfterWrite(expire, TimeUnit.MINUTES)
+        .build(
+            new CacheLoader<String, Item>() {
+              @Override
+              public Item load(String key) throws Exception {
+                return getItemInfo(key);
+              }
+            });
+
+    this.outfitCache = CacheBuilder.newBuilder()
+        .maximumSize(maxSize)
+        .expireAfterWrite(expire, TimeUnit.MINUTES)
+        .build(
+            new CacheLoader<String, Outfit>() {
+              @Override
+              public Outfit load(String key) throws Exception {
+                return getOutfitInfo(key);
+              }
+            });
+  }
+
+  public User getUserBean(String email) throws Exception {
+    return this.userCache.get(email);
+  }
+
+  public Item getItemBean(String id) throws Exception {
+    return this.itemCache.get(id);
+  }
+
+  public Outfit getOutfitBean(String id) throws Exception {
+    return this.outfitCache.get(id);
   }
 
   public User getUserInfo(String email) throws SQLException {
@@ -74,6 +132,8 @@ public class DatabaseQueries {
     PatternEnum pattern = PatternEnum.values()[rs.getInt(6)];
     WeatherEnum weather = WeatherEnum.values()[rs.getInt(7)];
     rs.close();
+
+    // TODO: How to instantiate Item of specific type
     return new Boots(weather, formality, pattern, color, type);
   }
 

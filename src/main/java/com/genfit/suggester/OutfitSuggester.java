@@ -6,13 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.genfit.attribute.Attribute;
-import com.genfit.attribute.ColorAttribute;
-import com.genfit.attribute.FormalityAttribute;
-import com.genfit.attribute.PatternAttribute;
-import com.genfit.attribute.WeatherAttribute;
 import com.genfit.clothing.Item;
 import com.genfit.clothing.Outfit;
-import com.genfit.database.DatabaseQueries;
+import com.genfit.database.Database;
 
 /**
  * Utility class that suggests new outfits based on suggested attributes.
@@ -42,7 +38,7 @@ public class OutfitSuggester {
 	  otherClasses.remove(classToQuery);
 	  
 	  // get list of items that have matching attributes of smallest query
-	  List<Item> match = DatabaseQueries.getItemsOfAttribute(attr.get(classToQuery));
+	  List<Item> match = Database.getItemsOfAttribute(attr.get(classToQuery));
 	  
 	  // sort through for the other attributes
 	  // TODO: write method for sorting through other attributes.
