@@ -25,7 +25,7 @@ public class Wardrobe {
 	 */
 	public void addOutfit(Outfit o) {
 		outfits.add(o);
-		items.addAll(o.getItems());
+		items.addAll(o.getItems().values());
 	}
 	
 	/**

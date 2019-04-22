@@ -3,9 +3,10 @@ package com.genfit.suggester;
 import com.genfit.clothing.Outfit;
 
 /**
- * Utility class that suggests new outfits given a partial outfit.
+ * Utility class that suggests new outfits based on suggested attributes.
  */
 public class OutfitSuggester {
+	
   /**
    * Private constructor for utility class.
    */
