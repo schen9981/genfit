@@ -1,8 +1,13 @@
 package com.genfit.database;
 
 import com.genfit.attribute.Attribute;
+import com.genfit.attribute.attributevals.AttributeEnum;
 import com.genfit.attribute.attributevals.Color;
+import com.genfit.attribute.attributevals.FormalityEnum;
+import com.genfit.attribute.attributevals.PatternEnum;
+import com.genfit.attribute.attributevals.TypeEnum;
 import com.genfit.attribute.attributevals.WeatherEnum;
+import com.genfit.clothing.Boots;
 import com.genfit.clothing.Item;
 import com.genfit.clothing.Outfit;
 import com.genfit.proxy.ItemProxy;
@@ -15,7 +20,9 @@ import java.sql.ResultSet;
 import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DatabaseQueries {
   Connection conn;
@@ -61,31 +68,48 @@ public class DatabaseQueries {
     ResultSet rs = getItemInfoPrep.executeQuery();
     rs.next();
     String name = rs.getString(2);
-    int type = rs.getInt(3);
-    int formality = rs.getInt(4);
-    int color = Integer.parseInt(rs.getString(5), 16);
-    int pattern = rs.getInt(6);
-    int weather = rs.getInt(7);
+    TypeEnum type = TypeEnum.values()[rs.getInt(3)];
+    FormalityEnum formality = FormalityEnum.values()[rs.getInt(4)];
+    Color color = new Color(Integer.parseInt(rs.getString(5), 16));
+    PatternEnum pattern = PatternEnum.values()[rs.getInt(6)];
+    WeatherEnum weather = WeatherEnum.values()[rs.getInt(7)];
     rs.close();
-    return new Item(weather, formality, pattern, new Color(color), type);
+    return new Boots(weather, formality, pattern, color, type);
   }
 
-  public List<ItemProxy> getAllItemsByAttributes(AttributeEnum attributeNum, List<Attribute> attribute) throws SQLException{
-    String[] attributeNames = {"type", "formality", "color", "pattern", "weather"};
-    String attributeName = attributeNames[attributeNum];
+  public List<ItemProxy> getAllItemsByAttributes(AttributeEnum attributeEnum, List<Attribute> attribute) throws SQLException{
+    String attributeName = attributeEnum.toString();
 
     String getAllItemsByAttributesSQL = "SELECT * FROM item WHERE ?=?";
 
-    for (int i = 0; i < attribute.size(); i++) {
+    for (int i = 1; i < attribute.size(); i++) {
       getAllItemsByAttributesSQL += " OR ?=?";
     }
     getAllItemsByAttributesSQL += ";";
     getAllItemsByAttributesPrep = conn.prepareStatement(getAllItemsByAttributesSQL);
-    for (int i = 1; i <= attribute.size() * 2; i+=2) {
-      getAllItemsByAttributesPrep.setString(i, attributeName);
-      getAllItemsByAttributesPrep.setString(i + 1, attribute.get(i / 2));
+
+    if (attributeEnum == AttributeEnum.COLOR) {
+      for (int i = 1; i <= attribute.size() * 2; i+=2) {
+        getAllItemsByAttributesPrep.setString(i, attributeName);
+        Color color = (Color) attribute.get(i / 2).getAttributeVal();
+        getAllItemsByAttributesPrep.setString(i + 1, color.toString());
+      }
+    } else {
+      for (int i = 1; i <= attribute.size() * 2; i+=2) {
+        getAllItemsByAttributesPrep.setString(i, attributeName);
+        Enum e = (Enum) attribute.get(i / 2).getAttributeVal();
+        getAllItemsByAttributesPrep.setInt(i + 1, e.ordinal());
+      }
     }
 
+    List<ItemProxy> itemProxyList = new ArrayList<>();
+    ResultSet rs = getAllItemsByAttributesPrep.executeQuery();
+    while (rs.next()) {
+      String itemID = rs.getString(1);
+      itemProxyList.add(new ItemProxy(itemID));
+    }
+    rs.close();
+    return itemProxyList;
   }
 
   public Outfit getOutfitInfo(String id) throws SQLException {
@@ -93,12 +117,29 @@ public class DatabaseQueries {
     ResultSet rs = getOutfitInfoPrep.executeQuery();
     rs.next();
     String name = rs.getString(2);
-    String outer = rs.getString(3);
-    String top = rs.getString(4);
-    String bottom = rs.getString(5);
-    String feet = rs.getString(6);
+    TypeEnum type = TypeEnum.values()[rs.getInt(3)];
+    FormalityEnum formality = FormalityEnum.values()[rs.getInt(4)];
+    Color color = new Color(Integer.parseInt(rs.getString(5), 16));
+    PatternEnum pattern = PatternEnum.values()[rs.getInt(6)];
+    WeatherEnum weather = WeatherEnum.values()[rs.getInt(7)];
+    String outerID = rs.getString(8);
+    String topID = rs.getString(9);
+    String bottomID = rs.getString(10);
+    String feetID = rs.getString(11);
     rs.close();
-    return new Outfit(id, name, outer, top, bottom, feet);
+
+    ItemProxy outer = new ItemProxy(outerID);
+    ItemProxy top = new ItemProxy(topID);
+    ItemProxy bottom = new ItemProxy(bottomID);
+    ItemProxy feet = new ItemProxy(feetID);
+
+    Map<TypeEnum, ItemProxy> itemMap = new HashMap<>();
+    itemMap.put(TypeEnum.OUTER, outer);
+    itemMap.put(TypeEnum.TOP, top);
+    itemMap.put(TypeEnum.BOTTOM, bottom);
+    itemMap.put(TypeEnum.SHOES, feet);
+
+    return new Outfit(weather, formality, pattern, color, type, itemMap, id);
   }
 
   public List<ItemProxy> getItemsByUserID(String id) throws SQLException {

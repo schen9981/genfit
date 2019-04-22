@@ -1,7 +1,25 @@
 package com.genfit.attribute.attributevals;
 
-/**
- * Created by ericwang on 2019/4/22.
- */
 public enum AttributeEnum {
+  TYPE {
+    public String toString() {
+      return "type";
+    }
+  }, FORMALITY {
+    public String toString() {
+      return "type";
+    }
+  },COLOR {
+    public String toString() {
+      return "type";
+    }
+  }, PATTERN {
+    public String toString() {
+      return "pattern";
+    }
+  }, WEATHER {
+    public String toString() {
+      return "weather";
+    }
+  };
 }
