@@ -1,5 +1,5 @@
 package com.genfit.attribute.attributevals;
 
-public class TypeEnum {
-
+public enum TypeEnum {
+  OUTER, TOP, BOTTOM, SHOES;
 }
