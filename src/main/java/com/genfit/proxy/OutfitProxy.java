@@ -13,7 +13,7 @@ public class OutfitProxy {
       throw new NullPointerException();
     }
     this.id = id;
-    this.outfit =null;
+    this.outfit = null;
   }
 
 }
