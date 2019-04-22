@@ -1,4 +1,12 @@
 package com.genfit.database;
 
-public class DatabaseQueries {
+import com.genfit.users.User;
+
+import java.sql.Connection;
+import java.util.List;
+
+public final class DatabaseQueries {
+
+  private DatabaseQueries() {}
+
 }
