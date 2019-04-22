@@ -1,5 +1,15 @@
 package com.genfit.clothing;
 
-public class Sweater extends ClothingProperties {
+import com.genfit.attribute.attributevals.Color;
+import com.genfit.attribute.attributevals.FormalityEnum;
+import com.genfit.attribute.attributevals.PatternEnum;
+import com.genfit.attribute.attributevals.TypeEnum;
+import com.genfit.attribute.attributevals.WeatherEnum;
 
+public class Sweater extends Item {
+
+	public Sweater(WeatherEnum weather, FormalityEnum formality, 
+			PatternEnum pattern, Color color, TypeEnum type) {
+		super(weather, formality, pattern, color, type);
+	}
 }

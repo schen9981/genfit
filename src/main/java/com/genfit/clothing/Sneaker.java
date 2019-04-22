@@ -6,9 +6,9 @@ import com.genfit.attribute.attributevals.PatternEnum;
 import com.genfit.attribute.attributevals.TypeEnum;
 import com.genfit.attribute.attributevals.WeatherEnum;
 
-public class Boots extends Item {
+public class Sneaker extends Item {
 	
-	public Boots(WeatherEnum weather, FormalityEnum formality, 
+	public Sneaker(WeatherEnum weather, FormalityEnum formality, 
 			PatternEnum pattern, Color color, TypeEnum type) {
 		super(weather, formality, pattern, color, type);
 	}
