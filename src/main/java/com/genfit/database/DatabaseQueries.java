@@ -1,8 +1,12 @@
 package com.genfit.database;
 
+import com.genfit.attribute.Attribute;
 import com.genfit.attribute.attributevals.Color;
 import com.genfit.attribute.attributevals.WeatherEnum;
 import com.genfit.clothing.Item;
+import com.genfit.clothing.Outfit;
+import com.genfit.proxy.ItemProxy;
+import com.genfit.proxy.OutfitProxy;
 import com.genfit.users.User;
 
 import java.sql.Connection;
@@ -11,8 +15,10 @@ import java.sql.ResultSet;
 import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseQueries {
+  Connection conn;
 
   private final String getUserInfoSQL = "SELECT * FROM user WHERE email=?;";
   private final String getItemInfoSQL = "SELECT * FROM item WHERE id=?;";
@@ -24,9 +30,12 @@ public class DatabaseQueries {
   private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
   private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
 
+  private PreparedStatement getAllItemsByAttributesPrep;
+
 
   public DatabaseQueries(Connection conn) {
     try {
+      this.conn = conn;
       getUserInfoPrep = conn.prepareStatement(getUserInfoSQL);
       getItemInfoPrep = conn.prepareStatement(getItemInfoSQL);
       getOutfitInfoPrep = conn.prepareStatement(getOutfitInfoSQL);
@@ -61,7 +70,25 @@ public class DatabaseQueries {
     return new Item(weather, formality, pattern, new Color(color), type);
   }
 
-  public OutfitProxy getOutfitInfo(String id) throws SQLException {
+  public List<ItemProxy> getAllItemsByAttributes(AttributeEnum attributeNum, List<Attribute> attribute) throws SQLException{
+    String[] attributeNames = {"type", "formality", "color", "pattern", "weather"};
+    String attributeName = attributeNames[attributeNum];
+
+    String getAllItemsByAttributesSQL = "SELECT * FROM item WHERE ?=?";
+
+    for (int i = 0; i < attribute.size(); i++) {
+      getAllItemsByAttributesSQL += " OR ?=?";
+    }
+    getAllItemsByAttributesSQL += ";";
+    getAllItemsByAttributesPrep = conn.prepareStatement(getAllItemsByAttributesSQL);
+    for (int i = 1; i <= attribute.size() * 2; i+=2) {
+      getAllItemsByAttributesPrep.setString(i, attributeName);
+      getAllItemsByAttributesPrep.setString(i + 1, attribute.get(i / 2));
+    }
+
+  }
+
+  public Outfit getOutfitInfo(String id) throws SQLException {
     getOutfitInfoPrep.setString(1, id);
     ResultSet rs = getOutfitInfoPrep.executeQuery();
     rs.next();
@@ -71,7 +98,7 @@ public class DatabaseQueries {
     String bottom = rs.getString(5);
     String feet = rs.getString(6);
     rs.close();
-    return new OutfitProxy(id, name, outer, top, bottom, feet);
+    return new Outfit(id, name, outer, top, bottom, feet);
   }
 
   public List<ItemProxy> getItemsByUserID(String id) throws SQLException {
@@ -87,7 +114,7 @@ public class DatabaseQueries {
   }
 
   public List<OutfitProxy> getOutfitsByUserID(String id) throws SQLException {
-    List<OutfitsProxy> outfitProxyList = new ArrayList<>();
+    List<OutfitProxy> outfitProxyList = new ArrayList<>();
     getOutfitsByUserIDPrep.setString(1, id);
     ResultSet rs = getOutfitsByUserIDPrep.executeQuery();
     while(rs.next()) {
@@ -97,5 +124,4 @@ public class DatabaseQueries {
     rs.close();
     return outfitProxyList;
   }
-
 }
