@@ -99,6 +99,9 @@ public class Database {
             });
   }
 
+
+
+
   public User getUserBean(String email) throws Exception {
     return this.userCache.get(email);
   }
@@ -110,6 +113,9 @@ public class Database {
   public Outfit getOutfitBean(String id) throws Exception {
     return this.outfitCache.get(id);
   }
+
+
+
 
   public User getUserInfo(String email) throws SQLException {
     getUserInfoPrep.setString(1, email);
@@ -166,7 +172,7 @@ public class Database {
     ResultSet rs = getAllItemsByAttributesPrep.executeQuery();
     while (rs.next()) {
       String itemID = rs.getString(1);
-      itemProxyList.add(new ItemProxy(itemID));
+      itemProxyList.add(new ItemProxy(this, itemID));
     }
     rs.close();
     return itemProxyList;
@@ -188,10 +194,10 @@ public class Database {
     String feetID = rs.getString(11);
     rs.close();
 
-    ItemProxy outer = new ItemProxy(outerID);
-    ItemProxy top = new ItemProxy(topID);
-    ItemProxy bottom = new ItemProxy(bottomID);
-    ItemProxy feet = new ItemProxy(feetID);
+    ItemProxy outer = new ItemProxy(this, outerID);
+    ItemProxy top = new ItemProxy(this, topID);
+    ItemProxy bottom = new ItemProxy(this, bottomID);
+    ItemProxy feet = new ItemProxy(this, feetID);
 
     Map<TypeEnum, ItemProxy> itemMap = new HashMap<>();
     itemMap.put(TypeEnum.OUTER, outer);
@@ -208,7 +214,7 @@ public class Database {
     ResultSet rs = getItemsByUserIDPrep.executeQuery();
     while(rs.next()) {
       String itemID = rs.getString(2);
-      itemProxyList.add(new ItemProxy(itemID));
+      itemProxyList.add(new ItemProxy(this, itemID));
     }
     rs.close();
     return itemProxyList;
@@ -220,7 +226,7 @@ public class Database {
     ResultSet rs = getOutfitsByUserIDPrep.executeQuery();
     while(rs.next()) {
       String outfitID = rs.getString(2);
-      outfitProxyList.add(new OutfitProxy(outfitID));
+      outfitProxyList.add(new OutfitProxy(this, outfitID));
     }
     rs.close();
     return outfitProxyList;
