@@ -3,21 +3,26 @@ package com.genfit.clothing;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.genfit.proxy.ItemProxy;
+import com.genfit.proxy.OutfitProxy;
+
 /**
  * Represents a user's wardrobe.
  */
 public class Wardrobe {
 	
-	Set<Item> items;
-	Set<Outfit> outfits;
+	Set<ItemProxy> items;
+	Set<OutfitProxy> outfits;
 	
 	/**
 	 * Constructor for an initially empty wardrobe.
 	 */
 	public Wardrobe() {
-		this.items = new HashSet<Item>();
-		this.outfits = new HashSet<Outfit>();
+		this.items = new HashSet<ItemProxy>();
+		this.outfits = new HashSet<OutfitProxy>();
 	}
+	
+	// TODO: adds the proxy or the item/outfit?
 	
 	/**
 	 * Adds an outfit to the wardrobe (and items if they don't exist).
