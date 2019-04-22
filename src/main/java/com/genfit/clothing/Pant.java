@@ -9,8 +9,8 @@ import com.genfit.attribute.attributevals.WeatherEnum;
 public class Pant extends Item {
 	
 	public Pant(WeatherEnum weather, FormalityEnum formality, 
-			PatternEnum pattern, Color color, TypeEnum type) {
-		super(weather, formality, pattern, color, type);
+			PatternEnum pattern, Color color, TypeEnum type, String id, String name) {
+		super(weather, formality, pattern, color, type, id, name);
 	}
 
 }
