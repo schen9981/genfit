@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
-    <title>${title}</title>
+    <#if title?has_content><title>${title}</title></#if>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- In real-world webapps, css is usually minified and
          concatenated. Here, separate normalize from our code, and
@@ -13,10 +13,8 @@
     <link rel="stylesheet"
           href="<#if cssPath?has_content>${cssPath}</#if>css/main.css">
 
-
     <link href="https://fonts.googleapis.com/css?family=Poppins"
           rel="stylesheet">
-
 
     <#if additionalCSS?has_content>
         ${additionalCSS}
