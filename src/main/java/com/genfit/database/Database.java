@@ -61,6 +61,9 @@ public class Database {
   }
 
 
+  /**
+   * Setup the loading cache for user, item, and outfit.
+   */
   private void instantiateCacheLoader() {
     final int maxSize = 10000;
     final int expire =10;
@@ -100,23 +103,43 @@ public class Database {
   }
 
 
-
-
+  /**
+   * Called by UserProxy instances.
+   * @param email of user
+   * @return User instance
+   * @throws Exception
+   */
   public User getUserBean(String email) throws Exception {
     return this.userCache.get(email);
   }
 
+  /**
+   * Called by ItemProxy instances.
+   * @param id of item
+   * @return Item instance
+   * @throws Exception
+   */
   public Item getItemBean(String id) throws Exception {
     return this.itemCache.get(id);
   }
 
+  /**
+   * Called by OutfitProxy instances.
+   * @param id oof outfit
+   * @return Outfit instance
+   * @throws Exception
+   */
   public Outfit getOutfitBean(String id) throws Exception {
     return this.outfitCache.get(id);
   }
 
 
-
-
+  /**
+   * Called by User LoadingCache if needed.
+   * @param email of user
+   * @return User instance
+   * @throws SQLException
+   */
   public User getUserInfo(String email) throws SQLException {
     getUserInfoPrep.setString(1, email);
     ResultSet rs = getUserInfoPrep.executeQuery();
@@ -124,9 +147,16 @@ public class Database {
     String id = rs.getString(1);
     String name = rs.getString(2);
     rs.close();
-    return new User(id, name, email);
+    return new User(id, name, email,
+        this.getItemsByUserID(email), this.getOutfitsByUserID(email));
   }
 
+  /**
+   * Called by Item LoadingCache if needed.
+   * @param id of item
+   * @return Item instance
+   * @throws SQLException
+   */
   public Item getItemInfo(String id) throws SQLException {
     getItemInfoPrep.setString(1, id);
     ResultSet rs = getItemInfoPrep.executeQuery();
@@ -142,6 +172,7 @@ public class Database {
     // TODO: How to instantiate Item of specific type
     return new Boots(weather, formality, pattern, color, type);
   }
+
 
   public List<ItemProxy> getAllItemsByAttributes(AttributeEnum attributeEnum, List<Attribute> attribute) throws SQLException{
     String attributeName = attributeEnum.toString();
@@ -178,6 +209,13 @@ public class Database {
     return itemProxyList;
   }
 
+
+  /**
+   * Called by Outfit LoadingCache if needed.
+   * @param id of outfit
+   * @return Outfit instance
+   * @throws SQLException
+   */
   public Outfit getOutfitInfo(String id) throws SQLException {
     getOutfitInfoPrep.setString(1, id);
     ResultSet rs = getOutfitInfoPrep.executeQuery();
@@ -205,9 +243,16 @@ public class Database {
     itemMap.put(TypeEnum.BOTTOM, bottom);
     itemMap.put(TypeEnum.SHOES, feet);
 
+    // TODO: Change parameters for Outfit constructor
     return new Outfit(weather, formality, pattern, color, type, itemMap, id);
   }
 
+  /**
+   * Called by getUserInfo() to instantiate a User instance.
+   * @param id of user
+   * @return List of ItemProxy instances
+   * @throws SQLException
+   */
   public List<ItemProxy> getItemsByUserID(String id) throws SQLException {
     List<ItemProxy> itemProxyList = new ArrayList<>();
     getItemsByUserIDPrep.setString(1, id);
@@ -220,6 +265,12 @@ public class Database {
     return itemProxyList;
   }
 
+  /**
+   * Called by getUserInfo() to instantiate a User instance.
+   * @param id of user
+   * @return List of OutfitProxy instances
+   * @throws SQLException
+   */
   public List<OutfitProxy> getOutfitsByUserID(String id) throws SQLException {
     List<OutfitProxy> outfitProxyList = new ArrayList<>();
     getOutfitsByUserIDPrep.setString(1, id);
