@@ -5,42 +5,37 @@ import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
 import com.genfit.attribute.TypeAttribute;
 import com.genfit.attribute.SeasonAttribute;
-import com.genfit.attribute.attributevals.Color;
-import com.genfit.attribute.attributevals.FormalityEnum;
-import com.genfit.attribute.attributevals.PatternEnum;
-import com.genfit.attribute.attributevals.TypeEnum;
-import com.genfit.attribute.attributevals.SeasonEnum;
 
 /**
  * Abstract class that wraps all the attribute/properties
  * of closet components (ie. item, outfit).
  */
 public abstract class ClosetComponent {
-
-  // properties of every attribute
-  private SeasonAttribute weather;
-  private FormalityAttribute formality;
-  private PatternAttribute pattern;
-  private ColorAttribute color;
-  private TypeAttribute type;
-
-  /**
-   * Constructor for a closet component.
-   *
-   * @param weather   - enum for weather property
-   * @param formality - enum for formality property
-   * @param pattern   - enum for pattern property
-   * @param color     - enum for color property
-   * @param type      - enum for type property
-   */
-  ClosetComponent(SeasonEnum weather, FormalityEnum formality,
-                  PatternEnum pattern, Color color, TypeEnum type) {
-    this.weather = new SeasonAttribute(weather);
-    this.formality = new FormalityAttribute(formality);
-    this.pattern = new PatternAttribute(pattern);
-    this.color = new ColorAttribute(color);
-    this.type = new TypeAttribute(type);
-  }
+	
+	// properties of every attribute
+	private SeasonAttribute season;
+	private FormalityAttribute formality;
+	private PatternAttribute pattern;
+	private ColorAttribute color;
+	private TypeAttribute type;
+	
+	/**
+	 * Constructor for a closet component.
+	 * @param weather - enum for weather property
+	 * @param formality - enum for formality property
+	 * @param pattern - enum for pattern property
+	 * @param color - enum for color property
+	 * @param type - enum for type property
+	 */
+	public ClosetComponent(SeasonAttribute weather, FormalityAttribute formality,
+												 PatternAttribute pattern, ColorAttribute color,
+												 TypeAttribute type) {
+		this.season = season;
+		this.formality = formality;
+		this.pattern = pattern;
+		this.color = color;
+		this.type = type;
+	}
 
   /**
    * Get the weather attribute for the closet component
@@ -48,7 +43,7 @@ public abstract class ClosetComponent {
    * @return weather attribute
    */
   public SeasonAttribute getWeatherAttribute() {
-    return this.weather;
+    return this.season;
   }
 
   /**
@@ -86,6 +81,5 @@ public abstract class ClosetComponent {
   public TypeAttribute getTypeAttribute() {
     return this.type;
   }
-
 
 }
