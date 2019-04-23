@@ -176,16 +176,22 @@ public class Database {
     rs.next();
     String name = rs.getString(2);
     TypeAttribute type = new TypeAttribute(TypeEnum.values()[rs.getInt(3)]);
-    FormalityAttribute formality = new FormalityAttribute(FormalityEnum.values()[rs.getInt(4)]);
-    ColorAttribute color = new ColorAttribute(new Color(Integer.parseInt(rs.getString(5), 16)));
-    PatternAttribute pattern = new PatternAttribute(PatternEnum.values()[rs.getInt(6)]);
-    SeasonAttribute season = new SeasonAttribute(SeasonEnum.values()[rs.getInt(7)]);
+    FormalityAttribute formality =
+            new FormalityAttribute(FormalityEnum.values()[rs.getInt(4)]);
+    ColorAttribute color =
+            new ColorAttribute(new Color(Integer.parseInt(rs.getString(5),
+                    16)));
+    PatternAttribute pattern =
+            new PatternAttribute(PatternEnum.values()[rs.getInt(6)]);
+    SeasonAttribute season =
+            new SeasonAttribute(SeasonEnum.values()[rs.getInt(7)]);
     rs.close();
     // TODO: How to instantiate Item of specific type
     return new Item(id, name, season, formality, pattern, color, type);
   }
 
 
+  // TODO: @lawrence will modify this
   public List<ItemProxy> getAllItemsByAttributes(AttributeEnum attributeEnum,
                                                  List<Attribute> attribute) throws SQLException {
     String attributeName = attributeEnum.toString();
