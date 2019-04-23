@@ -4,12 +4,13 @@ import com.genfit.attribute.attributevals.Color;
 import com.genfit.attribute.attributevals.FormalityEnum;
 import com.genfit.attribute.attributevals.PatternEnum;
 import com.genfit.attribute.attributevals.TypeEnum;
-import com.genfit.attribute.attributevals.WeatherEnum;
+import com.genfit.attribute.attributevals.SeasonEnum;
 
 public class Sweater extends Item {
 
-	public Sweater(WeatherEnum weather, FormalityEnum formality, 
-			PatternEnum pattern, Color color, TypeEnum type, String id, String name) {
-		super(weather, formality, pattern, color, type, id, name);
-	}
+  public Sweater(SeasonEnum weather, FormalityEnum formality,
+                 PatternEnum pattern, Color color, TypeEnum type, String id,
+                 String name) {
+    super(weather, formality, pattern, color, type, id, name);
+  }
 }

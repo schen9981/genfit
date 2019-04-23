@@ -1,5 +1,5 @@
 package com.genfit.attribute.attributevals;
 
-public enum WeatherEnum {
+public enum SeasonEnum {
   SPRING, SUMMER, FALL, WINTER;
 }
