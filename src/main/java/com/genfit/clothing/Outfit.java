@@ -8,14 +8,16 @@ import java.util.Map;
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
-import com.genfit.attribute.WeatherAttribute;
+import com.genfit.attribute.SeasonAttribute;
 import com.genfit.attribute.attributevals.Color;
 import com.genfit.attribute.attributevals.FormalityEnum;
 import com.genfit.attribute.attributevals.PatternEnum;
 import com.genfit.attribute.attributevals.TypeEnum;
-import com.genfit.attribute.attributevals.WeatherEnum;
+import com.genfit.attribute.attributevals.SeasonEnum;
 import com.genfit.proxy.ItemProxy;
 import com.google.common.collect.ImmutableMap;
+
+import java.util.Map;
 
 
 public class Outfit extends ClosetComponent {
@@ -24,7 +26,7 @@ public class Outfit extends ClosetComponent {
 	private String id;
 	private Map<TypeEnum, ItemProxy> items;
 	private String name;
-	private WeatherAttribute weather;
+	private SeasonAttribute season;
 	private FormalityAttribute formality;
 	private PatternAttribute pattern;
 	private ColorAttribute color;
@@ -46,6 +48,5 @@ public class Outfit extends ClosetComponent {
 				ImmutableMap.copyOf(this.items);
 		return immutable;
 	}
-
 
 }

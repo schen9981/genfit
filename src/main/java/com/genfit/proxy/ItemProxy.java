@@ -3,7 +3,7 @@ package com.genfit.proxy;
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.TypeAttribute;
-import com.genfit.attribute.WeatherAttribute;
+import com.genfit.attribute.SeasonAttribute;
 import com.genfit.clothing.Item;
 import com.genfit.database.Database;
 
@@ -21,7 +21,7 @@ public class ItemProxy {
       throw new NullPointerException();
     }
     this.id = id;
-    this.item =null;
+    this.item = null;
     this.db = db;
   }
 
@@ -35,7 +35,7 @@ public class ItemProxy {
     return this.item;
   }
 
-  private WeatherAttribute getWeatherAttribute() {
+  private SeasonAttribute getWeatherAttribute() {
     return this.getItem().getWeatherAttribute();
   }
 
