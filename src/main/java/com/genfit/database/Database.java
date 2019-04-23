@@ -1,13 +1,17 @@
 package com.genfit.database;
 
 import com.genfit.attribute.Attribute;
+import com.genfit.attribute.ColorAttribute;
+import com.genfit.attribute.FormalityAttribute;
+import com.genfit.attribute.PatternAttribute;
+import com.genfit.attribute.SeasonAttribute;
+import com.genfit.attribute.TypeAttribute;
 import com.genfit.attribute.attributevals.AttributeEnum;
 import com.genfit.attribute.attributevals.Color;
 import com.genfit.attribute.attributevals.FormalityEnum;
 import com.genfit.attribute.attributevals.PatternEnum;
 import com.genfit.attribute.attributevals.TypeEnum;
 import com.genfit.attribute.attributevals.SeasonEnum;
-import com.genfit.clothing.Boots;
 import com.genfit.clothing.Item;
 import com.genfit.clothing.Outfit;
 import com.genfit.proxy.ItemProxy;
@@ -171,15 +175,14 @@ public class Database {
     ResultSet rs = this.getItemInfoPrep.executeQuery();
     rs.next();
     String name = rs.getString(2);
-    TypeEnum type = TypeEnum.values()[rs.getInt(3)];
-    FormalityEnum formality = FormalityEnum.values()[rs.getInt(4)];
-    Color color = new Color(Integer.parseInt(rs.getString(5), 16));
-    PatternEnum pattern = PatternEnum.values()[rs.getInt(6)];
-    SeasonEnum season = SeasonEnum.values()[rs.getInt(7)];
+    TypeAttribute type = new TypeAttribute(TypeEnum.values()[rs.getInt(3)]);
+    FormalityAttribute formality = new FormalityAttribute(FormalityEnum.values()[rs.getInt(4)]);
+    ColorAttribute color = new ColorAttribute(new Color(Integer.parseInt(rs.getString(5), 16)));
+    PatternAttribute pattern = new PatternAttribute(PatternEnum.values()[rs.getInt(6)]);
+    SeasonAttribute season = new SeasonAttribute(SeasonEnum.values()[rs.getInt(7)]);
     rs.close();
-
     // TODO: How to instantiate Item of specific type
-    return new Item(season, formality, pattern, color, type);
+    return new Item(id, name, season, formality, pattern, color, type);
   }
 
 
@@ -232,6 +235,7 @@ public class Database {
     this.getOutfitInfoPrep.setString(1, id);
     ResultSet rs = this.getOutfitInfoPrep.executeQuery();
     rs.next();
+
     String name = rs.getString(2);
     TypeEnum type = TypeEnum.values()[rs.getInt(3)];
     FormalityEnum formality = FormalityEnum.values()[rs.getInt(4)];
@@ -256,7 +260,7 @@ public class Database {
     itemMap.put(TypeEnum.SHOES, feet);
 
     // TODO: Change parameters for Outfit constructor
-    return new Outfit(weather, formality, pattern, color, type, itemMap, id);
+    return new Outfit(id, name, itemMap);
   }
 
   /**
