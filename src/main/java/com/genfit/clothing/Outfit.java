@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.genfit.attribute.ColorAttribute;
+import com.genfit.attribute.FormalityAttribute;
+import com.genfit.attribute.PatternAttribute;
+import com.genfit.attribute.WeatherAttribute;
 import com.genfit.attribute.attributevals.Color;
 import com.genfit.attribute.attributevals.FormalityEnum;
 import com.genfit.attribute.attributevals.PatternEnum;
@@ -19,13 +23,18 @@ public class Outfit extends ClosetComponent {
 	// saves the list of items that the outfit has
 	private String id;
 	private Map<TypeEnum, ItemProxy> items;
+	private String name;
+	private WeatherAttribute weather;
+	private FormalityAttribute formality;
+	private PatternAttribute pattern;
+	private ColorAttribute color;
 	
-	public Outfit(WeatherEnum weather, FormalityEnum formality, PatternEnum pattern,
-								Color color, TypeEnum type, Map<TypeEnum, ItemProxy> items, String id) {
+	public Outfit(String id, String name, Map<TypeEnum, ItemProxy> items) {
 		// TODO: How to set attributes of outfit (some sort of average?)
-		super(weather, formality, pattern, color, type);
+//		super(weather, formality, pattern, color, null);
 		this.items = items;
 		this.id = id;
+		this.name = name;
 	}
 	
 	/**

@@ -3,8 +3,6 @@ package com.genfit.proxy;
 import com.genfit.database.Database;
 import com.genfit.users.User;
 
-import java.sql.SQLException;
-
 public class UserProxy {
 
   private String email;
@@ -20,14 +18,28 @@ public class UserProxy {
     this.user = null;
   }
 
-  public User getUser() {
-    try {
-      this.user = this.db.getUserBean(this.email);
-    } catch (Exception e) {
-      System.out.println("ERROR: Exception when getting UserBean");
+  private User getUser() {
+    if (this.user == null) {
+      try {
+        this.user = this.db.getUserBean(this.email);
+      } catch (Exception e) {
+        System.out.println("ERROR: Exception when getting UserBean");
+      }
     }
     return this.user;
   }
 
+
+  public String getEmail() {
+    return this.email;
+  }
+
+  public String getId() {
+    return this.getUser().getId();
+  }
+
+  public String getName() {
+    return this.getUser().getName();
+  }
 
 }

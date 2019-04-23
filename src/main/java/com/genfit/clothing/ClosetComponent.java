@@ -36,13 +36,14 @@ public abstract class ClosetComponent {
 	 * @param color - enum for color property
 	 * @param type - enum for type property
 	 */
-	public ClosetComponent(WeatherEnum weather, FormalityEnum formality, 
-			PatternEnum pattern, Color color, TypeEnum type) {
-		this.weather = new WeatherAttribute(weather);
-		this.formality = new FormalityAttribute(formality);
-		this.pattern = new PatternAttribute(pattern);
-		this.color = new ColorAttribute(color);
-		this.type = new TypeAttribute(type);
+	public ClosetComponent(WeatherAttribute weather, FormalityAttribute formality,
+												 PatternAttribute pattern, ColorAttribute color,
+												 TypeAttribute type) {
+		this.weather = weather;
+		this.formality = formality;
+		this.pattern = pattern;
+		this.color = color;
+		this.type = type;
 	}
 	
 	/**

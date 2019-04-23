@@ -1,5 +1,9 @@
 package com.genfit.proxy;
 
+import com.genfit.attribute.ColorAttribute;
+import com.genfit.attribute.FormalityAttribute;
+import com.genfit.attribute.TypeAttribute;
+import com.genfit.attribute.WeatherAttribute;
 import com.genfit.clothing.Item;
 import com.genfit.database.Database;
 
@@ -22,12 +26,32 @@ public class ItemProxy {
   }
 
 
-  public Item getItem() {
+  private Item getItem() {
     try {
       this.item = this.db.getItemBean(this.id);
     } catch (Exception e) {
       System.out.println("ERROR: Exception when getting ItemBean");
     }
     return this.item;
+  }
+
+  private WeatherAttribute getWeatherAttribute() {
+    return this.getItem().getWeatherAttribute();
+  }
+
+  private FormalityAttribute getFormalityAttribute() {
+    return this.getItem().getFormalityAttribute();
+  }
+
+  private ColorAttribute getColorAttribute() {
+    return this.getItem().getColorAttribute();
+  }
+
+  private TypeAttribute getTypeAttribute() {
+    return this.getItem().getTypeAttribute();
+  }
+
+  public String getId() {
+    return id;
   }
 }
