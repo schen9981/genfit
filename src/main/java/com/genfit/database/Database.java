@@ -179,7 +179,7 @@ public class Database {
     rs.close();
 
     // TODO: How to instantiate Item of specific type
-    return new Boots(season, formality, pattern, color, type);
+    return new Item(season, formality, pattern, color, type);
   }
 
 

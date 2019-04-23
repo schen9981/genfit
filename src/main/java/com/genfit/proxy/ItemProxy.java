@@ -17,11 +17,12 @@ public class ItemProxy {
       throw new NullPointerException();
     }
     this.id = id;
-    this.item =null;
+    this.item = null;
     this.db = db;
   }
 
 
+  // TODO: make this private
   public Item getItem() {
     try {
       this.item = this.db.getItemBean(this.id);

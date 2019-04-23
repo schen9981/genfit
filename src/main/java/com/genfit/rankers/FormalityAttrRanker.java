@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Comparator for formality attribute.
+ * Ranker for formality attribute.
  */
 public class FormalityAttrRanker implements AttributeRanker<FormalityAttribute> {
   @Override
