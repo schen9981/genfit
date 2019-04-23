@@ -9,10 +9,10 @@ import spark.TemplateViewRoute;
 
 import java.util.Map;
 
-public class FrontPageHandler implements TemplateViewRoute {
+public class ItemPageHandler implements TemplateViewRoute {
   private GenFitApp genFitApp;
 
-  public FrontPageHandler(GenFitApp genFitApp) {
+  public ItemPageHandler(GenFitApp genFitApp) {
     this.genFitApp = genFitApp;
   }
 
@@ -20,6 +20,6 @@ public class FrontPageHandler implements TemplateViewRoute {
   public ModelAndView handle(Request request, Response response) throws Exception {
     Map<String, Object> variables = ImmutableMap.of("title", "Welcome to "
             + "GenFit!!!");
-    return new ModelAndView(variables, "frontpage.ftl");
+    return new ModelAndView(variables, "itempage.ftl");
   }
 }

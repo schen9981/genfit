@@ -30,6 +30,16 @@ ${content}
 </#if>
 
 </body>
-<!-- See http://html5boilerplate.com/ for a good place to start
-     dealing with real world issues like old browsers.  -->
+<!-- Side navigation -->
+<div class="sidenav">
+  <a href="#">Profile</a>
+  <a href="#">Closet Items</a>
+  <a href="#">User Outfits</a>
+  <a href="#">Discover</a>
+</div>
+
+<!-- Page content -->
+<div class="main">
+</div>
+
 </html>

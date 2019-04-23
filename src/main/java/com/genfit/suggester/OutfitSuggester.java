@@ -38,7 +38,7 @@ public class OutfitSuggester {
 	  otherClasses.remove(classToQuery);
 	  
 	  // get list of items that have matching attributes of smallest query
-	  List<Item> match = Database.getItemsOfAttribute(attr.get(classToQuery));
+//	  List<Item> match = Database.getItemsOfAttribute(attr.get(classToQuery));
 	  
 	  // sort through for the other attributes
 	  // TODO: write method for sorting through other attributes.

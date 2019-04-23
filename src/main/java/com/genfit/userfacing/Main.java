@@ -1,7 +1,15 @@
 package com.genfit.userfacing;
 
-import com.genfit.userfacing.handlers.FrontPageHandler;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import com.genfit.userfacing.handlers.DiscoverPageHandler;
+import com.genfit.userfacing.handlers.ItemPageHandler;
+import com.genfit.userfacing.handlers.OutfitPageHandler;
 import com.google.gson.Gson;
+
 import freemarker.template.Configuration;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -10,11 +18,6 @@ import spark.Request;
 import spark.Response;
 import spark.Spark;
 import spark.template.freemarker.FreeMarkerEngine;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 /**
  * The Main class of our project. This is where execution begins.
@@ -28,6 +31,7 @@ public final class Main {
   private MainREPL repl;
   private String[] args;
   private GenFitApp mainApp;
+
   private Main(String[] args) {
     this.args = args;
   }
@@ -48,7 +52,7 @@ public final class Main {
       config.setDirectoryForTemplateLoading(templates);
     } catch (IOException ioe) {
       System.out.printf("ERROR: Unable use %s for template loading.%n",
-              templates);
+          templates);
       System.exit(1);
     }
     return new FreeMarkerEngine(config);
@@ -59,7 +63,7 @@ public final class Main {
     OptionParser parser = new OptionParser();
     parser.accepts("gui");
     parser.accepts("port").withRequiredArg().ofType(Integer.class)
-            .defaultsTo(DEFAULT_PORT);
+        .defaultsTo(DEFAULT_PORT);
     OptionSet options = parser.parse(this.args);
 
     this.repl = new MainREPL(this.mainApp);
@@ -81,8 +85,11 @@ public final class Main {
     FreeMarkerEngine freeMarker = createEngine();
 
     // Setup Spark Routes
-    Spark.get("/", new FrontPageHandler(this.mainApp),
-            freeMarker);
+    Spark.get("/", new UserPageHandler(this.mainApp), freeMarker);
+    Spark.get("/items", new ItemPageHandler(this.mainApp), freeMarker);
+    Spark.get("/outfits", new OutfitPageHandler(this.mainApp), freeMarker);
+    Spark.get("/discover", new DiscoverPageHandler(this.mainApp), freeMarker);
+
   }
 
   /**
@@ -104,4 +111,3 @@ public final class Main {
     }
   }
 }
-
