@@ -3,6 +3,8 @@ package com.genfit.proxy;
 import com.genfit.database.Database;
 import com.genfit.users.User;
 
+import java.util.List;
+
 public class UserProxy {
 
   private String email;
@@ -40,6 +42,14 @@ public class UserProxy {
 
   public String getName() {
     return this.getUser().getName();
+  }
+
+  public List<ItemProxy> getItems() {
+    return this.getUser().getItems();
+  }
+
+  public List<OutfitProxy> getOutfits() {
+    return this.getUser().getOutfits();
   }
 
 }
