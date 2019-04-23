@@ -47,26 +47,29 @@ public class SeasonAttrRanker implements AttributeRanker<SeasonAttribute> {
 
     for (ItemProxy item : items) {
       SeasonEnum itemSeason =
-              item.getItem().getWeatherAttribute().getAttributeVal();
+              item.getWeatherAttribute().getAttributeVal();
       this.countComplements(seasonCounts, itemSeason);
     }
 
     List<SeasonAttribute> sortedSeasons = new ArrayList<>(4);
-    sortedSeasons.add(new SeasonAttribute(SeasonEnum.FALL));
-    sortedSeasons.add(new SeasonAttribute(SeasonEnum.SPRING));
-    sortedSeasons.add(new SeasonAttribute(SeasonEnum.SUMMER));
-    sortedSeasons.add(new SeasonAttribute(SeasonEnum.WINTER));
 
+    // return an empty list if there were no clothes
+    if (items.size() > 0) {
+      sortedSeasons.add(new SeasonAttribute(SeasonEnum.FALL));
+      sortedSeasons.add(new SeasonAttribute(SeasonEnum.SPRING));
+      sortedSeasons.add(new SeasonAttribute(SeasonEnum.SUMMER));
+      sortedSeasons.add(new SeasonAttribute(SeasonEnum.WINTER));
 
-    sortedSeasons.sort(new Comparator<SeasonAttribute>() {
-      @Override
-      public int compare(SeasonAttribute o1, SeasonAttribute o2) {
-        Integer o1SeasonCount = seasonCounts.get(o1.getAttributeVal());
-        Integer o2SeasonCount = seasonCounts.get(o2.getAttributeVal());
+      sortedSeasons.sort(new Comparator<SeasonAttribute>() {
+        @Override
+        public int compare(SeasonAttribute o1, SeasonAttribute o2) {
+          Integer o1SeasonCount = seasonCounts.get(o1.getAttributeVal());
+          Integer o2SeasonCount = seasonCounts.get(o2.getAttributeVal());
 
-        return o1SeasonCount - o2SeasonCount;
-      }
-    });
+          return o1SeasonCount - o2SeasonCount;
+        }
+      });
+    }
 
     return sortedSeasons;
   }
