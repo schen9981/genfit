@@ -1,26 +1,5 @@
 package com.genfit.database;
 
-import com.genfit.attribute.Attribute;
-import com.genfit.attribute.ColorAttribute;
-import com.genfit.attribute.FormalityAttribute;
-import com.genfit.attribute.PatternAttribute;
-import com.genfit.attribute.SeasonAttribute;
-import com.genfit.attribute.TypeAttribute;
-import com.genfit.attribute.attributevals.AttributeEnum;
-import com.genfit.attribute.attributevals.Color;
-import com.genfit.attribute.attributevals.FormalityEnum;
-import com.genfit.attribute.attributevals.PatternEnum;
-import com.genfit.attribute.attributevals.TypeEnum;
-import com.genfit.attribute.attributevals.SeasonEnum;
-import com.genfit.clothing.Item;
-import com.genfit.clothing.Outfit;
-import com.genfit.proxy.ItemProxy;
-import com.genfit.proxy.OutfitProxy;
-import com.genfit.users.User;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,17 +10,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import com.genfit.attribute.Attribute;
+import com.genfit.attribute.ColorAttribute;
+import com.genfit.attribute.FormalityAttribute;
+import com.genfit.attribute.PatternAttribute;
+import com.genfit.attribute.SeasonAttribute;
+import com.genfit.attribute.TypeAttribute;
+import com.genfit.attribute.attributevals.AttributeEnum;
+import com.genfit.attribute.attributevals.Color;
+import com.genfit.attribute.attributevals.FormalityEnum;
+import com.genfit.attribute.attributevals.PatternEnum;
+import com.genfit.attribute.attributevals.SeasonEnum;
+import com.genfit.attribute.attributevals.TypeEnum;
+import com.genfit.clothing.Item;
+import com.genfit.clothing.Outfit;
+import com.genfit.proxy.ItemProxy;
+import com.genfit.proxy.OutfitProxy;
+import com.genfit.users.User;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+
 public class Database {
   private Connection conn;
   private final String getUserInfoSQL = "SELECT * FROM user WHERE email=?;";
   private final String getItemInfoSQL = "SELECT * FROM item WHERE id=?;";
   private final String getOutfitInfoSQL = "SELECT * FROM outfit WHERE id=?;";
-  //  private final String getItemsByUserIDSQL = "SELECT * FROM user_item,
-  //  item WHERE user_item.user_id=? AND user_item.item_id=item.id;";
+  // private final String getItemsByUserIDSQL = "SELECT * FROM user_item,
+  // item WHERE user_item.user_id=? AND user_item.item_id=item.id;";
   private final String getItemsByUserIDSQL = "SELECT * FROM user_item WHERE "
-          + "user_id=?;";
+      + "user_id=?;";
   private final String getOutfitsByUserIDSQL = "SELECT * FROM user_outfit "
-          + "WHERE user_id=?;";
+      + "WHERE user_id=?;";
   private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
   private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
   private PreparedStatement getAllItemsByAttributesPrep;
@@ -50,24 +50,22 @@ public class Database {
   private LoadingCache<String, Item> itemCache;
   private LoadingCache<String, Outfit> outfitCache;
 
-
   public Database(Connection conn) {
     try {
       this.conn = conn;
       this.getUserInfoPrep = conn.prepareStatement(this.getUserInfoSQL);
       this.getItemInfoPrep = conn.prepareStatement(this.getItemInfoSQL);
       this.getOutfitInfoPrep = conn.prepareStatement(this.getOutfitInfoSQL);
-      this.getItemsByUserIDPrep =
-              conn.prepareStatement(this.getItemsByUserIDSQL);
-      this.getOutfitsByUserIDPrep =
-              conn.prepareStatement(this.getOutfitsByUserIDSQL);
+      this.getItemsByUserIDPrep = conn
+          .prepareStatement(this.getItemsByUserIDSQL);
+      this.getOutfitsByUserIDPrep = conn
+          .prepareStatement(this.getOutfitsByUserIDSQL);
     } catch (SQLException e) {
-      System.out.println("ERROR: SQLExeception when prepare statement" +
-              "in Database constructor");
+      System.out.println("ERROR: SQLExeception when prepare statement"
+          + "in Database constructor");
     }
     this.instantiateCacheLoader();
   }
-
 
   /**
    * Setup the loading cache for user, item, and outfit.
@@ -76,40 +74,33 @@ public class Database {
     final int maxSize = 10000;
     final int expire = 10;
 
-    this.userCache = CacheBuilder.newBuilder()
-            .maximumSize(maxSize)
-            .expireAfterWrite(expire, TimeUnit.MINUTES)
-            .build(
-                    new CacheLoader<String, User>() {
-                      @Override
-                      public User load(String key) throws Exception {
-                        return Database.this.getUserInfo(key);
-                      }
-                    });
+    this.userCache = CacheBuilder.newBuilder().maximumSize(maxSize)
+        .expireAfterWrite(expire, TimeUnit.MINUTES)
+        .build(new CacheLoader<String, User>() {
+          @Override
+          public User load(String key) throws Exception {
+            return Database.this.getUserInfo(key);
+          }
+        });
 
-    this.itemCache = CacheBuilder.newBuilder()
-            .maximumSize(maxSize)
-            .expireAfterWrite(expire, TimeUnit.MINUTES)
-            .build(
-                    new CacheLoader<String, Item>() {
-                      @Override
-                      public Item load(String key) throws Exception {
-                        return Database.this.getItemInfo(key);
-                      }
-                    });
+    this.itemCache = CacheBuilder.newBuilder().maximumSize(maxSize)
+        .expireAfterWrite(expire, TimeUnit.MINUTES)
+        .build(new CacheLoader<String, Item>() {
+          @Override
+          public Item load(String key) throws Exception {
+            return Database.this.getItemInfo(key);
+          }
+        });
 
-    this.outfitCache = CacheBuilder.newBuilder()
-            .maximumSize(maxSize)
-            .expireAfterWrite(expire, TimeUnit.MINUTES)
-            .build(
-                    new CacheLoader<String, Outfit>() {
-                      @Override
-                      public Outfit load(String key) throws Exception {
-                        return Database.this.getOutfitInfo(key);
-                      }
-                    });
+    this.outfitCache = CacheBuilder.newBuilder().maximumSize(maxSize)
+        .expireAfterWrite(expire, TimeUnit.MINUTES)
+        .build(new CacheLoader<String, Outfit>() {
+          @Override
+          public Outfit load(String key) throws Exception {
+            return Database.this.getOutfitInfo(key);
+          }
+        });
   }
-
 
   /**
    * Called by UserProxy instances.
@@ -144,7 +135,6 @@ public class Database {
     return this.outfitCache.get(id);
   }
 
-
   /**
    * Called by User LoadingCache if needed.
    *
@@ -159,8 +149,8 @@ public class Database {
     String id = rs.getString(1);
     String name = rs.getString(2);
     rs.close();
-    return new User(id, name, email,
-            this.getItemsByUserID(email), this.getOutfitsByUserID(email));
+    return new User(id, name, email, this.getItemsByUserID(email),
+        this.getOutfitsByUserID(email));
   }
 
   /**
@@ -176,18 +166,23 @@ public class Database {
     rs.next();
     String name = rs.getString(2);
     TypeAttribute type = new TypeAttribute(TypeEnum.values()[rs.getInt(3)]);
-    FormalityAttribute formality = new FormalityAttribute(FormalityEnum.values()[rs.getInt(4)]);
-    ColorAttribute color = new ColorAttribute(new Color(Integer.parseInt(rs.getString(5), 16)));
-    PatternAttribute pattern = new PatternAttribute(PatternEnum.values()[rs.getInt(6)]);
-    SeasonAttribute season = new SeasonAttribute(SeasonEnum.values()[rs.getInt(7)]);
+    FormalityAttribute formality = new FormalityAttribute(
+        FormalityEnum.values()[rs.getInt(4)]);
+    ColorAttribute color = new ColorAttribute(
+        new Color(Integer.parseInt(rs.getString(5), 16)));
+    PatternAttribute pattern = new PatternAttribute(
+        PatternEnum.values()[rs.getInt(6)]);
+    SeasonAttribute season = new SeasonAttribute(
+        SeasonEnum.values()[rs.getInt(7)]);
     rs.close();
     // TODO: How to instantiate Item of specific type
-    return new Item(id, name, season, formality, pattern, color, type);
+    // return new Item(id, name, season, formality, pattern, color, type);
+    return null;
   }
 
-
+  // TODO: @lawrence will modify this
   public List<ItemProxy> getAllItemsByAttributes(AttributeEnum attributeEnum,
-                                                 List<Attribute> attribute) throws SQLException {
+      List<Attribute> attribute) throws SQLException {
     String attributeName = attributeEnum.toString();
 
     String getAllItemsByAttributesSQL = "SELECT * FROM item WHERE ?=?";
@@ -196,8 +191,8 @@ public class Database {
       getAllItemsByAttributesSQL += " OR ?=?";
     }
     getAllItemsByAttributesSQL += ";";
-    this.getAllItemsByAttributesPrep =
-            this.conn.prepareStatement(getAllItemsByAttributesSQL);
+    this.getAllItemsByAttributesPrep = this.conn
+        .prepareStatement(getAllItemsByAttributesSQL);
 
     if (attributeEnum == AttributeEnum.COLOR) {
       for (int i = 1; i <= attribute.size() * 2; i += 2) {
@@ -222,7 +217,6 @@ public class Database {
     rs.close();
     return itemProxyList;
   }
-
 
   /**
    * Called by Outfit LoadingCache if needed.
@@ -260,7 +254,8 @@ public class Database {
     itemMap.put(TypeEnum.SHOES, feet);
 
     // TODO: Change parameters for Outfit constructor
-    return new Outfit(id, name, itemMap);
+//    return new Outfit(id, name, itemMap);
+    return null;
   }
 
   /**
