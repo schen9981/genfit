@@ -34,10 +34,15 @@ public class DatabaseQueries {
   private final String getItemsByUserIDSQL = "SELECT * FROM user_item WHERE user_id=?;";
   private final String getOutfitsByUserIDSQL = "SELECT * FROM user_outfit WHERE user_id=?;";
 
+  private final String addOutfitSQL = "INSERT INTO outfit (name, outer, top, bottom, feet) VALUES (?, ?, ?, ?, ?);";
+  private final String addOutfitToUserSQL = "INSERT INTO user_outfit (user_id, outfit_id) VALUES (?, ?);";
+
   private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
   private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
 
   private PreparedStatement getAllItemsByAttributesPrep;
+
+  private PreparedStatement addOutfitPrep, addOutfitToUserPrep;
 
 
   public DatabaseQueries(Connection conn) {
@@ -48,6 +53,9 @@ public class DatabaseQueries {
       getOutfitInfoPrep = conn.prepareStatement(getOutfitInfoSQL);
       getItemsByUserIDPrep = conn.prepareStatement(getItemsByUserIDSQL);
       getOutfitsByUserIDPrep = conn.prepareStatement(getOutfitsByUserIDSQL);
+
+      addOutfitPrep = conn.prepareStatement(addOutfitSQL);
+      addOutfitToUserPrep = conn.prepareStatement(addOutfitToUserSQL);
     } catch (SQLException e) {
 
     }
@@ -165,4 +173,14 @@ public class DatabaseQueries {
     rs.close();
     return outfitProxyList;
   }
+
+  public void addOutfit(User user, Outfit outfit) throws SQLException{
+    Map itemMap = outfit.getItems();
+    //Item topItem = itemMap.get(TypeEnum.TOP).
+
+    //addOutfitPrep.setString(1, "name");
+    addOutfitPrep.setString(2, itemMap.get(TypeEnum.TOP));
+  }
+
+
 }
