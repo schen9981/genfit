@@ -15,6 +15,14 @@ public class ItemProxy {
   private Item item;
   private Database db;
 
+  /**
+   * Default constructor, should probably not be used.
+   */
+  public ItemProxy() {
+    this.db = null;
+    this.item = null;
+  }
+
   public ItemProxy(Database db, int id) {
     if (db == null) {
       throw new NullPointerException();

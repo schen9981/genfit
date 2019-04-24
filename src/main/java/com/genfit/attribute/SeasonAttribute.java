@@ -13,4 +13,11 @@ public class SeasonAttribute implements Attribute<SeasonEnum> {
   public SeasonEnum getAttributeVal() {
     return this.seasonEnum;
   }
+
+  @Override
+  public String toString() {
+    return "SeasonAttribute{" +
+            this.seasonEnum.name() +
+            '}';
+  }
 }

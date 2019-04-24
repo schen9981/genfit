@@ -11,6 +11,13 @@ public class PatternAttribute implements Attribute<PatternEnum> {
 
   @Override
   public PatternEnum getAttributeVal() {
-    return patternEnum;
+    return this.patternEnum;
+  }
+
+  @Override
+  public String toString() {
+    return "PatternAttribute{" +
+            this.patternEnum.name() +
+            '}';
   }
 }
