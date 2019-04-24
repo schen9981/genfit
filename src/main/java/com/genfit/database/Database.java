@@ -176,10 +176,11 @@ public class Database {
         SeasonEnum.values()[rs.getInt(7)]);
     rs.close();
     // TODO: How to instantiate Item of specific type
-//    return new Item(id, name, season, formality, pattern, color, type);
+    // return new Item(id, name, season, formality, pattern, color, type);
     return null;
   }
 
+  // TODO: @lawrence will modify this
   public List<ItemProxy> getAllItemsByAttributes(AttributeEnum attributeEnum,
       List<Attribute> attribute) throws SQLException {
     String attributeName = attributeEnum.toString();

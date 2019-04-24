@@ -2,6 +2,7 @@ package com.genfit.proxy;
 
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
+import com.genfit.attribute.PatternAttribute;
 import com.genfit.attribute.SeasonAttribute;
 import com.genfit.attribute.TypeAttribute;
 import com.genfit.clothing.Item;
@@ -32,23 +33,27 @@ public class ItemProxy {
     return this.item;
   }
 
-  private SeasonAttribute getWeatherAttribute() {
+  public SeasonAttribute getWeatherAttribute() {
     return this.getItem().getWeatherAttribute();
   }
 
-  private FormalityAttribute getFormalityAttribute() {
+  public FormalityAttribute getFormalityAttribute() {
     return this.getItem().getFormalityAttribute();
   }
 
-  private ColorAttribute getColorAttribute() {
+  public ColorAttribute getColorAttribute() {
     return this.getItem().getColorAttribute();
   }
 
-  private TypeAttribute getTypeAttribute() {
+  public TypeAttribute getTypeAttribute() {
     return this.getItem().getTypeAttribute();
   }
 
+  public PatternAttribute getPatternAttribute() {
+    return this.getItem().getPatternAttribute();
+  }
+
   public String getId() {
-    return id;
+    return this.id;
   }
 }

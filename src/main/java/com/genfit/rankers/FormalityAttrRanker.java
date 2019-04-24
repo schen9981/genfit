@@ -19,9 +19,8 @@ public class FormalityAttrRanker implements AttributeRanker<FormalityAttribute> 
       if (curLowFormality.equals(FormalityEnum.ULTRA_CASUAL)) {
         break;
       } else {
-        //TODO: Law of Demeter
         FormalityEnum itemFormality =
-                item.getItem().getFormalityAttribute().getAttributeVal();
+                item.getFormalityAttribute().getAttributeVal();
 
         // found a lower formality level
         if (itemFormality.compareTo(curLowFormality) < 0) {

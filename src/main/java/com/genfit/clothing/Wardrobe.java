@@ -11,8 +11,8 @@ import com.genfit.proxy.OutfitProxy;
  */
 public class Wardrobe {
 
-  Set<ItemProxy> items;
-  Set<OutfitProxy> outfits;
+  private Set<ItemProxy> items;
+  private Set<OutfitProxy> outfits;
 
   /**
    * Constructor for an initially empty wardrobe.
@@ -26,37 +26,39 @@ public class Wardrobe {
 
   /**
    * Adds an outfit to the wardrobe (and items if they don't exist).
-   * 
+   *
    * @param o Outfit to add
    */
-  public void addOutfit(Outfit o) {
-//		outfits.add(o);
-    items.addAll(o.getItems().values());
+  public void addOutfit(OutfitProxy o) {
+    this.outfits.add(o);
+    this.items.addAll(o.getItems().values());
   }
 
   /**
    * Add an item to the wardrobe.
-   * 
+   *
    * @param i Item to add
    */
-  public void addItem(Item i) {
-//		items.add(i);
+  public void addItem(ItemProxy i) {
+    this.items.add(i);
   }
 
-//	/**
-//	 * Gets all the outfits of the wardrobe.
-//	 * @return outfits of the wardrobe
-//	 */
-//	public Set<Outfit> getOutfits() {
-//		return this.outfits;
-//	}
-//
-//	/**
-//	 * Gets all the items of the wardrobe.
-//	 * @return items of the wardrobe
-//	 */
-//	public Set<Item> getItems() {
-//		return this.items;
-//	}
+  /**
+   * Gets all the outfits of the wardrobe.
+   *
+   * @return outfits of the wardrobe
+   */
+  public Set<OutfitProxy> getOutfits() {
+    return this.outfits;
+  }
+
+  /**
+   * Gets all the items of the wardrobe.
+   *
+   * @return items of the wardrobe
+   */
+  public Set<ItemProxy> getItems() {
+    return this.items;
+  }
 
 }
