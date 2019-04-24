@@ -10,12 +10,12 @@ import java.sql.SQLException;
 public class OutfitProxy {
 
   // Instance variables describing the OutfitProxy instance
-  private String id;
+  private int id;
   private Outfit outfit;
   private Database db;
 
-  public OutfitProxy(Database db, String id) {
-    if (id == null || db == null) {
+  public OutfitProxy(Database db, int id) {
+    if (db == null) {
       throw new NullPointerException();
     }
     this.db = db;

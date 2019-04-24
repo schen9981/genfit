@@ -7,13 +7,13 @@ import java.util.List;
 
 public class User {
 
-  private String id;
+  private int id;
   private String name;
   private String email;
   private List<ItemProxy> items;
   private List<OutfitProxy> outfits;
 
-  public User(String id, String name, String email,
+  public User(int id, String name, String email,
               List<ItemProxy> items, List<OutfitProxy> outfits) {
     this.id = id;
     this.name = name;
@@ -22,7 +22,7 @@ public class User {
     this.outfits = outfits;
   }
 
-  public String getId() {
+  public int getId() {
     return id;
   }
 

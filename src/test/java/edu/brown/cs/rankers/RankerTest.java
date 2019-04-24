@@ -59,7 +59,7 @@ public class RankerTest {
     assertEquals(this.arf.rankAttributes(this.par).size(), 0);
     assertEquals(this.arf.rankAttributes(this.far).size(), 0);
 
-    Item i1 = new Item("i1", "dummy1",
+    Item i1 = new Item(1, "dummy1",
             new SeasonAttribute(SeasonEnum.FALL),
             new FormalityAttribute(FormalityEnum.BUSINESS_CASUAL),
             new PatternAttribute(PatternEnum.SOLID),
@@ -72,7 +72,7 @@ public class RankerTest {
     printList(this.arf.rankAttributes(this.par));
     printList(this.arf.rankAttributes(this.far));
 
-    Item i2 = new Item("i2", "dummy2",
+    Item i2 = new Item(2, "dummy2",
             new SeasonAttribute(SeasonEnum.SPRING),
             new FormalityAttribute(FormalityEnum.ULTRA_CASUAL),
             new PatternAttribute(PatternEnum.STRIPED),
