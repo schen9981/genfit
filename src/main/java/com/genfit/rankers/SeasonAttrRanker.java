@@ -18,16 +18,16 @@ public class SeasonAttrRanker implements AttributeRanker<SeasonAttribute> {
 
   static {
     SeasonEnum[] fallMappings = {
-        SeasonEnum.FALL, SeasonEnum.SPRING
+            SeasonEnum.FALL, SeasonEnum.SPRING
     };
     SeasonEnum[] springMappings = {
-        SeasonEnum.SPRING, SeasonEnum.FALL, SeasonEnum.WINTER
+            SeasonEnum.SPRING, SeasonEnum.FALL, SeasonEnum.WINTER
     };
     SeasonEnum[] winterMappings = {
-        SeasonEnum.WINTER, SeasonEnum.FALL, SeasonEnum.SPRING
+            SeasonEnum.WINTER, SeasonEnum.FALL, SeasonEnum.SPRING
     };
     SeasonEnum[] summerMappings = {
-        SeasonEnum.SUMMER, SeasonEnum.SPRING
+            SeasonEnum.SUMMER, SeasonEnum.SPRING
     };
 
     seasonMappings = new HashMap<>();
@@ -38,12 +38,12 @@ public class SeasonAttrRanker implements AttributeRanker<SeasonAttribute> {
   }
 
   private void countComplements(Map<SeasonEnum, Integer> seasonCounts,
-      SeasonEnum season) {
+                                SeasonEnum season) {
     SeasonEnum[] complementarySeasons = seasonMappings.get(season);
     for (int i = 0; i < complementarySeasons.length; i++) {
       SeasonEnum complementarySeason = complementarySeasons[i];
       seasonCounts.merge(complementarySeason, 1,
-          (oldVal, newVal) -> oldVal + 1);
+              (oldVal, newVal) -> oldVal + 1);
     }
   }
 
@@ -71,9 +71,20 @@ public class SeasonAttrRanker implements AttributeRanker<SeasonAttribute> {
           Integer o1SeasonCount = seasonCounts.get(o1.getAttributeVal());
           Integer o2SeasonCount = seasonCounts.get(o2.getAttributeVal());
 
-          return o1SeasonCount - o2SeasonCount;
+          if (o1SeasonCount == null) {
+            o1SeasonCount = 0;
+          }
+
+          if (o2SeasonCount == null) {
+            o2SeasonCount = 0;
+          }
+
+          return -1 * (o1SeasonCount - o2SeasonCount);
         }
       });
+
+      // remove the last season
+      sortedSeasons.remove(3);
     }
 
     return sortedSeasons;
