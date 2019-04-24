@@ -54,9 +54,9 @@ public class Database {
   private PreparedStatement addUserPrep;
 
   private final String addItemSQL = "INSERT INTO item"
-          + " (name, type, formality, color, pattern, weather)"
+          + " (name, type, formality, color, pattern, season)"
           + " VALUES (?, ?, ?, ?, ?, ?);";
-  private final String addItemToUserSQL = "INSERT INTO item"
+  private final String addItemToUserSQL = "INSERT INTO user_item"
           + "(user_id, item_id) VALUES (?, ?);";
   private PreparedStatement addItemPrep, addItemToUserPrep;
 
