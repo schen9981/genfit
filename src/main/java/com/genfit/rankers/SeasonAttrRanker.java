@@ -1,9 +1,9 @@
 package com.genfit.rankers;
 
+import java.util.List;
+
 import com.genfit.attribute.SeasonAttribute;
 import com.genfit.proxy.ItemProxy;
-
-import java.util.List;
 
 /**
  * Ranker for weather attribute.
@@ -14,5 +14,6 @@ public class SeasonAttrRanker implements AttributeRanker<SeasonAttribute> {
     for (ItemProxy item : items) {
 
     }
+    return null;
   }
 }

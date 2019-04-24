@@ -21,7 +21,6 @@
     </#if>
 </head>
 <body>
-${content}
 <!-- Again, we're serving up the unminified source for clarity. -->
 <script src="<#if cssPath?has_content>${cssPath}</#if>js/jquery-2.1.1.js"></script>
 
@@ -32,14 +31,15 @@ ${content}
 </body>
 <!-- Side navigation -->
 <div class="sidenav">
-  <a href="#">Profile</a>
-  <a href="#">Closet Items</a>
-  <a href="#">User Outfits</a>
-  <a href="#">Discover</a>
+  <a href="/user">Profile</a>
+  <a href="/items">Closet Items</a>
+  <a href="/outfits">User Outfits</a>
+  <a href="/discover">Discover</a>
 </div>
 
 <!-- Page content -->
 <div class="main">
+  ${content}
 </div>
 
 </html>

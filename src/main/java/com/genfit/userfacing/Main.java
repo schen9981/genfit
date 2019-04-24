@@ -8,6 +8,9 @@ import java.io.StringWriter;
 import com.genfit.userfacing.handlers.DiscoverPageHandler;
 import com.genfit.userfacing.handlers.ItemPageHandler;
 import com.genfit.userfacing.handlers.OutfitPageHandler;
+import com.genfit.userfacing.handlers.UserItemRetriever;
+import com.genfit.userfacing.handlers.UserOutfitRetriever;
+import com.genfit.userfacing.handlers.UserPageHandler;
 import com.google.gson.Gson;
 
 import freemarker.template.Configuration;
@@ -69,6 +72,7 @@ public final class Main {
     this.repl = new MainREPL(this.mainApp);
 
     if (options.has("gui")) {
+      System.out.println("gui");
       this.runSparkServer((int) options.valueOf("port"));
     }
 
@@ -80,15 +84,20 @@ public final class Main {
   private void runSparkServer(int port) {
     Spark.port(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
-    Spark.exception(Exception.class, new ExceptionPrinter());
+//    Spark.exception(Exception.class, new ExceptionPrinter());
 
     FreeMarkerEngine freeMarker = createEngine();
 
-    // Setup Spark Routes
+    // Setup spark routes for main pages
     Spark.get("/", new UserPageHandler(this.mainApp), freeMarker);
+    Spark.get("/user", new UserPageHandler(this.mainApp), freeMarker);
     Spark.get("/items", new ItemPageHandler(this.mainApp), freeMarker);
     Spark.get("/outfits", new OutfitPageHandler(this.mainApp), freeMarker);
     Spark.get("/discover", new DiscoverPageHandler(this.mainApp), freeMarker);
+
+    // Setup spark routes for getting data (ie. json endpoints)
+    Spark.post("/userItems", new UserItemRetriever());
+    Spark.post("/userOutfits", new UserOutfitRetriever());
 
   }
 

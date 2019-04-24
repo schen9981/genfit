@@ -21,8 +21,9 @@ public class OutfitPageHandler implements TemplateViewRoute {
   @Override
   public ModelAndView handle(Request request, Response response)
       throws Exception {
-    Map<String, Object> variables = ImmutableMap.of("title",
-        "Welcome to " + "GenFit!!!");
+    String outfitJS = "<script src=\"js/outfit-page.js\"></script>";
+    Map<String, Object> variables = ImmutableMap.of("title", "User Outfits",
+        "additionalScripts", outfitJS);
     return new ModelAndView(variables, "outfitpage.ftl");
   }
 }

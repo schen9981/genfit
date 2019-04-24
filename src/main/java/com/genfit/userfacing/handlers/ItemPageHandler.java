@@ -1,13 +1,14 @@
 package com.genfit.userfacing.handlers;
 
+import java.util.Map;
+
 import com.genfit.userfacing.GenFitApp;
 import com.google.common.collect.ImmutableMap;
+
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
 import spark.TemplateViewRoute;
-
-import java.util.Map;
 
 public class ItemPageHandler implements TemplateViewRoute {
   private GenFitApp genFitApp;
@@ -17,9 +18,11 @@ public class ItemPageHandler implements TemplateViewRoute {
   }
 
   @Override
-  public ModelAndView handle(Request request, Response response) throws Exception {
-    Map<String, Object> variables = ImmutableMap.of("title", "Welcome to "
-            + "GenFit!!!");
+  public ModelAndView handle(Request request, Response response)
+      throws Exception {
+    String itemJS = "<script src=\"js/item-page.js\"></script>";
+    Map<String, Object> variables = ImmutableMap.of("title", "User Items",
+        "additionalScripts", itemJS);
     return new ModelAndView(variables, "itempage.ftl");
   }
 }

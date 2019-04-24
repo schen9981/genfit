@@ -2,12 +2,10 @@ package com.genfit.proxy;
 
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
-import com.genfit.attribute.TypeAttribute;
 import com.genfit.attribute.SeasonAttribute;
+import com.genfit.attribute.TypeAttribute;
 import com.genfit.clothing.Item;
 import com.genfit.database.Database;
-
-import java.sql.SQLException;
 
 public class ItemProxy {
 
@@ -25,8 +23,7 @@ public class ItemProxy {
     this.db = db;
   }
 
-
-  private Item getItem() {
+  public Item getItem() {
     try {
       this.item = this.db.getItemBean(this.id);
     } catch (Exception e) {

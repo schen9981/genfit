@@ -21,8 +21,7 @@ public class DiscoverPageHandler implements TemplateViewRoute {
   @Override
   public ModelAndView handle(Request request, Response response)
       throws Exception {
-    Map<String, Object> variables = ImmutableMap.of("title",
-        "Welcome to " + "GenFit!!!");
+    Map<String, Object> variables = ImmutableMap.of("title", "Discover");
     return new ModelAndView(variables, "discoverpage.ftl");
   }
 }
