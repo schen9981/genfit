@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.genfit.attribute.Attribute;
-import com.genfit.clothing.Item;
 import com.genfit.clothing.Outfit;
 import com.genfit.database.Database;
 
@@ -40,7 +39,7 @@ public class OutfitSuggester {
     otherClasses.remove(classToQuery);
 
     // get list of items that have matching attributes of smallest query
-    List<Item> match = db.getAllItemsByAttributes(attr);
+//    List<Item> match = db.getAllItemsByAttributes(attr);
 
     // sort through for the other attributes
     // TODO: write method for sorting through other attributes.

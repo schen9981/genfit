@@ -3,5 +3,9 @@
 
 <div id="items">
 </div>
+
+<div id="add">
+</div>
+
 </#assign>
 <#include "main.ftl">
