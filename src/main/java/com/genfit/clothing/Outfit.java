@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableMap;
 public class Outfit extends ClosetComponent {
 
   // saves the list of items that the outfit has
-  private String id;
+  private int id;
   private Map<TypeEnum, ItemProxy> items;
   private String name;
   private SeasonAttribute season;
@@ -21,7 +21,7 @@ public class Outfit extends ClosetComponent {
   private PatternAttribute pattern;
   private ColorAttribute color;
 
-  public Outfit(String id, String name, Map<TypeEnum, ItemProxy> items) {
+  public Outfit(int id, String name, Map<TypeEnum, ItemProxy> items) {
     // TODO: How to set attributes of outfit (some sort of average?)
 //		super(weather, formality, pattern, color, null);
     super(null, null, null, null, null);
@@ -41,4 +41,27 @@ public class Outfit extends ClosetComponent {
     return immutable;
   }
 
+  public int getId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public SeasonAttribute getSeason() {
+    return season;
+  }
+
+  public FormalityAttribute getFormality() {
+    return formality;
+  }
+
+  public PatternAttribute getPattern() {
+    return pattern;
+  }
+
+  public ColorAttribute getColor() {
+    return color;
+  }
 }

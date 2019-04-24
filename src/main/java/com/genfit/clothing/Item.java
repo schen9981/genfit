@@ -13,7 +13,7 @@ import com.genfit.attribute.attributevals.SeasonEnum;
 
 public class Item extends ClosetComponent {
 
-	private String id;
+	private int id;
 	private String name;
 	private SeasonAttribute season;
 	private FormalityAttribute formality;
@@ -21,7 +21,7 @@ public class Item extends ClosetComponent {
 	private ColorAttribute color;
 	private TypeAttribute type;
 
-	public Item(String id, String name, SeasonAttribute season,
+	public Item(int id, String name, SeasonAttribute season,
 							FormalityAttribute formality,
 							PatternAttribute pattern, ColorAttribute color,
 							TypeAttribute type) {
@@ -36,7 +36,7 @@ public class Item extends ClosetComponent {
 	}
 
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
