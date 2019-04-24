@@ -41,7 +41,7 @@ public class ItemProxyDummy extends ItemProxy {
   }
 
   @Override
-  public String getId() {
+  public int getId() {
     return this.item.getId();
   }
 

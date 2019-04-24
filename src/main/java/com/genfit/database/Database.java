@@ -1,15 +1,5 @@
 package com.genfit.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import com.genfit.attribute.Attribute;
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
@@ -26,12 +16,20 @@ import com.genfit.clothing.Item;
 import com.genfit.clothing.Outfit;
 import com.genfit.proxy.ItemProxy;
 import com.genfit.proxy.OutfitProxy;
-import com.genfit.proxy.UserProxy;
 import com.genfit.users.User;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.collect.ImmutableMap;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class Database {
   private Connection conn;
@@ -41,9 +39,9 @@ public class Database {
   private final String getItemInfoSQL = "SELECT * FROM item WHERE id=?;";
   private final String getOutfitInfoSQL = "SELECT * FROM outfit WHERE id=?;";
   private final String getItemsByUserIDSQL = "SELECT * FROM user_item WHERE "
-      + "user_id=?;";
+          + "user_id=?;";
   private final String getOutfitsByUserIDSQL = "SELECT * FROM user_outfit "
-      + "WHERE user_id=?;";
+          + "WHERE user_id=?;";
   private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
   private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
   private PreparedStatement getAllItemsByAttributesPrep;
@@ -68,16 +66,21 @@ public class Database {
 
   //Delete Statements
   private final String deleteUserSQL = "DELETE FROM user WHERE id=?;";
-  private final String deleteAllUserItemsSQL = "DELETE FROM user_item WHERE user_id=?;";
-  private final String deleteAllUserOutfitsSQL = "DELETE FROM user_outfit WHERE user_id=?;";
-  private PreparedStatement deleteUserPrep, deleteAllUserItemsPrep, deleteAllUserOutfitsPrep;
+  private final String deleteAllUserItemsSQL = "DELETE FROM user_item WHERE "
+          + "user_id=?;";
+  private final String deleteAllUserOutfitsSQL = "DELETE FROM user_outfit "
+          + "WHERE user_id=?;";
+  private PreparedStatement deleteUserPrep, deleteAllUserItemsPrep,
+          deleteAllUserOutfitsPrep;
 
   private final String deleteItemSQL = "DELETE FROM item WHERE id=?;";
-  private final String deleteUserItemSQL = "DELETE FROM user_item WHERE user_id=? AND item_id=?;";
+  private final String deleteUserItemSQL = "DELETE FROM user_item WHERE "
+          + "user_id=? AND item_id=?;";
   private PreparedStatement deleteItemPrep, deleteUserItemPrep;
 
   private final String deleteOutfitSQL = "DELETE FROM outfit WHERE id=?;";
-  private final String deleteUserOutfitSQL = "DELETE FROM user_item WHERE user_id=? AND outfit_id=?;";
+  private final String deleteUserOutfitSQL = "DELETE FROM user_item WHERE "
+          + "user_id=? AND outfit_id=?;";
   private PreparedStatement deleteOutfitPrep, deleteUserOutfitPrep;
 
   //Misc Statements
@@ -95,27 +98,29 @@ public class Database {
       this.getItemInfoPrep = conn.prepareStatement(this.getItemInfoSQL);
       this.getOutfitInfoPrep = conn.prepareStatement(this.getOutfitInfoSQL);
       this.getItemsByUserIDPrep = conn
-          .prepareStatement(this.getItemsByUserIDSQL);
+              .prepareStatement(this.getItemsByUserIDSQL);
       this.getOutfitsByUserIDPrep = conn
-          .prepareStatement(this.getOutfitsByUserIDSQL);
+              .prepareStatement(this.getOutfitsByUserIDSQL);
 
-      this.addUserPrep = conn.prepareStatement(addUserSQL);
-      this.addItemPrep = conn.prepareStatement(addItemSQL);
-      this.addItemToUserPrep = conn.prepareStatement(addItemToUserSQL);
-      this.addOutfitPrep = conn.prepareStatement(addOutfitSQL);
-      this.addOutfitToUserPrep = conn.prepareStatement(addOutfitToUserSQL);
+      this.addUserPrep = conn.prepareStatement(this.addUserSQL);
+      this.addItemPrep = conn.prepareStatement(this.addItemSQL);
+      this.addItemToUserPrep = conn.prepareStatement(this.addItemToUserSQL);
+      this.addOutfitPrep = conn.prepareStatement(this.addOutfitSQL);
+      this.addOutfitToUserPrep = conn.prepareStatement(this.addOutfitToUserSQL);
 
-      this.deleteAllUserItemsPrep = conn.prepareStatement(this.deleteAllUserItemsSQL);
-      this.deleteAllUserOutfitsPrep = conn.prepareStatement(this.deleteAllUserOutfitsSQL);
+      this.deleteAllUserItemsPrep =
+              conn.prepareStatement(this.deleteAllUserItemsSQL);
+      this.deleteAllUserOutfitsPrep =
+              conn.prepareStatement(this.deleteAllUserOutfitsSQL);
       this.deleteUserPrep = conn.prepareStatement(this.deleteUserSQL);
       this.deleteItemPrep = conn.prepareStatement(this.deleteItemSQL);
-      this.deleteUserItemPrep = conn.prepareStatement(deleteUserItemSQL);
-      this.deleteOutfitPrep = conn.prepareStatement(deleteOutfitSQL);
-      this.deleteUserOutfitPrep = conn.prepareStatement(deleteUserOutfitSQL);
-      this.lastInsertID = conn.prepareStatement(lastInsertIDSQL);
+      this.deleteUserItemPrep = conn.prepareStatement(this.deleteUserItemSQL);
+      this.deleteOutfitPrep = conn.prepareStatement(this.deleteOutfitSQL);
+      this.deleteUserOutfitPrep = conn.prepareStatement(this.deleteUserOutfitSQL);
+      this.lastInsertID = conn.prepareStatement(this.lastInsertIDSQL);
     } catch (SQLException e) {
       System.out.println("ERROR: SQLExeception when prepare statement"
-          + "in Database constructor");
+              + "in Database constructor");
     }
     this.instantiateCacheLoader();
   }
@@ -128,31 +133,31 @@ public class Database {
     final int expire = 10;
 
     this.userCache = CacheBuilder.newBuilder().maximumSize(maxSize)
-        .expireAfterWrite(expire, TimeUnit.MINUTES)
-        .build(new CacheLoader<String, User>() {
-          @Override
-          public User load(String key) throws Exception {
-            return Database.this.getUserInfo(key);
-          }
-        });
+            .expireAfterWrite(expire, TimeUnit.MINUTES)
+            .build(new CacheLoader<String, User>() {
+              @Override
+              public User load(String key) throws Exception {
+                return Database.this.getUserInfo(key);
+              }
+            });
 
     this.itemCache = CacheBuilder.newBuilder().maximumSize(maxSize)
-        .expireAfterWrite(expire, TimeUnit.MINUTES)
-        .build(new CacheLoader<Integer, Item>() {
-          @Override
-          public Item load(Integer key) throws Exception {
-            return Database.this.getItemInfo(key);
-          }
-        });
+            .expireAfterWrite(expire, TimeUnit.MINUTES)
+            .build(new CacheLoader<Integer, Item>() {
+              @Override
+              public Item load(Integer key) throws Exception {
+                return Database.this.getItemInfo(key);
+              }
+            });
 
     this.outfitCache = CacheBuilder.newBuilder().maximumSize(maxSize)
-        .expireAfterWrite(expire, TimeUnit.MINUTES)
-        .build(new CacheLoader<Integer, Outfit>() {
-          @Override
-          public Outfit load(Integer key) throws Exception {
-            return Database.this.getOutfitInfo(key);
-          }
-        });
+            .expireAfterWrite(expire, TimeUnit.MINUTES)
+            .build(new CacheLoader<Integer, Outfit>() {
+              @Override
+              public Outfit load(Integer key) throws Exception {
+                return Database.this.getOutfitInfo(key);
+              }
+            });
   }
 
   /**
@@ -203,7 +208,7 @@ public class Database {
     String name = rs.getString(2);
     rs.close();
     return new User(id, name, email, this.getItemsByUserID(id),
-        this.getOutfitsByUserID(id));
+            this.getOutfitsByUserID(id));
   }
 
   /**
@@ -220,13 +225,13 @@ public class Database {
     String name = rs.getString(2);
     TypeAttribute type = new TypeAttribute(TypeEnum.values()[rs.getInt(3)]);
     FormalityAttribute formality = new FormalityAttribute(
-        FormalityEnum.values()[rs.getInt(4)]);
+            FormalityEnum.values()[rs.getInt(4)]);
     ColorAttribute color = new ColorAttribute(
-        new Color(Integer.parseInt(rs.getString(5), 16)));
+            new Color(Integer.parseInt(rs.getString(5), 16)));
     PatternAttribute pattern = new PatternAttribute(
-        PatternEnum.values()[rs.getInt(6)]);
+            PatternEnum.values()[rs.getInt(6)]);
     SeasonAttribute season = new SeasonAttribute(
-        SeasonEnum.values()[rs.getInt(7)]);
+            SeasonEnum.values()[rs.getInt(7)]);
     rs.close();
     // TODO: How to instantiate Item of specific type
     // return new Item(id, name, season, formality, pattern, color, type);
@@ -235,7 +240,7 @@ public class Database {
 
   // TODO: @lawrence will modify this
   public List<ItemProxy> getAllItemsByAttributes(AttributeEnum attributeEnum,
-      List<Attribute> attribute) throws SQLException {
+                                                 List<Attribute> attribute) throws SQLException {
     String attributeName = attributeEnum.toString();
 
     String getAllItemsByAttributesSQL = "SELECT * FROM item WHERE ?=?";
@@ -245,7 +250,7 @@ public class Database {
     }
     getAllItemsByAttributesSQL += ";";
     this.getAllItemsByAttributesPrep = this.conn
-        .prepareStatement(getAllItemsByAttributesSQL);
+            .prepareStatement(getAllItemsByAttributesSQL);
 
     if (attributeEnum == AttributeEnum.COLOR) {
       for (int i = 1; i <= attribute.size() * 2; i += 2) {
@@ -346,69 +351,73 @@ public class Database {
 
 
   public void addUser(String name, String email) throws SQLException {
-    addUserPrep.setString(1, name);
-    addUserPrep.setString(2, email);
-    addUserPrep.executeUpdate();
+    this.addUserPrep.setString(1, name);
+    this.addUserPrep.setString(2, email);
+    this.addUserPrep.executeUpdate();
   }
 
   public void addItem(User user, String itemName) throws SQLException {
     //TODO item parameters
-    addItemPrep.setString(1, itemName);
-    addItemPrep.setInt(2, 0);
-    addItemPrep.setInt(3, 0);
-    addItemPrep.setString(4, "0xFFFFFF");
-    addItemPrep.setInt(5, 0);
-    addItemPrep.setInt(6, 0);
-    addItemPrep.executeUpdate();
+    this.addItemPrep.setString(1, itemName);
+    this.addItemPrep.setInt(2, 0);
+    this.addItemPrep.setInt(3, 0);
+    this.addItemPrep.setString(4, "0xFFFFFF");
+    this.addItemPrep.setInt(5, 0);
+    this.addItemPrep.setInt(6, 0);
+    this.addItemPrep.executeUpdate();
 
-    ResultSet rs = lastInsertID.executeQuery();
+    ResultSet rs = this.lastInsertID.executeQuery();
     rs.next();
     int itemID = rs.getInt(1);
 
-    addItemToUserPrep.setInt(1, user.getId());
-    addItemToUserPrep.setInt(2, itemID);
-    addItemToUserPrep.executeUpdate();
+    this.addItemToUserPrep.setInt(1, user.getId());
+    this.addItemToUserPrep.setInt(2, itemID);
+    this.addItemToUserPrep.executeUpdate();
   }
 
-  public void addOutfit(User user, String outfitName, Map<TypeEnum, ItemProxy> items) throws SQLException {
+  public void addOutfit(User user, String outfitName, Map<TypeEnum,
+          ItemProxy> items) throws SQLException {
     ItemProxy outerItem = items.get(TypeEnum.OUTER);
     ItemProxy topItem = items.get(TypeEnum.TOP);
     ItemProxy bottomItem = items.get(TypeEnum.BOTTOM);
     ItemProxy shoeItem = items.get(TypeEnum.SHOES);
 
-    addOutfitPrep.setString(1, outfitName);
-    addOutfitPrep.setInt(2, outerItem.getId());
-    addOutfitPrep.setInt(3, topItem.getId());
-    addOutfitPrep.setInt(4, bottomItem.getId());
-    addOutfitPrep.setInt(5, shoeItem.getId());
-    addOutfitPrep.executeUpdate();
+    this.addOutfitPrep.setString(1, outfitName);
+    this.addOutfitPrep.setInt(2, outerItem.getId());
+    this.addOutfitPrep.setInt(3, topItem.getId());
+    this.addOutfitPrep.setInt(4, bottomItem.getId());
+    this.addOutfitPrep.setInt(5, shoeItem.getId());
+    this.addOutfitPrep.executeUpdate();
 
-    ResultSet rs = lastInsertID.executeQuery();
+    ResultSet rs = this.lastInsertID.executeQuery();
     rs.next();
     int outfitID = rs.getInt(1);
 
-    addOutfitToUserPrep.setInt(1, user.getId());
-    addOutfitToUserPrep.setInt(2, outfitID);
-    addOutfitToUserPrep.executeUpdate();
+    this.addOutfitToUserPrep.setInt(1, user.getId());
+    this.addOutfitToUserPrep.setInt(2, outfitID);
+    this.addOutfitToUserPrep.executeUpdate();
   }
 
   /**
    * Deletes a user from the user Table, all user item and outfit references
    * from the user_item and user_outfit tables respectively.
+   *
    * @param user
    * @throws SQLException
    */
   private void deleteUser(User user) throws SQLException {
-    deleteUserPrep.setInt(1, user.getId());
-    deleteUserPrep.executeUpdate();
-    deleteAllUserItemsPrep.setInt(1, user.getId());
-    deleteAllUserItemsPrep.executeUpdate();
-    deleteAllUserOutfitsPrep.setInt(1, user.getId());
-    deleteAllUserOutfitsPrep.executeUpdate();
+    this.deleteUserPrep.setInt(1, user.getId());
+    this.deleteUserPrep.executeUpdate();
+    this.deleteAllUserItemsPrep.setInt(1, user.getId());
+    this.deleteAllUserItemsPrep.executeUpdate();
+    this.deleteAllUserOutfitsPrep.setInt(1, user.getId());
+    this.deleteAllUserOutfitsPrep.executeUpdate();
   }
+
   /**
    * Deletes an item from the item table and its reference from the
    * user_item table.
+   *
    * @param user - The User that owns the item.
    * @param item - The item to be deleted.
    * @throws SQLException
@@ -417,15 +426,16 @@ public class Database {
     //TODO: delete item (might be referenced by other users)?
 //    deleteItemPrep.setString(1, item.getId());
 //    deleteItemPrep.executeUpdate();
-    deleteUserItemPrep.setInt(1, user.getId());
-    deleteUserItemPrep.setInt(2, item.getId());
-    deleteUserItemPrep.executeUpdate();
+    this.deleteUserItemPrep.setInt(1, user.getId());
+    this.deleteUserItemPrep.setInt(2, item.getId());
+    this.deleteUserItemPrep.executeUpdate();
   }
 
   /**
    * Deletes an outfit from the outfit table and its reference in the
    * user_outfit table.
-   * @param user - The user that owns the outfit.
+   *
+   * @param user   - The user that owns the outfit.
    * @param outfit - The Outfit to be deleted.
    * @throws SQLException
    */
@@ -433,9 +443,9 @@ public class Database {
     //TODO: delete outfit (might be referenced by other users)?
 //    deleteOutfitPrep.setString(1, outfit.getId());
 //    deleteOutfitPrep.executeUpdate();
-    deleteUserOutfitPrep.setInt(1, user.getId());
-    deleteUserOutfitPrep.setInt(2, outfit.getId());
-    deleteUserOutfitPrep.executeUpdate();
+    this.deleteUserOutfitPrep.setInt(1, user.getId());
+    this.deleteUserOutfitPrep.setInt(2, outfit.getId());
+    this.deleteUserOutfitPrep.executeUpdate();
   }
 
 }

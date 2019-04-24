@@ -1,6 +1,5 @@
 package edu.brown.cs.rankers;
 
-import com.genfit.attribute.Attribute;
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
@@ -21,8 +20,6 @@ import com.genfit.rankers.SeasonAttrRanker;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 

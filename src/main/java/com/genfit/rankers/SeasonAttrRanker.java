@@ -1,14 +1,14 @@
 package com.genfit.rankers;
 
+import com.genfit.attribute.SeasonAttribute;
+import com.genfit.attribute.attributevals.SeasonEnum;
+import com.genfit.proxy.ItemProxy;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.genfit.attribute.SeasonAttribute;
-import com.genfit.attribute.attributevals.SeasonEnum;
-import com.genfit.proxy.ItemProxy;
 
 /**
  * Ranker for weather attribute.
