@@ -1,17 +1,13 @@
 package com.genfit.database;
-
-import com.genfit.clothing.Item;
-import com.genfit.clothing.Outfit;
 import com.genfit.proxy.ItemProxy;
 import com.genfit.proxy.OutfitProxy;
 import com.genfit.proxy.UserProxy;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
 
-import static com.genfit.database.IAMDatabaseAuthenticationTester.getDBConnectionUsingIam;
+import static com.genfit.database.AWSConnection.getDBConnectionUsingIam;
 
 /**
  * Created by ericwang on 2019/4/24.

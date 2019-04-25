@@ -26,6 +26,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,12 @@ import java.util.concurrent.TimeUnit;
 
 public class Database {
   private Connection conn;
+
+  //Check statements
+  private final String checkLoginSQL = "SELECT * FROM user WHERE email = ? "
+      + "AND password = ?;";
+  private final String checkSignupSQL = "SELECT * FROM user WHERE email = ?;";
+  private PreparedStatement checkLoginPrep, checkSignupPrep;
 
   //Get Statements
   private final String getUserInfoSQL = "SELECT * FROM user WHERE email=?;";
@@ -48,8 +55,8 @@ public class Database {
   private PreparedStatement getAllItemsByAttributesPrep;
 
   //Add Statements
-  private final String addUserSQL = "INSERT IGNORE INTO user (name, email)"
-          + " values (?, ?);";
+  private final String addUserSQL = "INSERT INTO user (name, email, password)"
+          + " values (?, ?, ?);";
   private PreparedStatement addUserPrep;
 
   private final String addItemSQL = "INSERT IGNORE INTO item"
@@ -95,6 +102,11 @@ public class Database {
   public Database(Connection conn) {
     try {
       this.conn = conn;
+      Statement stmt= conn.createStatement();
+      stmt.execute("USE genfit;");
+
+      this.checkLoginPrep = conn.prepareStatement(this.checkLoginSQL);
+      this.checkSignupPrep = conn.prepareStatement(this.checkSignupSQL);
       this.getUserInfoPrep = conn.prepareStatement(this.getUserInfoSQL);
       this.getItemInfoPrep = conn.prepareStatement(this.getItemInfoSQL);
       this.getOutfitInfoPrep = conn.prepareStatement(this.getOutfitInfoSQL);
@@ -207,6 +219,31 @@ public class Database {
    */
   public Outfit getOutfitBean(int id) throws Exception {
     return this.outfitCache.get(id);
+  }
+
+
+  public boolean checkLogin(String username, String hashPwd) throws Exception{
+    this.checkLoginPrep.setString(1, username);
+    this.checkLoginPrep.setString(2, hashPwd);
+    ResultSet rs = this.checkLoginPrep.executeQuery();
+    boolean success = false;
+    if (rs.next()) {
+      success = true;
+    }
+    rs.close();
+    return success;
+  }
+
+  public boolean checkSignup(String username) throws Exception{
+
+    this.checkSignupPrep.setString(1, username);
+    ResultSet rs = this.checkSignupPrep.executeQuery();
+    boolean success = true;
+    if (rs.next()) {
+      success = false;
+    }
+    rs.close();
+    return success;
   }
 
   /**
@@ -368,15 +405,18 @@ public class Database {
   }
 
 
+
   /**
    * Adds a new user.
    * @param name - The name of the new use.
    * @param email - the user's email.
    * @throws SQLException
    */
-  public void addUser(String name, String email) throws SQLException {
+  public void addUser(String name, String email, String hashPwd)
+      throws SQLException {
     this.addUserPrep.setString(1, name);
     this.addUserPrep.setString(2, email);
+    this.addUserPrep.setString(3, hashPwd);
     this.addUserPrep.executeUpdate();
   }
 

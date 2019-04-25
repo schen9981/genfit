@@ -21,11 +21,11 @@ import java.util.Properties;
 
 import java.net.URL;
 
-public class IAMDatabaseAuthenticationTester {
+public class AWSConnection {
   //AWS Credentials of the IAM user with policy enabling IAM Database Authenticated access to the db by the db user.
   private static final DefaultAWSCredentialsProviderChain creds = new DefaultAWSCredentialsProviderChain();
-  private static final String AWS_ACCESS_KEY = creds.getCredentials().getAWSAccessKeyId();
-  private static final String AWS_SECRET_KEY = creds.getCredentials().getAWSSecretKey();
+//  private static final String AWS_ACCESS_KEY = creds.getCredentials().getAWSAccessKeyId();
+//  private static final String AWS_SECRET_KEY = creds.getCredentials().getAWSSecretKey();
 
   //Configuration parameters for the generation of the IAM Database Authentication token
   private static final String RDS_INSTANCE_HOSTNAME = "cs32-term-project-db-instance.cqu9hho8uq1u.us-east-1.rds.amazonaws.com";
@@ -95,13 +95,13 @@ public class IAMDatabaseAuthenticationTester {
    * btusi123.cmz7kenwo2ye.rds.cn-north-1.amazonaws.com.cn:3306/?Action=connect&DBUser=iamtestuser&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20171003T010726Z&X-Amz-SignedHeaders=host&X-Amz-Expires=899&X-Amz-Credential=AKIAPFXHGVDI5RNFO4AQ%2F20171003%2Fcn-north-1%2Frds-db%2Faws4_request&X-Amz-Signature=f9f45ef96c1f770cdad11a53e33ffa4c3730bc03fdee820cfdf1322eed15483b
    * @return
    */
-  private static String generateAuthToken() {
-    BasicAWSCredentials awsCredentials = new BasicAWSCredentials(AWS_ACCESS_KEY, AWS_SECRET_KEY);
-    RdsIamAuthTokenGenerator generator = RdsIamAuthTokenGenerator.builder()
-            .credentials(new AWSStaticCredentialsProvider(awsCredentials)).region(REGION_NAME).build();
-    return generator.getAuthToken(GetIamAuthTokenRequest.builder()
-            .hostname(RDS_INSTANCE_HOSTNAME).port(RDS_INSTANCE_PORT).userName(DB_USER).build());
-  }
+//  private static String generateAuthToken() {
+//    BasicAWSCredentials awsCredentials = new BasicAWSCredentials(AWS_ACCESS_KEY, AWS_SECRET_KEY);
+//    RdsIamAuthTokenGenerator generator = RdsIamAuthTokenGenerator.builder()
+//            .credentials(new AWSStaticCredentialsProvider(awsCredentials)).region(REGION_NAME).build();
+//    return generator.getAuthToken(GetIamAuthTokenRequest.builder()
+//            .hostname(RDS_INSTANCE_HOSTNAME).port(RDS_INSTANCE_PORT).userName(DB_USER).build());
+//  }
 
   /**
    * This method sets the SSL properties which specify the key store file, its type and password:
