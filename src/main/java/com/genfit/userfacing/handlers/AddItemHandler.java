@@ -2,43 +2,73 @@ package com.genfit.userfacing.handlers;
 
 import java.util.Map;
 
-import com.genfit.userfacing.GenFitApp;
+import com.genfit.attribute.ColorAttribute;
+import com.genfit.attribute.FormalityAttribute;
+import com.genfit.attribute.PatternAttribute;
+import com.genfit.attribute.SeasonAttribute;
+import com.genfit.attribute.TypeAttribute;
+import com.genfit.attribute.attributevals.Color;
+import com.genfit.attribute.attributevals.FormalityEnum;
+import com.genfit.attribute.attributevals.PatternEnum;
+import com.genfit.attribute.attributevals.SeasonEnum;
+import com.genfit.attribute.attributevals.TypeEnum;
+import com.genfit.clothing.Item;
+import com.genfit.userfacing.Main;
 import com.google.common.collect.ImmutableMap;
 
-import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
-import spark.TemplateViewRoute;
+import spark.Route;
 
-public class AddItemHandler implements TemplateViewRoute {
-  private GenFitApp genFitApp;
-
-  public AddItemHandler(GenFitApp genFitApp) {
-    this.genFitApp = genFitApp;
-  }
+public class AddItemHandler implements Route {
 
   @Override
-  public ModelAndView handle(Request request, Response response)
-      throws Exception {
+  public String handle(Request request, Response response) throws Exception {
 
     QueryParamsMap qm = request.queryMap();
-    String name = qm.value("item-name");
-    String color = qm.value("item-color");
-    String type1 = qm.value("item-type-1");
-    String type2 = qm.value("item-type-2");
-    String pattern = qm.value("item-pattern");
-    String season = qm.value("item-season");
-    String formality = qm.value("item-formality");
 
-    // TODO: create an item
-    // TODO: add to database
-    // TODO: update page html
+    String[] itemInfoArr = new String[7];
 
-    String itemJS = "<script src=\"js/item-page.js\"></script>";
-    String itemCSS = "<link rel=\"stylesheet\" href=\"css/item-page.css\"></link>";
-    Map<String, Object> variables = ImmutableMap.of("title", "User Items",
-        "additionalScripts", itemJS, "additionalCSS", itemCSS);
-    return new ModelAndView(variables, "itempage.ftl");
+    String name = qm.value("itemName");
+    itemInfoArr[1] = name;
+
+    String colorStr = qm.value("itemColor");
+    itemInfoArr[2] = colorStr;
+    int colorInt = (int) Long.parseLong(colorStr.replaceFirst("#", ""), 16);
+    ColorAttribute color = new ColorAttribute(new Color(colorInt));
+
+    String typeStr = qm.value("itemType1");
+    itemInfoArr[3] = typeStr;
+    TypeAttribute type1 = new TypeAttribute(
+        Enum.valueOf(TypeEnum.class, typeStr));
+
+    String patternStr = qm.value("itemPattern");
+    itemInfoArr[4] = patternStr;
+    PatternAttribute pattern = new PatternAttribute(
+        Enum.valueOf(PatternEnum.class, patternStr));
+
+    String seasonStr = qm.value("itemSeason");
+    itemInfoArr[5] = seasonStr;
+    SeasonAttribute season = new SeasonAttribute(
+        Enum.valueOf(SeasonEnum.class, qm.value("itemSeason")));
+
+    String formalityStr = qm.value("itemFormality");
+    itemInfoArr[6] = formalityStr;
+    FormalityAttribute formality = new FormalityAttribute(
+        Enum.valueOf(FormalityEnum.class, formalityStr));
+
+    // create new item to add
+    int id = 0; // TODO: how to determine id of the item?
+    itemInfoArr[0] = Integer.toString(id);
+    Item newItem = new Item(id, name, season, formality, pattern, color, type1);
+
+    // TODO: add item to database
+
+    // return an item to add to html page
+
+    Map<String, Object> variables = ImmutableMap.of("newItem", itemInfoArr);
+
+    return Main.GSON.toJson(variables);
   }
 }

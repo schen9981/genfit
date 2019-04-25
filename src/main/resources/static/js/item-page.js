@@ -1,12 +1,12 @@
 // generate html content (ie. item information) for card
 function generateCardContent(item) {
-  // item represented as array [name, color, type, pattern, season, formality]
-  let itemContent = '<h5>' + item[0] + '</h5><br>';
-  itemContent += '<p>Color:' + item[1] + '</p></br>';
-  itemContent += '<p>Type:' + item[2] + '</p></br>';
-  itemContent += '<p>Pattern:' + item[3] + '</p></br>';
-  itemContent += '<p>Season:' + item[4] + '</p></br>';
-  itemContent += '<p>Formality:' + item[5] + '</p></br>';
+  // item represented as array [id, name, color, type, pattern, season, formality]
+  let itemContent = '<h5>' + item[1] + '</h5><br>';
+  itemContent += '<p>Color:' + item[2] + '</p></br>';
+  itemContent += '<p>Type:' + item[3] + '</p></br>';
+  itemContent += '<p>Pattern:' + item[4] + '</p></br>';
+  itemContent += '<p>Season:' + item[5] + '</p></br>';
+  itemContent += '<p>Formality:' + item[6] + '</p></br>';
   return itemContent;
 }
 
@@ -40,7 +40,7 @@ function generateCards(listOfItems) {
     let item = listOfItems[i];
 
     // generate modal html
-    let id = i + 1
+    let id = item[0];
     let buttonHTML = '<button class="item" id="item-' + id + '">Item' + id + '</button>';
     let modalHTML = '<div class="modal" id="modal-' + id + '">';
     modalHTML += '<div class="modal-content">';
@@ -67,14 +67,14 @@ function displayUserItems(userId) {
   // };
 
   userItems = [
-    ["Item 1", "red", "tshirt", "solid", "summer", "casual"],
-    ["Item 2", "red", "tshirt", "solid", "summer", "casual"],
-    ["Item 3", "red", "tshirt", "solid", "summer", "casual"],
-    ["Item 4", "red", "tshirt", "solid", "summer", "casual"],
-    ["Item 5", "red", "tshirt", "solid", "summer", "casual"],
-    ["Item 6", "red", "tshirt", "solid", "summer", "casual"],
-    ["Item 7", "red", "tshirt", "solid", "summer", "casual"],
-    ["Item 8", "red", "tshirt", "solid", "summer", "casual"],
+    [1, "Item 1", "red", "tshirt", "solid", "summer", "casual"],
+    [2, "Item 2", "red", "tshirt", "solid", "summer", "casual"],
+    [3, "Item 3", "red", "tshirt", "solid", "summer", "casual"],
+    [4, "Item 4", "red", "tshirt", "solid", "summer", "casual"],
+    [5, "Item 5", "red", "tshirt", "solid", "summer", "casual"],
+    [6, "Item 6", "red", "tshirt", "solid", "summer", "casual"],
+    [7, "Item 7", "red", "tshirt", "solid", "summer", "casual"],
+    [8, "Item 8", "red", "tshirt", "solid", "summer", "casual"],
   ]
 
   generateCards(userItems);
@@ -90,15 +90,15 @@ function displayUserItems(userId) {
 function dynamicTypeDropdown() {
   $('#type-1').on('change', function(){
     $('#type-2').html('');
-    if ($('#type-1').val() == "outer") {
+    if ($('#type-1').val() == "OUTER") {
         $('#type-2').append('<option value="outer-coat">Outer Coat</option>');
         $('#type-2').append('<option value="suit">Suit</option>');
-    } else if ($('#type-1').val() == "top") {
+    } else if ($('#type-1').val() == "TOP") {
       $('#type-2').append('<option value="shirt-blouse">Shirt/Blouse</option>');
       $('#type-2').append('<option value="tshirt">T-Shirt</option>');
       $('#type-2').append('<option value="sweater">Sweater</option>');
       $('#type-2').append('<option value="jacket">Jacket</option>');
-    } else if ($('#type-1').val() == "bottom") {
+    } else if ($('#type-1').val() == "BOTTOM") {
       $('#type-2').append('<option value="pants">Pants</option>');
       $('#type-2').append('<option value="skirt">Skirt</option>');
       $('#type-2').append('<option value="dress">Dress</option>');
@@ -141,8 +141,37 @@ function itemModalAnimation() {
   });
 }
 
+function addItemFormSubmit() {
+  console.log("here");
+  let form = $('#addItemForm');
+
+  // get parameters for post request from form
+  let postParams = {
+    itemName: $('#item-name').val(),
+    itemColor: $('#item-color').val(),
+    itemType1: $('#type-1').val(),
+    itemPattern: $('#item-pattern').val(),
+    itemSeason: $('#item-season').val(),
+    itemFormality: $('#item-formality').val()
+  }
+
+  form.on("submit", function(e) {
+    e.preventDefault();
+    // post request to addItems
+    $.post("/addItem", postParams, responseJSON => {
+      let item = JSON.parse(responseJSON).newItem;
+      let itemList = [item];
+      generateCards(itemList);
+      $('#addItemModal').css("display", "none");
+    });
+  });
+}
+
 
 $(document).ready(() => {
   displayUserItems(1);
   itemModalAnimation();
+  addItemFormSubmit();
+
+  // TODO: CACHE USER items (also so that adding item will allow for user to refresh page)
 });

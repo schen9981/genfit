@@ -101,7 +101,7 @@ public final class Main {
     Spark.post("/userOutfits", new UserOutfitRetriever());
 
     // Setup post requests for forms
-    Spark.post("/addItem", new AddItemHandler(this.mainApp), freeMarker);
+    Spark.post("/addItem", new AddItemHandler());
   }
 
   /**
