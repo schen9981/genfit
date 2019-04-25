@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.genfit.attribute.Attribute;
-import com.genfit.clothing.Item;
 import com.genfit.clothing.Outfit;
 import com.genfit.database.Database;
 

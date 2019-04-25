@@ -21,8 +21,9 @@ public class ItemPageHandler implements TemplateViewRoute {
   public ModelAndView handle(Request request, Response response)
       throws Exception {
     String itemJS = "<script src=\"js/item-page.js\"></script>";
+    String itemCSS = "<link rel=\"stylesheet\" href=\"css/item-page.css\"></link>";
     Map<String, Object> variables = ImmutableMap.of("title", "User Items",
-        "additionalScripts", itemJS);
+        "additionalScripts", itemJS, "additionalCSS", itemCSS);
     return new ModelAndView(variables, "itempage.ftl");
   }
 }

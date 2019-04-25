@@ -16,6 +16,7 @@ import com.genfit.clothing.Item;
 import com.genfit.clothing.Outfit;
 import com.genfit.proxy.ItemProxy;
 import com.genfit.proxy.OutfitProxy;
+import com.genfit.proxy.UserProxy;
 import com.genfit.users.User;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -25,6 +26,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +35,12 @@ import java.util.concurrent.TimeUnit;
 
 public class Database {
   private Connection conn;
+
+  //Check statements
+  private final String checkLoginSQL = "SELECT * FROM user WHERE email = ? "
+      + "AND password = ?;";
+  private final String checkSignupSQL = "SELECT * FROM user WHERE email = ?;";
+  private PreparedStatement checkLoginPrep, checkSignupPrep;
 
   //Get Statements
   private final String getUserInfoSQL = "SELECT * FROM user WHERE email=?;";
@@ -47,19 +55,19 @@ public class Database {
   private PreparedStatement getAllItemsByAttributesPrep;
 
   //Add Statements
-  private final String addUserSQL = "INSERT INTO user (name, email)"
-          + " values (?, ?);";
+  private final String addUserSQL = "INSERT INTO user (name, email, password)"
+          + " values (?, ?, ?);";
   private PreparedStatement addUserPrep;
 
-  private final String addItemSQL = "INSERT INTO item"
-          + " (name, type, formality, color, pattern, weather)"
+  private final String addItemSQL = "INSERT IGNORE INTO item"
+          + " (name, type, formality, color, pattern, season)"
           + " VALUES (?, ?, ?, ?, ?, ?);";
-  private final String addItemToUserSQL = "INSERT INTO item"
+  private final String addItemToUserSQL = "INSERT INTO user_item "
           + "(user_id, item_id) VALUES (?, ?);";
   private PreparedStatement addItemPrep, addItemToUserPrep;
 
-  private final String addOutfitSQL = "INSERT INTO outfit"
-          + " (name, outer, top, bottom, feet) VALUES (?, ?, ?, ?, ?);";
+  private final String addOutfitSQL = "INSERT IGNORE INTO outfit"
+          + " (name, `outer`, top, bottom, feet) VALUES (?, ?, ?, ?, ?);";
   private final String addOutfitToUserSQL = "INSERT INTO user_outfit"
           + " (user_id, outfit_id) VALUES (?, ?);";
   private PreparedStatement addOutfitPrep, addOutfitToUserPrep;
@@ -94,6 +102,11 @@ public class Database {
   public Database(Connection conn) {
     try {
       this.conn = conn;
+      Statement stmt= conn.createStatement();
+      stmt.execute("USE genfit;");
+
+      this.checkLoginPrep = conn.prepareStatement(this.checkLoginSQL);
+      this.checkSignupPrep = conn.prepareStatement(this.checkSignupSQL);
       this.getUserInfoPrep = conn.prepareStatement(this.getUserInfoSQL);
       this.getItemInfoPrep = conn.prepareStatement(this.getItemInfoSQL);
       this.getOutfitInfoPrep = conn.prepareStatement(this.getOutfitInfoSQL);
@@ -123,6 +136,21 @@ public class Database {
               + "in Database constructor");
     }
     this.instantiateCacheLoader();
+  }
+
+  /**
+   * Parses a csv of hex values from the database and returns
+   * a list of colors.
+   * @param colors - the csv String of colors.
+   * @return - a list of colors.
+   */
+  private List<Color> parseColorCSV(String colors) {
+    String[] splitComma = colors.split(",");
+    List<Color> colorList = new ArrayList<>();
+    for (String colorString : splitComma) {
+      colorList.add(new Color(Integer.parseInt(colorString, 16)));
+    }
+    return colorList;
   }
 
   /**
@@ -193,6 +221,31 @@ public class Database {
     return this.outfitCache.get(id);
   }
 
+
+  public boolean checkLogin(String username, String hashPwd) throws Exception{
+    this.checkLoginPrep.setString(1, username);
+    this.checkLoginPrep.setString(2, hashPwd);
+    ResultSet rs = this.checkLoginPrep.executeQuery();
+    boolean success = false;
+    if (rs.next()) {
+      success = true;
+    }
+    rs.close();
+    return success;
+  }
+
+  public boolean checkSignup(String username) throws Exception{
+
+    this.checkSignupPrep.setString(1, username);
+    ResultSet rs = this.checkSignupPrep.executeQuery();
+    boolean success = true;
+    if (rs.next()) {
+      success = false;
+    }
+    rs.close();
+    return success;
+  }
+
   /**
    * Called by User LoadingCache if needed.
    *
@@ -226,8 +279,10 @@ public class Database {
     TypeAttribute type = new TypeAttribute(TypeEnum.values()[rs.getInt(3)]);
     FormalityAttribute formality = new FormalityAttribute(
             FormalityEnum.values()[rs.getInt(4)]);
-    ColorAttribute color = new ColorAttribute(
-            new Color(Integer.parseInt(rs.getString(5), 16)));
+
+    String colorCSV = rs.getString(5);
+    List<Color> colorList = parseColorCSV(colorCSV);
+
     PatternAttribute pattern = new PatternAttribute(
             PatternEnum.values()[rs.getInt(6)]);
     SeasonAttribute season = new SeasonAttribute(
@@ -350,18 +405,27 @@ public class Database {
   }
 
 
-  public void addUser(String name, String email) throws SQLException {
+
+  /**
+   * Adds a new user.
+   * @param name - The name of the new use.
+   * @param email - the user's email.
+   * @throws SQLException
+   */
+  public void addUser(String name, String email, String hashPwd)
+      throws SQLException {
     this.addUserPrep.setString(1, name);
     this.addUserPrep.setString(2, email);
+    this.addUserPrep.setString(3, hashPwd);
     this.addUserPrep.executeUpdate();
   }
 
-  public void addItem(User user, String itemName) throws SQLException {
+  public void addItem(UserProxy userProxy, String itemName) throws SQLException {
     //TODO item parameters
     this.addItemPrep.setString(1, itemName);
     this.addItemPrep.setInt(2, 0);
     this.addItemPrep.setInt(3, 0);
-    this.addItemPrep.setString(4, "0xFFFFFF");
+    this.addItemPrep.setString(4, "0x111111");
     this.addItemPrep.setInt(5, 0);
     this.addItemPrep.setInt(6, 0);
     this.addItemPrep.executeUpdate();
@@ -370,12 +434,12 @@ public class Database {
     rs.next();
     int itemID = rs.getInt(1);
 
-    this.addItemToUserPrep.setInt(1, user.getId());
+    this.addItemToUserPrep.setInt(1, userProxy.getId());
     this.addItemToUserPrep.setInt(2, itemID);
     this.addItemToUserPrep.executeUpdate();
   }
 
-  public void addOutfit(User user, String outfitName, Map<TypeEnum,
+  public void addOutfit(UserProxy userProxy, String outfitName, Map<TypeEnum,
           ItemProxy> items) throws SQLException {
     ItemProxy outerItem = items.get(TypeEnum.OUTER);
     ItemProxy topItem = items.get(TypeEnum.TOP);
@@ -393,7 +457,7 @@ public class Database {
     rs.next();
     int outfitID = rs.getInt(1);
 
-    this.addOutfitToUserPrep.setInt(1, user.getId());
+    this.addOutfitToUserPrep.setInt(1, userProxy.getId());
     this.addOutfitToUserPrep.setInt(2, outfitID);
     this.addOutfitToUserPrep.executeUpdate();
   }
@@ -402,15 +466,15 @@ public class Database {
    * Deletes a user from the user Table, all user item and outfit references
    * from the user_item and user_outfit tables respectively.
    *
-   * @param user
+   * @param userProxy - the user to be deleted
    * @throws SQLException
    */
-  private void deleteUser(User user) throws SQLException {
-    this.deleteUserPrep.setInt(1, user.getId());
+  public void deleteUser(UserProxy userProxy) throws SQLException {
+    this.deleteUserPrep.setInt(1, userProxy.getId());
     this.deleteUserPrep.executeUpdate();
-    this.deleteAllUserItemsPrep.setInt(1, user.getId());
+    this.deleteAllUserItemsPrep.setInt(1, userProxy.getId());
     this.deleteAllUserItemsPrep.executeUpdate();
-    this.deleteAllUserOutfitsPrep.setInt(1, user.getId());
+    this.deleteAllUserOutfitsPrep.setInt(1, userProxy.getId());
     this.deleteAllUserOutfitsPrep.executeUpdate();
   }
 
@@ -418,16 +482,16 @@ public class Database {
    * Deletes an item from the item table and its reference from the
    * user_item table.
    *
-   * @param user - The User that owns the item.
-   * @param item - The item to be deleted.
+   * @param userProxy - The User that owns the item.
+   * @param itemProxy - The item to be deleted.
    * @throws SQLException
    */
-  private void deleteItem(User user, Item item) throws SQLException {
+  public void deleteItem(UserProxy userProxy, ItemProxy itemProxy) throws SQLException {
     //TODO: delete item (might be referenced by other users)?
 //    deleteItemPrep.setString(1, item.getId());
 //    deleteItemPrep.executeUpdate();
-    this.deleteUserItemPrep.setInt(1, user.getId());
-    this.deleteUserItemPrep.setInt(2, item.getId());
+    this.deleteUserItemPrep.setInt(1, userProxy.getId());
+    this.deleteUserItemPrep.setInt(2, itemProxy.getId());
     this.deleteUserItemPrep.executeUpdate();
   }
 
@@ -435,16 +499,16 @@ public class Database {
    * Deletes an outfit from the outfit table and its reference in the
    * user_outfit table.
    *
-   * @param user   - The user that owns the outfit.
-   * @param outfit - The Outfit to be deleted.
+   * @param userProxy   - The user proxy that owns the outfit.
+   * @param outfitProxy - The Outfit to be deleted.
    * @throws SQLException
    */
-  private void deleteOutfit(User user, Outfit outfit) throws SQLException {
+  public void deleteOutfit(UserProxy userProxy, OutfitProxy outfitProxy) throws SQLException {
     //TODO: delete outfit (might be referenced by other users)?
 //    deleteOutfitPrep.setString(1, outfit.getId());
 //    deleteOutfitPrep.executeUpdate();
-    this.deleteUserOutfitPrep.setInt(1, user.getId());
-    this.deleteUserOutfitPrep.setInt(2, outfit.getId());
+    this.deleteUserOutfitPrep.setInt(1, userProxy.getId());
+    this.deleteUserOutfitPrep.setInt(2, outfitProxy.getId());
     this.deleteUserOutfitPrep.executeUpdate();
   }
 
