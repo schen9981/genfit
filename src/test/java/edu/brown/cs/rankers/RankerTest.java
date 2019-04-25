@@ -60,7 +60,7 @@ public class RankerTest {
             new SeasonAttribute(SeasonEnum.FALL),
             new FormalityAttribute(FormalityEnum.BUSINESS_CASUAL),
             new PatternAttribute(PatternEnum.SOLID),
-            new ColorAttribute(new Color(0)),
+            new ColorAttribute(new Color(Color.convertToHexVal(62, 131, 242))),
             new TypeAttribute(TypeEnum.BOTTOM));
 
     this.arf.addItem(new ItemProxyDummy(i1));
@@ -73,11 +73,12 @@ public class RankerTest {
             new SeasonAttribute(SeasonEnum.SPRING),
             new FormalityAttribute(FormalityEnum.ULTRA_CASUAL),
             new PatternAttribute(PatternEnum.STRIPED),
-            new ColorAttribute(new Color(0)),
+            new ColorAttribute(new Color(4567)),
             new TypeAttribute(TypeEnum.TOP));
 
     this.arf.addItem(new ItemProxyDummy(i2));
 
+    printList(this.arf.rankAttributes(this.car));
     printList(this.arf.rankAttributes(this.sar));
     printList(this.arf.rankAttributes(this.par));
     printList(this.arf.rankAttributes(this.far));
