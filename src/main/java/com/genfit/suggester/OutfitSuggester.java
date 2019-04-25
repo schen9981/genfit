@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.genfit.attribute.Attribute;
-import com.genfit.clothing.Item;
 import com.genfit.clothing.Outfit;
 import com.genfit.database.Database;
 
@@ -30,7 +29,7 @@ public class OutfitSuggester {
    * @return list of outfits to suggest
    */
   public List<Outfit> suggestOutfits(Map<Class, List<Attribute>> attr,
-                                     Database db) {
+      Database db) {
 
     // get the class that has the minimum number of attributes to query
     Class classToQuery = minAttrToQuery(attr);
@@ -39,10 +38,8 @@ public class OutfitSuggester {
     Set<Class> otherClasses = attr.keySet();
     otherClasses.remove(classToQuery);
 
-    // get list of items that have matching attributes of smallest query
-
     // TODO: figure out this DBQuery
-    //List<Item> match = db.getAllItemsByAttributes(attr);
+    // List<Item> match = db.getAllItemsByAttributes(attr);
 
     // sort through for the other attributes
     // TODO: write method for sorting through other attributes.
