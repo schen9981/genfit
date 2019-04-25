@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import com.genfit.userfacing.handlers.AddItemHandler;
 import com.genfit.userfacing.handlers.DiscoverPageHandler;
 import com.genfit.userfacing.handlers.ItemPageHandler;
 import com.genfit.userfacing.handlers.OutfitPageHandler;
@@ -99,6 +100,8 @@ public final class Main {
     Spark.post("/userItems", new UserItemRetriever());
     Spark.post("/userOutfits", new UserOutfitRetriever());
 
+    // Setup post requests for forms
+    Spark.post("/addItem", new AddItemHandler(this.mainApp), freeMarker);
   }
 
   /**

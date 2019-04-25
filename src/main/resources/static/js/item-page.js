@@ -11,7 +11,7 @@ function generateCardContent(item) {
 }
 
 // animate modal for popup functionality
-function animateModal(itemId) {
+function animateItemModal(itemId) {
   // id of the html elements
   let mId = '#modal-' + itemId;
   let bId = '#item-' + itemId;
@@ -53,13 +53,13 @@ function generateCards(listOfItems) {
     $('#items').append(modalHTML);
 
     // add popup functionality to given modal
-    animateModal(id);
+    animateItemModal(id);
   }
   // set dimensions of cards
   $('.item').css("width", "20%");
 }
 
-
+// function to retrieve and display user items
 function displayUserItems(userId) {
   // post request to /userItems to retrieve user's items
   // let postParams = {
@@ -86,6 +86,63 @@ function displayUserItems(userId) {
   // });
 }
 
+// function that dynamically populates second type dropdown
+function dynamicTypeDropdown() {
+  $('#type-1').on('change', function(){
+    $('#type-2').html('');
+    if ($('#type-1').val() == "outer") {
+        $('#type-2').append('<option value="outer-coat">Outer Coat</option>');
+        $('#type-2').append('<option value="suit">Suit</option>');
+    } else if ($('#type-1').val() == "top") {
+      $('#type-2').append('<option value="shirt-blouse">Shirt/Blouse</option>');
+      $('#type-2').append('<option value="tshirt">T-Shirt</option>');
+      $('#type-2').append('<option value="sweater">Sweater</option>');
+      $('#type-2').append('<option value="jacket">Jacket</option>');
+    } else if ($('#type-1').val() == "bottom") {
+      $('#type-2').append('<option value="pants">Pants</option>');
+      $('#type-2').append('<option value="skirt">Skirt</option>');
+      $('#type-2').append('<option value="dress">Dress</option>');
+      $('#type-2').append('<option value="shorts">Shorts</option>');
+    } else {
+      $('#type-2').append('<option value="sneakers">Sneakers</option>');
+      $('#type-2').append('<option value="boots">Boots</option>');
+      $('#type-2').append('<option value="sandals">Sandals</option>');
+      $('#type-2').append('<option value="dress-shoes">Dress Shoes</option>');
+    }
+  });
+}
+
+// function that allows for users to add more colors to outfit
+function additionalColorForm() {
+  $('#addColor').on('click', function(e) {
+    $('#item-colors').append('<input type="color" name="item-color" value="#ff0000"><br>');
+    e.preventDefault();
+  });
+}
+
+// function that animates the add item modal
+function itemModalAnimation() {
+  additionalColorForm();
+  dynamicTypeDropdown();
+
+  let modal = $('#addItemModal');
+  let btn = $('#addItem');
+  let span = $('#addSpan');
+
+  // open modal when button clicked
+  btn.click(function() {
+    console.log('clicked');
+    modal.css("display", "block");
+  });
+
+  // close modal when user clicks 'x'
+  span.click(function() {
+    modal.css("display", "none");
+  });
+}
+
+
 $(document).ready(() => {
   displayUserItems(1);
+  itemModalAnimation();
 });
