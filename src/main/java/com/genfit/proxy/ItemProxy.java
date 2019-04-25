@@ -11,12 +11,20 @@ import com.genfit.database.Database;
 public class ItemProxy {
 
   // Instance variables describing the OutfitProxy instance
-  private String id;
+  private int id;
   private Item item;
   private Database db;
 
-  public ItemProxy(Database db, String id) {
-    if (id == null || db == null) {
+  /**
+   * Default constructor, should probably not be used.
+   */
+  public ItemProxy() {
+    this.db = null;
+    this.item = null;
+  }
+
+  public ItemProxy(Database db, int id) {
+    if (db == null) {
       throw new NullPointerException();
     }
     this.id = id;
@@ -53,7 +61,7 @@ public class ItemProxy {
     return this.getItem().getPatternAttribute();
   }
 
-  public String getId() {
+  public int getId() {
     return this.id;
   }
 }

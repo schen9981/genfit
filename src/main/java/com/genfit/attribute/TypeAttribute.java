@@ -11,6 +11,13 @@ public class TypeAttribute implements Attribute<TypeEnum> {
 
   @Override
   public TypeEnum getAttributeVal() {
-    return typeEnum;
+    return this.typeEnum;
+  }
+
+  @Override
+  public String toString() {
+    return "TypeAttribute{" +
+            this.typeEnum.name() +
+            '}';
   }
 }

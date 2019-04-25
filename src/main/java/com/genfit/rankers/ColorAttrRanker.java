@@ -12,6 +12,7 @@ import java.util.List;
 public class ColorAttrRanker implements AttributeRanker<ColorAttribute> {
   @Override
   public List<ColorAttribute> rankByAttribute(List<ItemProxy> items) {
+    //TODO: fill in
     return null;
   }
 }

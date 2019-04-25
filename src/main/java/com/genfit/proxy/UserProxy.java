@@ -36,7 +36,7 @@ public class UserProxy {
     return this.email;
   }
 
-  public String getId() {
+  public int getId() {
     return this.getUser().getId();
   }
 
