@@ -36,4 +36,7 @@ public class OutfitProxy {
     return this.getOutfit().getItems();
   }
 
+  public int getId() {
+    return id;
+  }
 }
