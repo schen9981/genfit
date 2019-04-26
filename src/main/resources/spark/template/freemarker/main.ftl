@@ -27,7 +27,7 @@
 <script src="<#if cssPath?has_content>${cssPath}</#if>js/jquery-2.1.1.js"></script>
 <script src="/js/bcrypt.min.js"></script>
 <script src="/js/jquery-2.1.1.js"></script>
-<script src="js/frontpage.js"></script>
+<script src="js/authentication.js"></script>
 
 <#if additionalScripts?has_content>
     ${additionalScripts}

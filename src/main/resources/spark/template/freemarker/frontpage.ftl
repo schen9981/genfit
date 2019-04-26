@@ -1,4 +1,10 @@
 <#assign content>
+    <script>
+        if (getLoginStatus()) {
+            window.location.replace("/user");
+        }
+    </script>
+
     <div class="container">
         <div id="left-wrapper">
             <h1>Welcome to GenFit</h1>
@@ -37,6 +43,5 @@
         </div>
     </div>
 </#assign>
-
-
 <#include "main.ftl">
+<script src="js/frontpage.js"></script>
