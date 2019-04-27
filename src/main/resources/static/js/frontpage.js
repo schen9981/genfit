@@ -72,5 +72,5 @@ $(document).ready(function() {
         signup(name, username, password);
     });
 
-    // $(".sidenav").remove();
+    $(".sidenav").remove();
 });

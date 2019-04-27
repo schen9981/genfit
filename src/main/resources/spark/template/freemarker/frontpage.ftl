@@ -1,4 +1,6 @@
 <#assign content>
+    <link rel="stylesheet"
+          href="<#if cssPath?has_content>${cssPath}</#if>css/frontpage.css">
     <script>
         if (getLoginStatus()) {
             window.location.replace("/user");
@@ -15,10 +17,11 @@
 
         <div id="right-wrapper">
             <div id="login-wrapper">
+                <h2>Log In</h2>
                 <form id = "login-form" method="POST" action="home">
                     <input id = "loginemail" type="email" placeholder="Email" required>
                     <input id = "loginpwd" type="password" placeholder="Password" required>
-                    <input type="submit" value="Login">
+                    <input class="btn" id="login" type="submit" value="Log In">
                 </form>
             </div>
 
@@ -28,7 +31,7 @@
                     <input id="signupname" type="text" placeholder="Name" required>
                     <input id ="signupemail" type="email" placeholder="Email" required>
                     <input id ="signuppwd" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="Password" required>
-                    <input type="submit" value="Sign Up">
+                    <input class="btn" id="signup" type="submit" value="Sign Up">
                 </form>
 
 

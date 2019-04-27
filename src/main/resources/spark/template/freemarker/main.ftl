@@ -12,8 +12,6 @@
           href="<#if cssPath?has_content>${cssPath}</#if>css/html5bp.css">
     <link rel="stylesheet"
           href="<#if cssPath?has_content>${cssPath}</#if>css/main.css">
-    <link rel="stylesheet"
-          href="<#if cssPath?has_content>${cssPath}</#if>css/frontpage.css">
 
     <link href="https://fonts.googleapis.com/css?family=Poppins"
           rel="stylesheet">
@@ -40,6 +38,7 @@
   <a href="/items">Closet Items</a>
   <a href="/outfits">User Outfits</a>
   <a href="/discover">Discover</a>
+    <a id="signout" href="/" onclick="logout()">Sign Out</a>
 </div>
 
 <!-- Page content -->
