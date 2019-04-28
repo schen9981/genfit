@@ -28,18 +28,23 @@ public class OutfitSuggester {
    * @param db
    * @return list of outfits to suggest
    */
-  public List<Outfit> suggestOutfits(Map<Class, List<Attribute>> attr,
-      Database db) {
+  public List<Outfit> suggestOutfits(Outfit outfit,
+                                     Database db) {
+
+    Map<Class, List<? extends Attribute>> outfitAttr =
+            AttributeSuggester.getMatchingOutfitAttributes(outfit);
 
     // get the class that has the minimum number of attributes to query
-    Class classToQuery = minAttrToQuery(attr);
+    Class classToQuery = minAttrToQuery(outfitAttr);
 
     // create set of all other classes to query on (exclude min)
-    Set<Class> otherClasses = attr.keySet();
+    Set<Class> otherClasses = outfitAttr.keySet();
     otherClasses.remove(classToQuery);
 
+    // get list of items that have matching attributes of smallest query
+
     // TODO: figure out this DBQuery
-    // List<Item> match = db.getAllItemsByAttributes(attr);
+    //List<Item> match = db.getAllItemsByAttributes(attr);
 
     // sort through for the other attributes
     // TODO: write method for sorting through other attributes.
@@ -55,7 +60,7 @@ public class OutfitSuggester {
    * @param attr - map of attributes
    * @return minimum class
    */
-  private static Class minAttrToQuery(Map<Class, List<Attribute>> attr) {
+  private static Class minAttrToQuery(Map<Class, List<? extends Attribute>> attr) {
     Class minClass = null;
     int minSize = Integer.MAX_VALUE;
     for (Class c : attr.keySet()) {

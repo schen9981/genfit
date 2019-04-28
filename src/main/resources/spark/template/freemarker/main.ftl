@@ -23,6 +23,9 @@
 <body>
 <!-- Again, we're serving up the unminified source for clarity. -->
 <script src="<#if cssPath?has_content>${cssPath}</#if>js/jquery-2.1.1.js"></script>
+<script src="/js/bcrypt.min.js"></script>
+<script src="/js/jquery-2.1.1.js"></script>
+<script src="js/authentication.js"></script>
 
 <#if additionalScripts?has_content>
     ${additionalScripts}
@@ -35,6 +38,7 @@
   <a href="/items">Closet Items</a>
   <a href="/outfits">User Outfits</a>
   <a href="/discover">Discover</a>
+    <a id="signout" href="/" onclick="logout()">Sign Out</a>
 </div>
 
 <!-- Page content -->
