@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import com.genfit.attribute.Attribute;
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
@@ -37,8 +39,7 @@ public class Database {
   private Connection conn;
 
   // Check statements
-  private final String checkLoginSQL = "SELECT * FROM user WHERE email = ? "
-      + "AND password = ?;";
+  private final String checkLoginSQL = "SELECT * FROM user WHERE email = ?;";
   private final String checkSignupSQL = "SELECT * FROM user WHERE email = ?;";
   private PreparedStatement checkLoginPrep, checkSignupPrep;
 
@@ -222,16 +223,23 @@ public class Database {
     return this.outfitCache.get(id);
   }
 
-  public boolean checkLogin(String username, String hashPwd) throws Exception {
+  public boolean checkLogin(String username, String clientHashPwd)
+      throws Exception {
     this.checkLoginPrep.setString(1, username);
-    this.checkLoginPrep.setString(2, hashPwd);
     ResultSet rs = this.checkLoginPrep.executeQuery();
-    boolean success = false;
+    String storedHash = null;
     if (rs.next()) {
-      success = true;
+      storedHash = rs.getString(4);
+//      System.out.println(storedHash);
     }
     rs.close();
-    return success;
+
+    if (null == storedHash || !storedHash.startsWith("$2a$")) {
+      throw new IllegalArgumentException(
+          "Invalid hash provided for comparison");
+    }
+
+    return BCrypt.checkpw(clientHashPwd, storedHash);
   }
 
   public boolean checkSignup(String username) throws Exception {

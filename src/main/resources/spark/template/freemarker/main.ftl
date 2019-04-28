@@ -23,7 +23,12 @@
 <body>
 <!-- Again, we're serving up the unminified source for clarity. -->
 <script src="<#if cssPath?has_content>${cssPath}</#if>js/jquery-2.1.1.js"></script>
-<script src="/js/bcrypt.min.js"></script>
+<#--<script src="/js/bcrypt.min.js"></script>-->
+<#--<script data-main="js/authentication.js" src="js/require.js"></script>-->
+<#--<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/hmac-sha256.js"></script>-->
+<#--<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/enc-base64.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+
 <script src="/js/jquery-2.1.1.js"></script>
 <script src="js/authentication.js"></script>
 
