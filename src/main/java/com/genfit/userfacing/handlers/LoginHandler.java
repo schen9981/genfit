@@ -29,15 +29,16 @@ public class LoginHandler implements Route {
     boolean correctInfo = false;
 //    String finalHash = BCrypt.hashpw(hashPwd, BCrypt.gensalt());
     String finalHash = hashPwd;
-    System.out.println(finalHash);
+//    System.out.println(finalHash);
 
     // Check database
     try {
       correctInfo = this.db.checkLogin(username, finalHash);
     } catch (Exception e) {
-      System.out.println("ERROR: Error when checking login info.");
+//      System.out.println("ERROR: Error when checking login info.");
+      e.printStackTrace();
     }
-
+    System.out.println(correctInfo);
     Map<String, Object> variables =
         ImmutableMap.of("success", correctInfo);
     return GSON.toJson(variables);
