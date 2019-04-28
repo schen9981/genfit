@@ -21,6 +21,7 @@ import com.genfit.users.User;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,8 +38,7 @@ public class Database {
   private Connection conn;
 
   //Check statements
-  private final String checkLoginSQL = "SELECT * FROM user WHERE email = ? "
-      + "AND password = ?;";
+  private final String checkLoginSQL = "SELECT * FROM user WHERE email = ?;";
   private final String checkSignupSQL = "SELECT * FROM user WHERE email = ?;";
   private PreparedStatement checkLoginPrep, checkSignupPrep;
 
@@ -222,16 +222,22 @@ public class Database {
   }
 
 
-  public boolean checkLogin(String username, String hashPwd) throws Exception{
+  public boolean checkLogin(String username, String clientHashPwd) throws Exception{
     this.checkLoginPrep.setString(1, username);
-    this.checkLoginPrep.setString(2, hashPwd);
     ResultSet rs = this.checkLoginPrep.executeQuery();
-    boolean success = false;
+    String storedHash = null;
     if (rs.next()) {
-      success = true;
+      storedHash = rs.getString(4);
+//      System.out.println(storedHash);
     }
     rs.close();
-    return success;
+
+    if (null == storedHash || !storedHash.startsWith("$2a$")) {
+      throw new IllegalArgumentException("Invalid hash provided for comparison");
+    }
+
+
+    return BCrypt.checkpw(clientHashPwd, storedHash);
   }
 
   public boolean checkSignup(String username) throws Exception{
