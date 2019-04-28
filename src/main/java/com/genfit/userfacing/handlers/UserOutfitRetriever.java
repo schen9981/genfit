@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.genfit.clothing.Outfit;
+import com.genfit.userfacing.GenFitApp;
 import com.genfit.userfacing.Main;
 import com.google.common.collect.ImmutableMap;
 
@@ -14,6 +15,12 @@ import spark.Response;
 import spark.Route;
 
 public class UserOutfitRetriever implements Route {
+
+  private GenFitApp genFitApp;
+
+  public UserOutfitRetriever(GenFitApp genFitApp) {
+    this.genFitApp = genFitApp;
+  }
 
   @Override
   public String handle(Request req, Response res) {

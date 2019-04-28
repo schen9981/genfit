@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.genfit.clothing.Item;
+import com.genfit.userfacing.GenFitApp;
 import com.genfit.userfacing.Main;
 import com.google.common.collect.ImmutableMap;
 
@@ -15,13 +16,19 @@ import spark.Route;
 
 public class UserItemRetriever implements Route {
 
+  private GenFitApp genFitApp;
+
+  public UserItemRetriever(GenFitApp genFitApp) {
+    this.genFitApp = genFitApp;
+  }
+
   @Override
   public String handle(Request req, Response res) {
     QueryParamsMap qm = req.queryMap();
 
     String userId = qm.value("userId");
 
-    // TODO: get information for each item, parse into json
+    // TODO: query database to get items of user
     List<Item> userItems = new ArrayList<>();
 
     Map<String, Object> variables = ImmutableMap.of("items", userItems);

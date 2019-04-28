@@ -88,7 +88,7 @@ public final class Main {
   private void runSparkServer(int port) {
     Spark.port(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
-//    Spark.exception(Exception.class, new ExceptionPrinter());
+    Spark.exception(Exception.class, new ExceptionPrinter());
 
     FreeMarkerEngine freeMarker = createEngine();
 
@@ -104,11 +104,11 @@ public final class Main {
     // Setup spark routes for getting data (ie. json endpoints)
     Spark.post("/login", new LoginHandler(this.mainApp.getDb()));
     Spark.post("/signup", new SignupHandler(this.mainApp.getDb()));
-    Spark.post("/userItems", new UserItemRetriever());
-    Spark.post("/userOutfits", new UserOutfitRetriever());
+    Spark.post("/userItems", new UserItemRetriever(this.mainApp));
+    Spark.post("/userOutfits", new UserOutfitRetriever(this.mainApp));
 
     // Setup post requests for forms
-    Spark.post("/addItem", new AddItemHandler());
+    Spark.post("/addItem", new AddItemHandler(this.mainApp));
   }
 
   /**
