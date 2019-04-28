@@ -1,3 +1,6 @@
+// map from id -> item json
+let itemCache = new Map([]);
+
 // generate html content (ie. item information) for card
 function generateCardContent(item) {
   // item represented as array [id, name, color, type, pattern, season, formality]
@@ -36,7 +39,7 @@ function animateItemModal(itemId) {
 // generates the modal/cards for each item from a list
 function generateCards(listOfItems) {
   for (i = 0; i < listOfItems.length; i++) {
-    // get current item
+    // get current item json
     let item = listOfItems[i];
 
     // generate modal html
@@ -158,8 +161,9 @@ function addItemFormSubmit() {
   form.on("submit", function(e) {
     e.preventDefault();
     // post request to addItems
+    console.log(postParams);
     $.post("/addItem", postParams, responseJSON => {
-      let item = JSON.parse(responseJSON).newItem;
+      let item = JSON.parse(responseJSON);
       let itemList = [item];
       generateCards(itemList);
       $('#addItemModal').css("display", "none");

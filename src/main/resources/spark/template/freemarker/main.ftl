@@ -12,8 +12,8 @@
           href="<#if cssPath?has_content>${cssPath}</#if>css/html5bp.css">
     <link rel="stylesheet"
           href="<#if cssPath?has_content>${cssPath}</#if>css/main.css">
-    <link rel="stylesheet"
-          href="<#if cssPath?has_content>${cssPath}</#if>css/frontpage.css">
+    <!-- <link rel="stylesheet"
+          href="<#if cssPath?has_content>${cssPath}</#if>css/frontpage.css"> -->
 
     <link href="https://fonts.googleapis.com/css?family=Poppins"
           rel="stylesheet">
@@ -27,7 +27,7 @@
 <script src="<#if cssPath?has_content>${cssPath}</#if>js/jquery-2.1.1.js"></script>
 <script src="/js/bcrypt.min.js"></script>
 <script src="/js/jquery-2.1.1.js"></script>
-<script src="js/frontpage.js"></script>
+<!-- <script src="js/frontpage.js"></script> -->
 
 <#if additionalScripts?has_content>
     ${additionalScripts}

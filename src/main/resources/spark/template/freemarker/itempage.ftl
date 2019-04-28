@@ -22,6 +22,7 @@
 
         Type:<br>
         <select id="type-1" name="item-type-1">
+          <option disabled selected value> -- select an option -- </option>
           <option value="OUTER">Outerwear</option>
           <option value="TOP">Top</option>
           <option value="BOTTOM">Bottom</option>
