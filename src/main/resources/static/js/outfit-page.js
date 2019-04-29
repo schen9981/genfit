@@ -152,7 +152,8 @@ function addItemFormSubmit() {
 
 $(document).ready(() => {
   username = localStorage.username;
-  displayUserItems(username);
-  itemModalAnimation();
-  addItemFormSubmit();
+  // displayUserItems(username);
+  // itemModalAnimation();
+  // addItemFormSubmit();
+  $(".name").html(localStorage.getItem('name'));
 });

@@ -12,6 +12,11 @@ public class FormalityAttribute implements Attribute<FormalityEnum> {
   }
 
   @Override
+  public String getAttributeName() {
+    return "formality";
+  }
+
+  @Override
   public FormalityEnum getAttributeVal() {
     return this.formalityEnum;
   }

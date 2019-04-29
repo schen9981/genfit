@@ -20,7 +20,6 @@ import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
 import com.genfit.attribute.SeasonAttribute;
 import com.genfit.attribute.TypeAttribute;
-import com.genfit.attribute.attributevals.AttributeEnum;
 import com.genfit.attribute.attributevals.Color;
 import com.genfit.attribute.attributevals.FormalityEnum;
 import com.genfit.attribute.attributevals.PatternEnum;
@@ -35,6 +34,17 @@ import com.genfit.users.User;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.mindrot.jbcrypt.BCrypt;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class Database {
   private Connection conn;
@@ -95,8 +105,9 @@ public class Database {
 
   // Misc Statements
   private final String lastInsertIDSQL = "SELECT LAST_INSERT_ID();";
+  private final String changePasswordSQL = "UPDATE user SET password = ? WHERE email = ?";
+  private PreparedStatement changePasswordPrep;
   private PreparedStatement lastInsertID;
-
   private LoadingCache<String, User> userCache;
   private LoadingCache<Integer, Item> itemCache;
   private LoadingCache<Integer, Outfit> outfitCache;
@@ -108,7 +119,7 @@ public class Database {
       this.conn = conn;
       Statement stmt = conn.createStatement();
       stmt.execute("USE genfit;");
-
+      this.changePasswordPrep = conn.prepareStatement(this.changePasswordSQL);
       this.checkLoginPrep = conn.prepareStatement(this.checkLoginSQL);
       this.checkSignupPrep = conn.prepareStatement(this.checkSignupSQL);
       this.getUserInfoPrep = conn.prepareStatement(this.getUserInfoSQL);
@@ -231,8 +242,13 @@ public class Database {
     return this.outfitCache.get(id);
   }
 
-  public boolean checkLogin(String username, String clientHashPwd)
-      throws Exception {
+  public void changePassword(String email, String newPwdHash) throws Exception {
+    this.changePasswordPrep.setString(1, newPwdHash);
+    this.changePasswordPrep.setString(2, email);
+    this.changePasswordPrep.executeUpdate();
+  }
+
+  public boolean checkLogin(String username, String clientHashPwd) throws Exception{
     this.checkLoginPrep.setString(1, username);
     ResultSet rs = this.checkLoginPrep.executeQuery();
     String storedHash = null;
@@ -243,8 +259,8 @@ public class Database {
     rs.close();
 
     if (null == storedHash || !storedHash.startsWith("$2a$")) {
-      throw new IllegalArgumentException(
-          "Invalid hash provided for comparison");
+//      throw new IllegalArgumentException("Invalid hash provided for comparison");
+      return false;
     }
 
     return BCrypt.checkpw(clientHashPwd, storedHash);
@@ -314,31 +330,36 @@ public class Database {
     return toReturn;
   }
 
-  // TODO: @lawrence will modify this
-  public List<ItemProxy> getAllItemsByAttributes(AttributeEnum attributeEnum,
-      List<Attribute> attribute) throws SQLException {
-    String attributeName = attributeEnum.toString();
+  public List<ItemProxy> getAllItemsByAttributes(Attribute attributeToQuery,
+                                                 List<? extends Attribute>
+                                                         attribute)
+          throws SQLException {
+    String attributeName = attributeToQuery.getAttributeName();
 
-    String getAllItemsByAttributesSQL = "SELECT * FROM item WHERE ?=?";
+    StringBuilder getAllItemsByAttributesSQL = new StringBuilder("SELECT * "
+            + "FROM item "
+            + "WHERE "
+            + attributeName + "=?");
 
     for (int i = 1; i < attribute.size(); i++) {
-      getAllItemsByAttributesSQL += " OR ?=?";
+      getAllItemsByAttributesSQL.append(" OR " + attributeName + "=?");
     }
-    getAllItemsByAttributesSQL += ";";
-    this.getAllItemsByAttributesPrep = this.conn
-        .prepareStatement(getAllItemsByAttributesSQL);
+    getAllItemsByAttributesSQL.append(";");
 
-    if (attributeEnum == AttributeEnum.COLOR) {
-      for (int i = 1; i <= attribute.size() * 2; i += 2) {
-        this.getAllItemsByAttributesPrep.setString(i, attributeName);
-        Color color = (Color) attribute.get(i / 2).getAttributeVal();
-        this.getAllItemsByAttributesPrep.setString(i + 1, color.toString());
+    this.getAllItemsByAttributesPrep = this.conn
+            .prepareStatement(getAllItemsByAttributesSQL.toString());
+
+    if (attributeName.equals(new ColorAttribute(null).getAttributeName())) {
+      for (int i = 1; i <= attribute.size(); i++) {
+        //this.getAllItemsByAttributesPrep.setString(i, attributeName);
+        Color color = (Color) attribute.get(i - 1).getAttributeVal();
+        this.getAllItemsByAttributesPrep.setString(i, color.toString());
       }
     } else {
-      for (int i = 1; i <= attribute.size() * 2; i += 2) {
-        this.getAllItemsByAttributesPrep.setString(i, attributeName);
-        Enum e = (Enum) attribute.get(i / 2).getAttributeVal();
-        this.getAllItemsByAttributesPrep.setInt(i + 1, e.ordinal());
+      for (int i = 1; i <= attribute.size(); i++) {
+        //this.getAllItemsByAttributesPrep.setString(i, attributeName);
+        Enum e = (Enum) attribute.get(i - 1).getAttributeVal();
+        this.getAllItemsByAttributesPrep.setInt(i, e.ordinal());
       }
     }
 
@@ -424,6 +445,7 @@ public class Database {
     rs.close();
     return outfitProxyList;
   }
+
 
   /**
    * Adds a new user.

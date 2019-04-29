@@ -10,13 +10,12 @@ import com.genfit.userfacing.handlers.DeleteItemHandler;
 import com.genfit.userfacing.handlers.DiscoverPageHandler;
 import com.genfit.userfacing.handlers.FrontpageHandler;
 import com.genfit.userfacing.handlers.ItemPageHandler;
-import com.genfit.userfacing.handlers.LoginHandler;
 import com.genfit.userfacing.handlers.OutfitComponentsRetriever;
 import com.genfit.userfacing.handlers.OutfitPageHandler;
-import com.genfit.userfacing.handlers.SignupHandler;
 import com.genfit.userfacing.handlers.UserItemRetriever;
 import com.genfit.userfacing.handlers.UserOutfitRetriever;
 import com.genfit.userfacing.handlers.UserPageHandler;
+import com.genfit.userfacing.handlers.UserformHandler;
 import com.google.gson.Gson;
 
 import freemarker.template.Configuration;
@@ -104,8 +103,8 @@ public final class Main {
     Spark.get("/discover", new DiscoverPageHandler(this.mainApp), freeMarker);
 
     // Setup spark routes for getting data (ie. json endpoints)
-    Spark.post("/login", new LoginHandler(this.mainApp.getDb()));
-    Spark.post("/signup", new SignupHandler(this.mainApp.getDb()));
+    Spark.post("/userform", new UserformHandler(this.mainApp.getDb()));
+
     Spark.post("/userItems", new UserItemRetriever(this.mainApp));
     Spark.post("/userOutfits", new UserOutfitRetriever(this.mainApp));
     Spark.post("/outfitComponents",

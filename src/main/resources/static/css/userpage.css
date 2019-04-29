@@ -1,0 +1,26 @@
+/* Add a red text color and an "x" when the requirements are wrong */
+.invalid {
+    color: red;
+}
+
+.invalid:before {
+    position: relative;
+    left: -10px;
+    content: "✖";
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+    color: green;
+}
+
+.valid:before {
+    position: relative;
+    left: -10px;
+    content: "✔";
+}
+
+.chart-container {
+    width: 45%;
+    display: inline-block;
+}

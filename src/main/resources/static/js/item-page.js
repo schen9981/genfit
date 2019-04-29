@@ -1,9 +1,8 @@
 // map from id -> item array (?)
 // let itemCache = new Map([]);
-
 // username of current user
 let username;
-
+$(".name").html(localStorage.getItem('name'));
 // generate html content (ie. item information) for card
 function generateCardContent(item) {
   // item represented as array [id, name, color, type, pattern, season, formality, image src]
@@ -42,7 +41,7 @@ function animateItemModal(itemId) {
 
 // generates the modal/cards for each item from a list
 function generateCards(listOfItems) {
-  for (i = 0; i < listOfItems.length; i++) {
+  for (let i = 0; i < listOfItems.length; i++) {
     // get current item json
     let item = listOfItems[i];
 
@@ -196,4 +195,5 @@ $(document).ready(() => {
   displayUserItems(username);
   itemModalAnimation();
   addItemFormSubmit();
+  $(".name").html(localStorage.getItem('name'));
 });
