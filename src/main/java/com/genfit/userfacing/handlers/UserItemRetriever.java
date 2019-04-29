@@ -71,7 +71,7 @@ public class UserItemRetriever implements Route {
    * @return array representation
    */
   public static String[] getItemInfoArr(Item item) {
-    String[] itemInfoArr = new String[7];
+    String[] itemInfoArr = new String[8];
     itemInfoArr[0] = Integer.toString(item.getId());
     itemInfoArr[1] = item.getName();
     itemInfoArr[2] = item.getColor().getAttributeVal().toString();
@@ -79,6 +79,7 @@ public class UserItemRetriever implements Route {
     itemInfoArr[4] = item.getPattern().getAttributeVal().toString();
     itemInfoArr[5] = item.getSeason().getAttributeVal().toString();
     itemInfoArr[6] = item.getFormality().getAttributeVal().toString();
+    itemInfoArr[7] = item.getImage();
 
     return itemInfoArr;
   }

@@ -4,6 +4,7 @@ import com.genfit.database.Database;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import jdk.nashorn.internal.ir.annotations.Immutable;
+import org.mindrot.jbcrypt.BCrypt;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
