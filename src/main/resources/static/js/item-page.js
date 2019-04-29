@@ -40,7 +40,7 @@ function animateItemModal(itemId) {
 
 // generates the modal/cards for each item from a list
 function generateCards(listOfItems) {
-  for (i = 0; i < listOfItems.length; i++) {
+  for (let i = 0; i < listOfItems.length; i++) {
     // get current item json
     let item = listOfItems[i];
 

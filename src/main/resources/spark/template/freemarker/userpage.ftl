@@ -4,7 +4,11 @@
     <h1 class="name"></h1>
     <div id="item-overview">
         <h2>Items</h2>
-        <div>
+        <div class="chart-container">
+            <canvas id="typePie"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="formalityRadar"></canvas>
         </div>
     </div>
     <div id="outfit-overview">
