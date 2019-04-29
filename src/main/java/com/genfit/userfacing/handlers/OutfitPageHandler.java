@@ -22,8 +22,9 @@ public class OutfitPageHandler implements TemplateViewRoute {
   public ModelAndView handle(Request request, Response response)
       throws Exception {
     String outfitJS = "<script src=\"js/outfit-page.js\"></script>";
+    String outfitCSS = "<link rel=\"stylesheet\" href=\"css/outfit-page.css\"></link>";
     Map<String, Object> variables = ImmutableMap.of("title", "User Outfits",
-        "additionalScripts", outfitJS);
+        "additionalScripts", outfitJS, "additionalCSS", outfitCSS);
     return new ModelAndView(variables, "outfitpage.ftl");
   }
 }

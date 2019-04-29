@@ -65,9 +65,9 @@ public class RankerTest {
 
     this.arf.addItem(new ItemProxyDummy(i1));
 
-    printList(this.arf.rankAttributes(this.sar));
-    printList(this.arf.rankAttributes(this.par));
-    printList(this.arf.rankAttributes(this.far));
+    //printList(this.arf.rankAttributes(this.sar));
+    //printList(this.arf.rankAttributes(this.par));
+    //printList(this.arf.rankAttributes(this.far));
 
     Item i2 = new Item(2, "dummy2",
             new SeasonAttribute(SeasonEnum.SPRING),
@@ -78,9 +78,9 @@ public class RankerTest {
 
     this.arf.addItem(new ItemProxyDummy(i2));
 
-    printList(this.arf.rankAttributes(this.car));
-    printList(this.arf.rankAttributes(this.sar));
-    printList(this.arf.rankAttributes(this.par));
-    printList(this.arf.rankAttributes(this.far));
+    //printList(this.arf.rankAttributes(this.car));
+    //printList(this.arf.rankAttributes(this.sar));
+    //printList(this.arf.rankAttributes(this.par));
+    //printList(this.arf.rankAttributes(this.far));
   }
 }

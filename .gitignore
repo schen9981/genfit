@@ -76,9 +76,10 @@ target/
 
 .mvn-classpath
 target/
-.mvn-classpath
-.classpath
+classpath
 .idea/
-**.DS_Store**
+**.DS_Store*
+cs32*
+cs32-group-project.iml
 
 **/*.sqlite3

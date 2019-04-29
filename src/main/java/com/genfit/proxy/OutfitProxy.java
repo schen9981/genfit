@@ -5,8 +5,6 @@ import com.genfit.clothing.Outfit;
 import com.genfit.database.Database;
 import com.google.common.collect.ImmutableMap;
 
-import java.sql.SQLException;
-
 public class OutfitProxy {
 
   // Instance variables describing the OutfitProxy instance
@@ -23,7 +21,7 @@ public class OutfitProxy {
     this.outfit = null;
   }
 
-  private Outfit getOutfit() {
+  public Outfit getOutfit() {
     try {
       this.outfit = this.db.getOutfitBean(this.id);
     } catch (Exception e) {

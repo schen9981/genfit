@@ -36,29 +36,55 @@ public class ItemProxy {
     try {
       this.item = this.db.getItemBean(this.id);
     } catch (Exception e) {
+      e.printStackTrace();
       System.out.println("ERROR: Exception when getting ItemBean");
     }
     return this.item;
   }
 
   public SeasonAttribute getWeatherAttribute() {
-    return this.getItem().getWeatherAttribute();
+    Item i = this.getItem();
+    if (i == null) {
+      return null;
+    } else {
+      return i.getWeatherAttribute();
+    }
   }
 
   public FormalityAttribute getFormalityAttribute() {
-    return this.getItem().getFormalityAttribute();
+    Item i = this.getItem();
+    if (i == null) {
+      return null;
+    } else {
+      return i.getFormalityAttribute();
+    }
   }
 
   public ColorAttribute getColorAttribute() {
-    return this.getItem().getColorAttribute();
+    Item i = this.getItem();
+    if (i == null) {
+      return null;
+    } else {
+      return i.getColorAttribute();
+    }
   }
 
   public TypeAttribute getTypeAttribute() {
-    return this.getItem().getTypeAttribute();
+    Item i = this.getItem();
+    if (i == null) {
+      return null;
+    } else {
+      return i.getTypeAttribute();
+    }
   }
 
   public PatternAttribute getPatternAttribute() {
-    return this.getItem().getPatternAttribute();
+    Item i = this.getItem();
+    if (i == null) {
+      return null;
+    } else {
+      return i.getPatternAttribute();
+    }
   }
 
   public int getId() {
