@@ -12,7 +12,6 @@
           href="<#if cssPath?has_content>${cssPath}</#if>css/html5bp.css">
     <link rel="stylesheet"
           href="<#if cssPath?has_content>${cssPath}</#if>css/main.css">
-
     <link href="https://fonts.googleapis.com/css?family=Poppins"
           rel="stylesheet">
 
@@ -28,9 +27,9 @@
 <#--<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/hmac-sha256.js"></script>-->
 <#--<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/enc-base64.min.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-
 <script src="/js/jquery-2.1.1.js"></script>
 <script src="js/authentication.js"></script>
+<script src="js/user-form.js"></script>
 
 <#if additionalScripts?has_content>
     ${additionalScripts}

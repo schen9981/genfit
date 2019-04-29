@@ -93,8 +93,9 @@ public class Database {
 
   //Misc Statements
   private final String lastInsertIDSQL = "SELECT LAST_INSERT_ID();";
+  private final String changePasswordSQL = "UPDATE user SET password = ? WHERE email = ?";
+  private PreparedStatement changePasswordPrep;
   private PreparedStatement lastInsertID;
-
   private LoadingCache<String, User> userCache;
   private LoadingCache<Integer, Item> itemCache;
   private LoadingCache<Integer, Outfit> outfitCache;
@@ -104,7 +105,7 @@ public class Database {
       this.conn = conn;
       Statement stmt= conn.createStatement();
       stmt.execute("USE genfit;");
-
+      this.changePasswordPrep = conn.prepareStatement(this.changePasswordSQL);
       this.checkLoginPrep = conn.prepareStatement(this.checkLoginSQL);
       this.checkSignupPrep = conn.prepareStatement(this.checkSignupSQL);
       this.getUserInfoPrep = conn.prepareStatement(this.getUserInfoSQL);
@@ -221,6 +222,11 @@ public class Database {
     return this.outfitCache.get(id);
   }
 
+  public void changePassword(String email, String newPwdHash) throws Exception {
+    this.changePasswordPrep.setString(1, newPwdHash);
+    this.changePasswordPrep.setString(2, email);
+    this.changePasswordPrep.executeUpdate();
+  }
 
   public boolean checkLogin(String username, String clientHashPwd) throws Exception{
     this.checkLoginPrep.setString(1, username);
@@ -233,7 +239,8 @@ public class Database {
     rs.close();
 
     if (null == storedHash || !storedHash.startsWith("$2a$")) {
-      throw new IllegalArgumentException("Invalid hash provided for comparison");
+//      throw new IllegalArgumentException("Invalid hash provided for comparison");
+      return false;
     }
 
 
