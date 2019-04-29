@@ -52,8 +52,11 @@ public class SeasonAttrRanker implements AttributeRanker<SeasonAttribute> {
     Map<SeasonEnum, Integer> seasonCounts = new HashMap<>();
 
     for (ItemProxy item : items) {
-      SeasonEnum itemSeason = item.getWeatherAttribute().getAttributeVal();
-      this.countComplements(seasonCounts, itemSeason);
+      SeasonAttribute seasonAttribute = item.getWeatherAttribute();
+      if (seasonAttribute != null) {
+        SeasonEnum itemSeason = seasonAttribute.getAttributeVal();
+        this.countComplements(seasonCounts, itemSeason);
+      }
     }
 
     List<SeasonAttribute> sortedSeasons = new ArrayList<>(4);

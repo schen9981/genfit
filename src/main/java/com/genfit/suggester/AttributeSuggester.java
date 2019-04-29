@@ -5,11 +5,11 @@ import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
 import com.genfit.attribute.SeasonAttribute;
-import com.genfit.attribute.attributevals.Color;
 import com.genfit.attribute.attributevals.TypeEnum;
 import com.genfit.clothing.Outfit;
 import com.genfit.proxy.ItemProxy;
 import com.genfit.rankers.AttributeRankerFactory;
+import com.genfit.rankers.ColorAttrRanker;
 import com.genfit.rankers.FormalityAttrRanker;
 import com.genfit.rankers.PatternAttrRanker;
 import com.genfit.rankers.SeasonAttrRanker;
@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Utility class for suggesting attributes given a combination of clothing.
  */
-public class AttributeSuggester {
+class AttributeSuggester {
   /**
    * Private constructor for utility class.
    */
@@ -36,7 +36,7 @@ public class AttributeSuggester {
    * @param o outfit to start matching on
    * @return a map from the Attribute class to the possible values of the type
    */
-  public static Map<Class, List<? extends Attribute>> getMatchingOutfitAttributes(Outfit o) {
+  static Map<Class, List<? extends Attribute>> getMatchingOutfitAttributes(Outfit o) {
     Map<Class, List<? extends Attribute>> matches = new HashMap<>();
 
     Map<TypeEnum, ItemProxy> outfitItems = o.getItems();
@@ -56,7 +56,8 @@ public class AttributeSuggester {
             arf.rankAttributes(new FormalityAttrRanker());
     List<PatternAttribute> matchingPatternAttrs =
             arf.rankAttributes(new PatternAttrRanker());
-    List<ColorAttribute> matchingColorAttrs = new LinkedList<>();
+    List<ColorAttribute> matchingColorAttrs =
+            arf.rankAttributes(new ColorAttrRanker());
 
     matches.put(SeasonAttribute.class, matchingSeasonAttrs);
     matches.put(FormalityAttribute.class, matchingFormalityAttrs);

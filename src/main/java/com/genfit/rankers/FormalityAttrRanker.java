@@ -34,6 +34,17 @@ public class FormalityAttrRanker implements AttributeRanker<FormalityAttribute> 
     // return an empty list if there were no items in the list
     if (items.size() > 0) {
       toRet.add(new FormalityAttribute(curLowFormality));
+      switch (curLowFormality) {
+        case ULTRA_CASUAL:
+          toRet.add(new FormalityAttribute(FormalityEnum.CASUAL));
+          break;
+        case CASUAL:
+          break;
+        case BUSINESS_CASUAL:
+          toRet.add(new FormalityAttribute(FormalityEnum.BUSINESS_CASUAL));
+          break;
+        case FORMAL:
+      }
     }
     return toRet;
   }

@@ -3,8 +3,6 @@ package com.genfit.userfacing.handlers;
 import com.genfit.database.Database;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
-import jdk.nashorn.internal.ir.annotations.Immutable;
-import org.mindrot.jbcrypt.BCrypt;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
@@ -17,6 +15,7 @@ public class SignupHandler implements Route {
 
   private static final Gson GSON = new Gson();
   private Database db;
+
   public SignupHandler(Database db) {
     this.db = db;
   }

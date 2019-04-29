@@ -17,6 +17,11 @@ public class ColorAttribute implements Attribute<Color> {
   }
 
   @Override
+  public String getAttributeName() {
+    return "color";
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;

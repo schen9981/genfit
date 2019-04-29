@@ -6,7 +6,6 @@ import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
 import com.genfit.attribute.SeasonAttribute;
 import com.genfit.attribute.TypeAttribute;
-import com.genfit.attribute.attributevals.AttributeEnum;
 import com.genfit.attribute.attributevals.Color;
 import com.genfit.attribute.attributevals.FormalityEnum;
 import com.genfit.attribute.attributevals.PatternEnum;
@@ -38,7 +37,7 @@ public class Database {
 
   //Check statements
   private final String checkLoginSQL = "SELECT * FROM user WHERE email = ? "
-      + "AND password = ?;";
+          + "AND password = ?;";
   private final String checkSignupSQL = "SELECT * FROM user WHERE email = ?;";
   private PreparedStatement checkLoginPrep, checkSignupPrep;
 
@@ -102,7 +101,7 @@ public class Database {
   public Database(Connection conn) {
     try {
       this.conn = conn;
-      Statement stmt= conn.createStatement();
+      Statement stmt = conn.createStatement();
       stmt.execute("USE genfit;");
 
       this.checkLoginPrep = conn.prepareStatement(this.checkLoginSQL);
@@ -129,10 +128,11 @@ public class Database {
       this.deleteItemPrep = conn.prepareStatement(this.deleteItemSQL);
       this.deleteUserItemPrep = conn.prepareStatement(this.deleteUserItemSQL);
       this.deleteOutfitPrep = conn.prepareStatement(this.deleteOutfitSQL);
-      this.deleteUserOutfitPrep = conn.prepareStatement(this.deleteUserOutfitSQL);
+      this.deleteUserOutfitPrep =
+              conn.prepareStatement(this.deleteUserOutfitSQL);
       this.lastInsertID = conn.prepareStatement(this.lastInsertIDSQL);
     } catch (SQLException e) {
-      System.out.println("ERROR: SQLExeception when prepare statement"
+      System.out.println("ERROR: SQLException when prepare statement"
               + "in Database constructor");
     }
     this.instantiateCacheLoader();
@@ -141,6 +141,7 @@ public class Database {
   /**
    * Parses a csv of hex values from the database and returns
    * a list of colors.
+   *
    * @param colors - the csv String of colors.
    * @return - a list of colors.
    */
@@ -148,7 +149,8 @@ public class Database {
     String[] splitComma = colors.split(",");
     List<Color> colorList = new ArrayList<>();
     for (String colorString : splitComma) {
-      colorList.add(new Color(Integer.parseInt(colorString, 16)));
+      colorList.add(new Color(Integer.parseInt(colorString,
+              16)));
     }
     return colorList;
   }
@@ -222,7 +224,7 @@ public class Database {
   }
 
 
-  public boolean checkLogin(String username, String hashPwd) throws Exception{
+  public boolean checkLogin(String username, String hashPwd) throws Exception {
     this.checkLoginPrep.setString(1, username);
     this.checkLoginPrep.setString(2, hashPwd);
     ResultSet rs = this.checkLoginPrep.executeQuery();
@@ -234,7 +236,7 @@ public class Database {
     return success;
   }
 
-  public boolean checkSignup(String username) throws Exception{
+  public boolean checkSignup(String username) throws Exception {
 
     this.checkSignupPrep.setString(1, username);
     ResultSet rs = this.checkSignupPrep.executeQuery();
@@ -281,43 +283,53 @@ public class Database {
             FormalityEnum.values()[rs.getInt(4)]);
 
     String colorCSV = rs.getString(5);
-    List<Color> colorList = parseColorCSV(colorCSV);
+    List<Color> colorList = this.parseColorCSV(colorCSV);
+    ColorAttribute color = null;
+    if (colorList.size() > 0) {
+      color = new ColorAttribute(colorList.get(0));
+    } else {
+      color = new ColorAttribute(new Color(Color.convertToHexVal(0, 0, 0)));
+    }
 
     PatternAttribute pattern = new PatternAttribute(
             PatternEnum.values()[rs.getInt(6)]);
     SeasonAttribute season = new SeasonAttribute(
             SeasonEnum.values()[rs.getInt(7)]);
     rs.close();
-    // TODO: How to instantiate Item of specific type
-    // return new Item(id, name, season, formality, pattern, color, type);
-    return null;
+    // TODO: add subtype to constructor
+    return new Item(id, name, season, formality, pattern, color, type);
   }
 
-  // TODO: @lawrence will modify this
-  public List<ItemProxy> getAllItemsByAttributes(AttributeEnum attributeEnum,
-                                                 List<Attribute> attribute) throws SQLException {
-    String attributeName = attributeEnum.toString();
+  public List<ItemProxy> getAllItemsByAttributes(Attribute attributeToQuery,
+                                                 List<? extends Attribute>
+                                                         attribute)
+          throws SQLException {
+    String attributeName = attributeToQuery.getAttributeName();
 
-    String getAllItemsByAttributesSQL = "SELECT * FROM item WHERE ?=?";
+    StringBuilder getAllItemsByAttributesSQL = new StringBuilder("SELECT * "
+            + "FROM item "
+            + "WHERE "
+            + attributeName + "=?");
 
     for (int i = 1; i < attribute.size(); i++) {
-      getAllItemsByAttributesSQL += " OR ?=?";
+      getAllItemsByAttributesSQL.append(" OR " + attributeName + "=?");
     }
-    getAllItemsByAttributesSQL += ";";
-    this.getAllItemsByAttributesPrep = this.conn
-            .prepareStatement(getAllItemsByAttributesSQL);
+    getAllItemsByAttributesSQL.append(";");
 
-    if (attributeEnum == AttributeEnum.COLOR) {
-      for (int i = 1; i <= attribute.size() * 2; i += 2) {
-        this.getAllItemsByAttributesPrep.setString(i, attributeName);
-        Color color = (Color) attribute.get(i / 2).getAttributeVal();
-        this.getAllItemsByAttributesPrep.setString(i + 1, color.toString());
+    this.getAllItemsByAttributesPrep = this.conn
+            .prepareStatement(getAllItemsByAttributesSQL.toString());
+
+    if (attributeName.equals(new ColorAttribute(null).getAttributeName())) {
+      for (int i = 1; i <= attribute.size(); i++) {
+        //this.getAllItemsByAttributesPrep.setString(i, attributeName);
+        Color color = (Color) attribute.get(i - 1).getAttributeVal();
+        this.getAllItemsByAttributesPrep.setString(i, color.toString());
       }
     } else {
-      for (int i = 1; i <= attribute.size() * 2; i += 2) {
-        this.getAllItemsByAttributesPrep.setString(i, attributeName);
-        Enum e = (Enum) attribute.get(i / 2).getAttributeVal();
-        this.getAllItemsByAttributesPrep.setInt(i + 1, e.ordinal());
+      for (int i = 1; i <= attribute.size(); i++) {
+        //this.getAllItemsByAttributesPrep.setString(i, attributeName);
+        Enum e = (Enum) attribute.get(i - 1).getAttributeVal();
+        this.getAllItemsByAttributesPrep.setInt(i, e.ordinal());
       }
     }
 
@@ -405,15 +417,15 @@ public class Database {
   }
 
 
-
   /**
    * Adds a new user.
-   * @param name - The name of the new use.
+   *
+   * @param name  - The name of the new use.
    * @param email - the user's email.
    * @throws SQLException
    */
   public void addUser(String name, String email, String hashPwd)
-      throws SQLException {
+          throws SQLException {
     this.addUserPrep.setString(1, name);
     this.addUserPrep.setString(2, email);
     this.addUserPrep.setString(3, hashPwd);
