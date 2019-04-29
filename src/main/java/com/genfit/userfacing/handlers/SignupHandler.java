@@ -7,6 +7,7 @@ import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -15,7 +16,6 @@ public class SignupHandler implements Route {
 
   private static final Gson GSON = new Gson();
   private Database db;
-
   public SignupHandler(Database db) {
     this.db = db;
   }
@@ -25,11 +25,13 @@ public class SignupHandler implements Route {
     QueryParamsMap qm = req.queryMap();
     String name = qm.value("name");
     String username = qm.value("username");
-    String hashPwd = qm.value("password");
+    String clientHashPwd = qm.value("password");
 
     boolean newUsername = true;
-//    String finalHash = BCrypt.hashpw(hashPwd, BCrypt.gensalt(10));
-    String finalHash = hashPwd;
+    String finalHash = BCrypt.hashpw(clientHashPwd, BCrypt.gensalt(10));
+//    String finalHash = hashPwd;
+
+    System.out.println(BCrypt.checkpw(clientHashPwd, finalHash) + "$$");
     // Check database
     try {
       newUsername = this.db.checkSignup(username);

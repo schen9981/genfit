@@ -15,7 +15,6 @@ public class LoginHandler implements Route {
 
   private static final Gson GSON = new Gson();
   private Database db;
-
   public LoginHandler(Database db) {
     this.db = db;
   }
@@ -24,23 +23,19 @@ public class LoginHandler implements Route {
   public String handle(Request req, Response res) {
     QueryParamsMap qm = req.queryMap();
     String username = qm.value("username");
-    String hashPwd = qm.value("password");
+    String clientHashPwd = qm.value("password");
 
-    boolean correctInfo = false;
-//    String finalHash = BCrypt.hashpw(hashPwd, BCrypt.gensalt());
-    String finalHash = hashPwd;
-//    System.out.println(finalHash);
-
+    boolean success = false;
     // Check database
     try {
-      correctInfo = this.db.checkLogin(username, finalHash);
+      success = this.db.checkLogin(username, clientHashPwd);
     } catch (Exception e) {
 //      System.out.println("ERROR: Error when checking login info.");
       e.printStackTrace();
     }
-    System.out.println(correctInfo);
+    System.out.println(success);
     Map<String, Object> variables =
-            ImmutableMap.of("success", correctInfo);
+        ImmutableMap.of("success", success);
     return GSON.toJson(variables);
   }
 }
