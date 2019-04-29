@@ -1,5 +1,5 @@
 document.getElementById("form-wrapper").style.display = "none";
-$("#name").html(localStorage.getItem('name'));
+$(".name").html(localStorage.getItem('name'));
 function openForm() {
     document.getElementById("change-btn").style.display = "none";
     document.getElementById("form-wrapper").style.display = "block";

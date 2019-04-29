@@ -1,9 +1,8 @@
 // map from id -> item array (?)
 // let itemCache = new Map([]);
-
 // username of current user
 let username;
-
+$(".name").html(localStorage.getItem('name'));
 // generate html content (ie. item information) for card
 function generateCardContent(item) {
   // item represented as array [id, name, color, type, pattern, season, formality]
@@ -188,4 +187,5 @@ $(document).ready(() => {
   displayUserItems(username);
   itemModalAnimation();
   addItemFormSubmit();
+  $(".name").html(localStorage.getItem('name'));
 });

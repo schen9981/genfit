@@ -448,7 +448,6 @@ public class Database {
     this.addItemPrep.setString(4, color.getAttributeVal().toString());
     this.addItemPrep.setInt(5, pattern.getAttributeVal().ordinal());
     this.addItemPrep.setInt(6, season.getAttributeVal().ordinal());
-
     this.addItemPrep.executeUpdate();
 
     ResultSet rs = this.lastInsertID.executeQuery();

@@ -103,7 +103,6 @@ public final class Main {
     Spark.get("/discover", new DiscoverPageHandler(this.mainApp), freeMarker);
 
     // Setup spark routes for getting data (ie. json endpoints)
-//    Spark.post("/login", new LoginHandler(this.mainApp.getDb()));
     Spark.post("/userform", new UserformHandler(this.mainApp.getDb()));
 
     Spark.post("/userItems", new UserItemRetriever(this.mainApp));

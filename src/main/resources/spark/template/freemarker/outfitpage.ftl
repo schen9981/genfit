@@ -1,5 +1,5 @@
 <#assign content>
-<h1>Items in User's Outfit</h1>
+  <h1>Outfits in <span class="name"></span>'s Closet</h1>
 
 <div id="outfits">
 </div>
