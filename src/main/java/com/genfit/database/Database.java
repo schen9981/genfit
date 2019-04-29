@@ -362,7 +362,7 @@ public class Database {
     itemMap.put(TypeEnum.SHOES, feet);
 
     // TODO: Change parameters for Outfit constructor
-//    return new Outfit(id, name, itemMap);
+//  return new Outfit(id, name, itemMap);
     return null;
   }
 
@@ -431,12 +431,16 @@ public class Database {
     this.addItemPrep.executeUpdate();
 
     ResultSet rs = this.lastInsertID.executeQuery();
-    rs.next();
-    int itemID = rs.getInt(1);
+    if(rs.next()) {
+      int itemID = rs.getInt(1);
 
-    this.addItemToUserPrep.setInt(1, userProxy.getId());
-    this.addItemToUserPrep.setInt(2, itemID);
-    this.addItemToUserPrep.executeUpdate();
+      this.addItemToUserPrep.setInt(1, userProxy.getId());
+      this.addItemToUserPrep.setInt(2, itemID);
+      this.addItemToUserPrep.executeUpdate();
+    } else {
+      throw new SQLException();
+    }
+
   }
 
   public void addOutfit(UserProxy userProxy, String outfitName, Map<TypeEnum,
@@ -454,12 +458,13 @@ public class Database {
     this.addOutfitPrep.executeUpdate();
 
     ResultSet rs = this.lastInsertID.executeQuery();
-    rs.next();
-    int outfitID = rs.getInt(1);
+    if (rs.next()) {
+      int outfitID = rs.getInt(1);
 
-    this.addOutfitToUserPrep.setInt(1, userProxy.getId());
-    this.addOutfitToUserPrep.setInt(2, outfitID);
-    this.addOutfitToUserPrep.executeUpdate();
+      this.addOutfitToUserPrep.setInt(1, userProxy.getId());
+      this.addOutfitToUserPrep.setInt(2, outfitID);
+      this.addOutfitToUserPrep.executeUpdate();
+    }
   }
 
   /**
