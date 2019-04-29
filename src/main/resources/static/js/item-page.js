@@ -1,8 +1,5 @@
-// map from id -> item json
-let itemCache = new Map([]);
-
-// current id of item
-let currId = 0;
+// map from id -> item array (?)
+// let itemCache = new Map([]);
 
 // username of current user
 let username;
@@ -49,12 +46,13 @@ function generateCards(listOfItems) {
     let item = listOfItems[i];
 
     // generate modal html
-    let id = currId;
-    let buttonHTML = '<button class="item" id="item-' + id + '">Item' + id + '</button>';
+    let id = item[0];
+    let buttonHTML = '<button class="item" id="item-' + id + '">' + id + '</button>';
     let modalHTML = '<div class="modal" id="modal-' + id + '">';
     modalHTML += '<div class="modal-content">';
     modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
     modalHTML += generateCardContent(item);
+    modalHTML += '<button id="delete-item-' + id + '">Delete Item</button>';
     modalHTML += '</div></div>';
 
     // add modal to div 'items'
@@ -63,10 +61,31 @@ function generateCards(listOfItems) {
 
     // add popup functionality to given modal
     animateItemModal(id);
-    currId++;
+
+    // add delete button functionality
+    deleteUserItem(id);
   }
   // set dimensions of cards
   $('.item').css("width", "20%");
+}
+
+// add button functionality to remove an item
+function deleteUserItem(itemId) {
+  // event handler for removing item
+  $('#delete-item-' + itemId).on('click', function(e) {
+    let postParams = {
+      username: username,
+      itemId: itemId
+    };
+
+    // post request to remove item
+    $.post("/deleteItem", postParams, responseJSON => {
+      $('#item-' + itemId).remove();
+      $('#modal-' + itemId).remove();
+    });
+
+    window.location.reload();
+  });
 }
 
 // function to retrieve and display user items
@@ -75,19 +94,6 @@ function displayUserItems(username) {
   let postParams = {
     username: username
   };
-
-  // userItems = [
-  //   [1, "Item 1", "red", "tshirt", "solid", "summer", "casual"],
-  //   [2, "Item 2", "red", "tshirt", "solid", "summer", "casual"],
-  //   [3, "Item 3", "red", "tshirt", "solid", "summer", "casual"],
-  //   [4, "Item 4", "red", "tshirt", "solid", "summer", "casual"],
-  //   [5, "Item 5", "red", "tshirt", "solid", "summer", "casual"],
-  //   [6, "Item 6", "red", "tshirt", "solid", "summer", "casual"],
-  //   [7, "Item 7", "red", "tshirt", "solid", "summer", "casual"],
-  //   [8, "Item 8", "red", "tshirt", "solid", "summer", "casual"],
-  // ]
-
-  // generateCards(userItems);
 
   $.post("/userItems", postParams, responseJSON => {
     //get the items of the user
@@ -179,10 +185,7 @@ function addItemFormSubmit() {
 
 $(document).ready(() => {
   username = localStorage.username;
-
   displayUserItems(username);
   itemModalAnimation();
   addItemFormSubmit();
-
-  // TODO: CACHE USER items (also so that adding item will allow for user to refresh page)
 });

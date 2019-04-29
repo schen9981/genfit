@@ -28,7 +28,8 @@
           <option value="SHOES">Shoes</option>
         </select>
         <select id="type-2" name="item-type-2">
-          <option>Please select a generic item type.</option>
+          <option value="outer-coat">Outer Coat</option>
+          <option value="suit">Suit</option>
         </select><br>
 
         Pattern:<br>

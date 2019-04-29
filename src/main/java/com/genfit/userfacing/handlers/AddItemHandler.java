@@ -33,38 +33,40 @@ public class AddItemHandler implements Route {
     String[] toReturn = new String[7];
 
     String name = qm.value("itemName");
-    toReturn[0] = name;
+    toReturn[1] = name;
 
     String colorStr = qm.value("itemColor");
-    toReturn[1] = colorStr;
+    toReturn[2] = colorStr;
     int colorInt = (int) Long.parseLong(colorStr.replaceFirst("#", ""), 16);
     ColorAttribute color = new ColorAttribute(new Color(colorInt));
 
     String typeStr = qm.value("itemType1");
-    toReturn[2] = typeStr;
+    toReturn[3] = typeStr;
     TypeAttribute type1 = new TypeAttribute(
         Enum.valueOf(TypeEnum.class, typeStr));
 
     String patternStr = qm.value("itemPattern");
-    toReturn[3] = patternStr;
+    toReturn[4] = patternStr;
     PatternAttribute pattern = new PatternAttribute(
         Enum.valueOf(PatternEnum.class, patternStr));
 
     String seasonStr = qm.value("itemSeason");
-    toReturn[4] = seasonStr;
+    toReturn[5] = seasonStr;
     SeasonAttribute season = new SeasonAttribute(
         Enum.valueOf(SeasonEnum.class, seasonStr));
 
     String formalityStr = qm.value("itemFormality");
-    toReturn[5] = formalityStr;
+    toReturn[6] = formalityStr;
     FormalityAttribute formality = new FormalityAttribute(
         Enum.valueOf(FormalityEnum.class, formalityStr));
 
     // get id of current user
     int id = this.genFitApp.getDb().getUserBean(qm.value("username")).getId();
     // add item
-    this.genFitApp.getDb().addItem(id, name, type1, formality, color, pattern,
-        season);
+    int itemId = this.genFitApp.getDb().addItem(id, name, type1, formality,
+        color, pattern, season);
+
+    toReturn[0] = Integer.toString(itemId);
 
     // return an item to add to html page
     return Main.GSON.toJson(toReturn);

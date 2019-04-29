@@ -31,13 +31,12 @@ public class UserItemRetriever implements Route {
     String username = qm.value("username");
 
     List<ItemProxy> userItemProxies = new ArrayList<>();
-    List<Item> userItems = new ArrayList<>();
+    List<String[]> userItems = new ArrayList<>();
 
     // get id for user
     int id;
     try {
       id = this.genFitApp.getDb().getUserBean(username).getId();
-      System.out.println(id);
     } catch (Exception e1) {
       // if error, return empty list
       Map<String, Object> variables = ImmutableMap.of("items", userItems);
@@ -55,11 +54,33 @@ public class UserItemRetriever implements Route {
     }
 
     for (ItemProxy p : userItemProxies) {
-      userItems.add(p.getItem());
+      Item currItem = p.getItem();
+      String[] itemInfoArr = getItemInfoArr(currItem);
+      userItems.add(itemInfoArr);
     }
 
     Map<String, Object> variables = ImmutableMap.of("items", userItems);
 
     return Main.GSON.toJson(variables);
   }
+
+  /**
+   * Gets the array representation of an item.
+   *
+   * @param item - item we are extracting information from.
+   * @return array representation
+   */
+  public static String[] getItemInfoArr(Item item) {
+    String[] itemInfoArr = new String[7];
+    itemInfoArr[0] = Integer.toString(item.getId());
+    itemInfoArr[1] = item.getName();
+    itemInfoArr[2] = item.getColor().getAttributeVal().toString();
+    itemInfoArr[3] = item.getType().getAttributeVal().toString();
+    itemInfoArr[4] = item.getPattern().getAttributeVal().toString();
+    itemInfoArr[5] = item.getSeason().getAttributeVal().toString();
+    itemInfoArr[6] = item.getFormality().getAttributeVal().toString();
+
+    return itemInfoArr;
+  }
+
 }

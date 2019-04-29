@@ -282,23 +282,26 @@ public class Database {
   private Item getItemInfo(int id) throws SQLException {
     this.getItemInfoPrep.setInt(1, id);
     ResultSet rs = this.getItemInfoPrep.executeQuery();
-    rs.next();
-    String name = rs.getString(2);
-    TypeAttribute type = new TypeAttribute(TypeEnum.values()[rs.getInt(3)]);
-    FormalityAttribute formality = new FormalityAttribute(
-        FormalityEnum.values()[rs.getInt(4)]);
+    Item toReturn = null;
+    while (rs.next()) {
+      String name = rs.getString(2);
+      TypeAttribute type = new TypeAttribute(TypeEnum.values()[rs.getInt(3)]);
+      FormalityAttribute formality = new FormalityAttribute(
+          FormalityEnum.values()[rs.getInt(4)]);
 
-    String colorCSV = rs.getString(5);
-    List<Color> colorList = parseColorCSV(colorCSV);
+      String colorCSV = rs.getString(5);
+      List<Color> colorList = parseColorCSV(colorCSV);
 
-    PatternAttribute pattern = new PatternAttribute(
-        PatternEnum.values()[rs.getInt(6)]);
-    SeasonAttribute season = new SeasonAttribute(
-        SeasonEnum.values()[rs.getInt(7)]);
+      PatternAttribute pattern = new PatternAttribute(
+          PatternEnum.values()[rs.getInt(6)]);
+      SeasonAttribute season = new SeasonAttribute(
+          SeasonEnum.values()[rs.getInt(7)]);
+
+      toReturn = new Item(id, name, season, formality, pattern,
+          new ColorAttribute(colorList.get(0)), type);
+    }
     rs.close();
-    // TODO: How to instantiate Item of specific type
-    // return new Item(id, name, season, formality, pattern, color, type);
-    return null;
+    return toReturn;
   }
 
   // TODO: @lawrence will modify this
@@ -427,7 +430,7 @@ public class Database {
     this.addUserPrep.executeUpdate();
   }
 
-  public void addItem(int userId, String name, TypeAttribute type,
+  public int addItem(int userId, String name, TypeAttribute type,
       FormalityAttribute formality, ColorAttribute color,
       PatternAttribute pattern, SeasonAttribute season) throws SQLException {
     this.addItemPrep.setString(1, name);
@@ -446,6 +449,8 @@ public class Database {
     this.addItemToUserPrep.setInt(1, userId);
     this.addItemToUserPrep.setInt(2, itemID);
     this.addItemToUserPrep.executeUpdate();
+
+    return itemID;
   }
 
   public void addOutfit(UserProxy userProxy, String outfitName,
@@ -491,17 +496,16 @@ public class Database {
    * Deletes an item from the item table and its reference from the user_item
    * table.
    *
-   * @param userProxy - The User that owns the item.
-   * @param itemProxy - The item to be deleted.
+   * @param userId - id of user that owns the item
+   * @param itemId - id of item to be deleted
    * @throws SQLException
    */
-  public void deleteItem(UserProxy userProxy, ItemProxy itemProxy)
-      throws SQLException {
+  public void deleteItem(int userId, int itemId) throws SQLException {
     // TODO: delete item (might be referenced by other users)?
 //    deleteItemPrep.setString(1, item.getId());
 //    deleteItemPrep.executeUpdate();
-    this.deleteUserItemPrep.setInt(1, userProxy.getId());
-    this.deleteUserItemPrep.setInt(2, itemProxy.getId());
+    this.deleteUserItemPrep.setInt(1, userId);
+    this.deleteUserItemPrep.setInt(2, itemId);
     this.deleteUserItemPrep.executeUpdate();
   }
 
