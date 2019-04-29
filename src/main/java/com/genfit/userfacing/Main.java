@@ -6,10 +6,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import com.genfit.userfacing.handlers.AddItemHandler;
+import com.genfit.userfacing.handlers.DeleteItemHandler;
 import com.genfit.userfacing.handlers.DiscoverPageHandler;
 import com.genfit.userfacing.handlers.FrontpageHandler;
 import com.genfit.userfacing.handlers.ItemPageHandler;
 import com.genfit.userfacing.handlers.LoginHandler;
+import com.genfit.userfacing.handlers.OutfitComponentsRetriever;
 import com.genfit.userfacing.handlers.OutfitPageHandler;
 import com.genfit.userfacing.handlers.SignupHandler;
 import com.genfit.userfacing.handlers.UserItemRetriever;
@@ -106,9 +108,12 @@ public final class Main {
     Spark.post("/signup", new SignupHandler(this.mainApp.getDb()));
     Spark.post("/userItems", new UserItemRetriever(this.mainApp));
     Spark.post("/userOutfits", new UserOutfitRetriever(this.mainApp));
+    Spark.post("/outfitComponents",
+        new OutfitComponentsRetriever(this.mainApp));
 
-    // Setup post requests for forms
+    // Setup post requests for forms and buttons
     Spark.post("/addItem", new AddItemHandler(this.mainApp));
+    Spark.post("/deleteItem", new DeleteItemHandler(this.mainApp));
   }
 
   /**

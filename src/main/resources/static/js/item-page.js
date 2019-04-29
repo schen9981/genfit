@@ -1,5 +1,8 @@
-// map from id -> item json
-let itemCache = new Map([]);
+// map from id -> item array (?)
+// let itemCache = new Map([]);
+
+// username of current user
+let username;
 
 // generate html content (ie. item information) for card
 function generateCardContent(item) {
@@ -44,11 +47,12 @@ function generateCards(listOfItems) {
 
     // generate modal html
     let id = item[0];
-    let buttonHTML = '<button class="item" id="item-' + id + '">Item' + id + '</button>';
+    let buttonHTML = '<button class="item" id="item-' + id + '">' + id + '</button>';
     let modalHTML = '<div class="modal" id="modal-' + id + '">';
     modalHTML += '<div class="modal-content">';
     modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
     modalHTML += generateCardContent(item);
+    modalHTML += '<button id="delete-item-' + id + '">Delete Item</button>';
     modalHTML += '</div></div>';
 
     // add modal to div 'items'
@@ -57,36 +61,46 @@ function generateCards(listOfItems) {
 
     // add popup functionality to given modal
     animateItemModal(id);
+
+    // add delete button functionality
+    deleteUserItem(id);
   }
   // set dimensions of cards
   $('.item').css("width", "20%");
 }
 
+// add button functionality to remove an item
+function deleteUserItem(itemId) {
+  // event handler for removing item
+  $('#delete-item-' + itemId).on('click', function(e) {
+    let postParams = {
+      username: username,
+      itemId: itemId
+    };
+
+    // post request to remove item
+    $.post("/deleteItem", postParams, responseJSON => {
+      $('#item-' + itemId).remove();
+      $('#modal-' + itemId).remove();
+    });
+
+    window.location.reload();
+  });
+}
+
 // function to retrieve and display user items
-function displayUserItems(userId) {
+function displayUserItems(username) {
   // post request to /userItems to retrieve user's items
-  // let postParams = {
-  //   userId: userId
-  // };
+  let postParams = {
+    username: username
+  };
 
-  userItems = [
-    [1, "Item 1", "red", "tshirt", "solid", "summer", "casual"],
-    [2, "Item 2", "red", "tshirt", "solid", "summer", "casual"],
-    [3, "Item 3", "red", "tshirt", "solid", "summer", "casual"],
-    [4, "Item 4", "red", "tshirt", "solid", "summer", "casual"],
-    [5, "Item 5", "red", "tshirt", "solid", "summer", "casual"],
-    [6, "Item 6", "red", "tshirt", "solid", "summer", "casual"],
-    [7, "Item 7", "red", "tshirt", "solid", "summer", "casual"],
-    [8, "Item 8", "red", "tshirt", "solid", "summer", "casual"],
-  ]
-
-  generateCards(userItems);
-
-  // $.post("/userItems", postParams, responseJSON => {
-  //   get the items of the user
-  //   let userItems = JSON.parse(responseJSON).items;
-  //   generateCards(userItems);
-  // });
+  $.post("/userItems", postParams, responseJSON => {
+    //get the items of the user
+    let userItems = JSON.parse(responseJSON).items;
+    console.log(userItems);
+    generateCards(userItems);
+  });
 }
 
 // function that dynamically populates second type dropdown
@@ -145,21 +159,18 @@ function itemModalAnimation() {
 }
 
 function addItemFormSubmit() {
-  console.log("here");
-  let form = $('#addItemForm');
-
-  // get parameters for post request from form
-  let postParams = {
-    itemName: $('#item-name').val(),
-    itemColor: $('#item-color').val(),
-    itemType1: $('#type-1').val(),
-    itemPattern: $('#item-pattern').val(),
-    itemSeason: $('#item-season').val(),
-    itemFormality: $('#item-formality').val()
-  }
-
-  form.on("submit", function(e) {
+  $('#addItemForm').on("submit", function(e) {
     e.preventDefault();
+    // get parameters for post request from form
+    let postParams = {
+      username: username,
+      itemName: $('#item-name').val(),
+      itemColor: $('#item-color').val(),
+      itemType1: $('#type-1').val(),
+      itemPattern: $('#item-pattern').val(),
+      itemSeason: $('#item-season').val(),
+      itemFormality: $('#item-formality').val()
+    }
     // post request to addItems
     console.log(postParams);
     $.post("/addItem", postParams, responseJSON => {
@@ -173,9 +184,8 @@ function addItemFormSubmit() {
 
 
 $(document).ready(() => {
-  displayUserItems(1);
+  username = localStorage.username;
+  displayUserItems(username);
   itemModalAnimation();
   addItemFormSubmit();
-
-  // TODO: CACHE USER items (also so that adding item will allow for user to refresh page)
 });

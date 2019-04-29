@@ -22,14 +22,14 @@
 
         Type:<br>
         <select id="type-1" name="item-type-1">
-          <option disabled selected value> -- select an option -- </option>
           <option value="OUTER">Outerwear</option>
           <option value="TOP">Top</option>
           <option value="BOTTOM">Bottom</option>
           <option value="SHOES">Shoes</option>
         </select>
         <select id="type-2" name="item-type-2">
-          <option>Please select a generic item type.</option>
+          <option value="outer-coat">Outer Coat</option>
+          <option value="suit">Suit</option>
         </select><br>
 
         Pattern:<br>

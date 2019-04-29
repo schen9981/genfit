@@ -25,11 +25,13 @@ public class SignupHandler implements Route {
     QueryParamsMap qm = req.queryMap();
     String name = qm.value("name");
     String username = qm.value("username");
-    String hashPwd = qm.value("password");
+    String clientHashPwd = qm.value("password");
 
     boolean newUsername = true;
-//    String finalHash = BCrypt.hashpw(hashPwd, BCrypt.gensalt(10));
-    String finalHash = hashPwd;
+    String finalHash = BCrypt.hashpw(clientHashPwd, BCrypt.gensalt(10));
+//    String finalHash = hashPwd;
+
+    System.out.println(BCrypt.checkpw(clientHashPwd, finalHash) + "$$");
     // Check database
     try {
       newUsername = this.db.checkSignup(username);

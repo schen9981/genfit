@@ -1,16 +1,22 @@
-if (window.location.pathname !== "/") {
+    if (window.location.pathname !== "/") {
     redirect();
 }
 
 function hash(password) {
-    let bcrypt = require('bcrypt.min.js');
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    // let bcrypt = require('bcrypt.min.js');
+    // return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+
+    // let CryptoJS = require(["crypto-js"]);
+    // return CryptoJS.AES.encrypt("genfit", password);
+
+    // return CryptoJS.AES.encrypt(password, "cs32genfit");
+    return CryptoJS.MD5(password).toString();
 }
 
 function login(username, password) {
 
-    // let hashPwd = hash(password);
-    let hashPwd = password;
+    let hashPwd = hash(password);
+    // let hashPwd = password;
     const postParameters = {
         username : username.toLowerCase(),
         password : hashPwd
@@ -35,8 +41,8 @@ function login(username, password) {
 
 
 function signup(name, username, password) {
-    // let hashPwd = hash(password);
-    let hashPwd = password;
+    let hashPwd = hash(password);
+    // let hashPwd = password;
     const postParameters = {
         name : name,
         username : username.toLowerCase(),
