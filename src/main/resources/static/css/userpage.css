@@ -19,3 +19,8 @@
     left: -10px;
     content: "✔";
 }
+
+.chart-container {
+    width: 45%;
+    display: inline-block;
+}

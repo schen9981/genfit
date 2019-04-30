@@ -6,6 +6,16 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.genfit.attribute.ColorAttribute;
+import com.genfit.attribute.FormalityAttribute;
+import com.genfit.attribute.PatternAttribute;
+import com.genfit.attribute.SeasonAttribute;
+import com.genfit.attribute.TypeAttribute;
+import com.genfit.attribute.attributevals.Color;
+import com.genfit.attribute.attributevals.FormalityEnum;
+import com.genfit.attribute.attributevals.PatternEnum;
+import com.genfit.attribute.attributevals.SeasonEnum;
+import com.genfit.attribute.attributevals.TypeEnum;
 import com.genfit.proxy.ItemProxy;
 import com.genfit.proxy.OutfitProxy;
 import com.genfit.proxy.UserProxy;
@@ -27,48 +37,42 @@ public class DatabaseTest {
   private static final String region = "us-east-1";
 
   public static void main(String[] args) throws Exception {
-    BasicAWSCredentials creds = new BasicAWSCredentials(access_key, secret_key);
-    AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-            .withCredentials(new AWSStaticCredentialsProvider(creds))
-            .withRegion(region).build();
-    String filePath = "/Users/ericwang/Desktop/shirt.jpg";
-    String[] splitFilePath = filePath.split("/");
-    String keyName = splitFilePath[splitFilePath.length - 1];
-    try {
-      //s3Client.putObject(bucket_name, keyName, new File(filePath));
-    } catch (AmazonServiceException e) {
-      System.err.println(e.getErrorMessage());
-      System.exit(1);
-    }
-
-    ListObjectsV2Result result = s3Client.listObjectsV2(bucket_name);
-    List<S3ObjectSummary> objects = result.getObjectSummaries();
-    for (S3ObjectSummary os: objects) {
-      System.out.println("* " + os.getKey());
-    }
-    System.out.println("Done");
+//    BasicAWSCredentials creds = new BasicAWSCredentials(access_key, secret_key);
+//    AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+//            .withCredentials(new AWSStaticCredentialsProvider(creds))
+//            .withRegion(region).build();
+//    String filePath = "/Users/ericwang/Desktop/shirt.jpg";
+//    String[] splitFilePath = filePath.split("/");
+//    String keyName = splitFilePath[splitFilePath.length - 1];
+//    try {
+//      //s3Client.putObject(bucket_name, keyName, new File(filePath));
+//    } catch (AmazonServiceException e) {
+//      System.err.println(e.getErrorMessage());
+//      System.exit(1);
+//    }
+//
+//    ListObjectsV2Result result = s3Client.listObjectsV2(bucket_name);
+//    List<S3ObjectSummary> objects = result.getObjectSummaries();
+//    for (S3ObjectSummary os: objects) {
+//      System.out.println("* " + os.getKey());
+//    }
+//    System.out.println("Done");
 //    //get the connection
-//    Connection connection = getDBConnectionUsingIam();
-//
-//    //verify the connection is successful
-//    Statement stmt = connection.createStatement();
-//    stmt.execute("USE genfit;");
-//    stmt.close();
-//    Database db = new Database(connection);
-//
-//    UserProxy up = new UserProxy(db, "zero@gmail.com");
-//    for (ItemProxy i: up.getItems()) {
-//      System.out.println(i.getId());
-//    }
-//    List<OutfitProxy> outfitProxyList = up.getOutfits();
-//    for (OutfitProxy op : outfitProxyList) {
-//      System.out.println(op.getId());
-//    }
+    Connection connection = getDBConnectionUsingIam();
 
-//    db.addItem(1, "dbtestitem");
-    //db.deleteItem(up, new ItemProxy(db, 8));
-    //close the connection
-//    connection.close();
+    //verify the connection is successful
+    Statement stmt = connection.createStatement();
+    stmt.execute("USE genfit;");
+    stmt.close();
+    Database db = new Database(connection);
+    db.addItem(1, "someshirt",
+            new TypeAttribute(TypeEnum.TOP),
+            new FormalityAttribute(FormalityEnum.CASUAL),
+            new ColorAttribute(new Color(0xffffff)),
+            new PatternAttribute(PatternEnum.SOLID),
+            new SeasonAttribute(SeasonEnum.SPRING));
+
+    connection.close();
   }
 
 }

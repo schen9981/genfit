@@ -119,9 +119,9 @@ function changePwd(username, currentPwd, newPwd) {
                 password : hash(newPwd)
             };
             $.post("/userform", postParameters, responseJSON => {
-                // console.log(JSON.parse(responseJSON).success);
                 if (JSON.parse(responseJSON).success) {
                     alert("Password updated!");
+                    window.location.replace("/");
                 } else {
                     alert("Sorry, try again later!");
                 }

@@ -48,3 +48,4 @@
     </div>
 </#assign>
 <#include "main.ftl">
+<script src="js/user-form.js"></script>

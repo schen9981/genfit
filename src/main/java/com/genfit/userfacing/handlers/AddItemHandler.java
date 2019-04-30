@@ -30,7 +30,7 @@ public class AddItemHandler implements Route {
   public String handle(Request request, Response response) throws Exception {
 
     QueryParamsMap qm = request.queryMap();
-    String[] toReturn = new String[7];
+    String[] toReturn = new String[8];
 
     String name = qm.value("itemName");
     toReturn[1] = name;
@@ -67,6 +67,7 @@ public class AddItemHandler implements Route {
         color, pattern, season);
 
     toReturn[0] = Integer.toString(itemId);
+    toReturn[7] = this.genFitApp.getDb().getItemBean(itemId).getImage();
 
     // return an item to add to html page
     return Main.GSON.toJson(toReturn);

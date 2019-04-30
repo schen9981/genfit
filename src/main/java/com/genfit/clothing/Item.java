@@ -15,10 +15,11 @@ public class Item extends ClosetComponent {
   private PatternAttribute pattern;
   private ColorAttribute color;
   private TypeAttribute type;
+  private String image;
 
   public Item(int id, String name, SeasonAttribute season,
       FormalityAttribute formality, PatternAttribute pattern,
-      ColorAttribute color, TypeAttribute type) {
+      ColorAttribute color, TypeAttribute type, String image) {
     super(season, formality, pattern, color, type);
     this.id = id;
     this.name = name;
@@ -27,6 +28,7 @@ public class Item extends ClosetComponent {
     this.pattern = pattern;
     this.color = color;
     this.type = type;
+    this.image = image;
   }
 
   public int getId() {
@@ -55,5 +57,9 @@ public class Item extends ClosetComponent {
 
   public TypeAttribute getType() {
     return type;
+  }
+
+  public String getImage() {
+    return image;
   }
 }

@@ -61,7 +61,8 @@ public class RankerTest {
             new FormalityAttribute(FormalityEnum.BUSINESS_CASUAL),
             new PatternAttribute(PatternEnum.SOLID),
             new ColorAttribute(new Color(Color.convertToHexVal(62, 131, 242))),
-            new TypeAttribute(TypeEnum.BOTTOM));
+            new TypeAttribute(TypeEnum.BOTTOM),
+            "https://s3.amazonaws.com/cs32-term-project-s3-bucket/pants.png");
 
     this.arf.addItem(new ItemProxyDummy(i1));
 
@@ -74,7 +75,8 @@ public class RankerTest {
             new FormalityAttribute(FormalityEnum.ULTRA_CASUAL),
             new PatternAttribute(PatternEnum.STRIPED),
             new ColorAttribute(new Color(4567)),
-            new TypeAttribute(TypeEnum.TOP));
+            new TypeAttribute(TypeEnum.TOP),
+            "https://s3.amazonaws.com/cs32-term-project-s3-bucket/shirt.png");
 
     this.arf.addItem(new ItemProxyDummy(i2));
 

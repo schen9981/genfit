@@ -1,6 +1,19 @@
 package com.genfit.database;
 
-import com.amazonaws.services.redshift.model.transform.TaggedResourceStaxUnmarshaller;
+import java.lang.reflect.Type;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import org.mindrot.jbcrypt.BCrypt;
+
 import com.genfit.attribute.Attribute;
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
@@ -60,8 +73,8 @@ public class Database {
   private PreparedStatement addUserPrep;
 
   private final String addItemSQL = "INSERT IGNORE INTO item"
-          + " (name, type, formality, color, pattern, season)"
-          + " VALUES (?, ?, ?, ?, ?, ?);";
+      + " (name, type, formality, color, pattern, season, image)"
+      + " VALUES (?, ?, ?, ?, ?, ?, ?);";
   private final String addItemToUserSQL = "INSERT INTO user_item "
           + "(user_id, item_id) VALUES (?, ?);";
   private PreparedStatement addItemPrep, addItemToUserPrep;
@@ -101,6 +114,8 @@ public class Database {
   private LoadingCache<Integer, Item> itemCache;
   private LoadingCache<Integer, Outfit> outfitCache;
 
+
+  private Map<Integer, String> defaultImageMap = new HashMap<>();
   public Database(Connection conn) {
     try {
       this.conn = conn;
@@ -134,6 +149,11 @@ public class Database {
       this.deleteUserOutfitPrep = conn
               .prepareStatement(this.deleteUserOutfitSQL);
       this.lastInsertID = conn.prepareStatement(this.lastInsertIDSQL);
+
+      defaultImageMap.put(TypeEnum.OUTER.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/outer_jacket.png");
+      defaultImageMap.put(TypeEnum.TOP.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/tshirt.png");
+      defaultImageMap.put(TypeEnum.BOTTOM.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/pants.png");
+      defaultImageMap.put(TypeEnum.SHOES.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/sneakers.png");
     } catch (SQLException e) {
       System.out.println("ERROR: SQLExeception when prepare statement"
               + "in Database constructor");
@@ -304,8 +324,10 @@ public class Database {
       SeasonAttribute season = new SeasonAttribute(
               SeasonEnum.values()[rs.getInt(7)]);
 
+      String image = rs.getString(8);
+
       toReturn = new Item(id, name, season, formality, pattern,
-              new ColorAttribute(colorList.get(0)), type);
+          new ColorAttribute(colorList.get(0)), type, image);
     }
     rs.close();
     return toReturn;
@@ -482,7 +504,7 @@ public class Database {
     this.addItemPrep.setString(4, color.getAttributeVal().toString());
     this.addItemPrep.setInt(5, pattern.getAttributeVal().ordinal());
     this.addItemPrep.setInt(6, season.getAttributeVal().ordinal());
-
+    this.addItemPrep.setString(7, defaultImageMap.get(type.getAttributeVal().ordinal()));
     this.addItemPrep.executeUpdate();
 
     ResultSet rs = this.lastInsertID.executeQuery();
@@ -559,17 +581,16 @@ public class Database {
    * Deletes an outfit from the outfit table and its reference in the
    * user_outfit table.
    *
-   * @param userProxy   - The user proxy that owns the outfit.
-   * @param outfitProxy - The Outfit to be deleted.
+   * @param userId   - id of user that owns the item
+   * @param outfitId - id of item to be deleted
    * @throws SQLException
    */
-  public void deleteOutfit(UserProxy userProxy, OutfitProxy outfitProxy)
-          throws SQLException {
+  public void deleteOutfit(int userId, int outfitId) throws SQLException {
     // TODO: delete outfit (might be referenced by other users)?
 //    deleteOutfitPrep.setString(1, outfit.getId());
 //    deleteOutfitPrep.executeUpdate();
-    this.deleteUserOutfitPrep.setInt(1, userProxy.getId());
-    this.deleteUserOutfitPrep.setInt(2, outfitProxy.getId());
+    this.deleteUserOutfitPrep.setInt(1, userId);
+    this.deleteUserOutfitPrep.setInt(2, outfitId);
     this.deleteUserOutfitPrep.executeUpdate();
   }
 
