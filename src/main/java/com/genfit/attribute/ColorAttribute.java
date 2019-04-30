@@ -30,7 +30,8 @@ public class ColorAttribute implements Attribute<Color> {
       return false;
     }
     ColorAttribute that = (ColorAttribute) o;
-    return Objects.equals(this.colorVal, that.colorVal);
+    //TODO: maybe change this to have a notion of distance instead
+    return this.colorVal.equals(that.colorVal);
   }
 
   @Override
