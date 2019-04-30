@@ -31,8 +31,9 @@ public class OutfitByAttributeRetriever implements Route {
     QueryParamsMap qm = req.queryMap();
 
     String username = qm.value("username");
+    int userId = -1;
     try {
-      int userId = this.genFitApp.getDb().getUserBean(username).getId();
+      userId = this.genFitApp.getDb().getUserBean(username).getId();
     } catch (Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -51,7 +52,7 @@ public class OutfitByAttributeRetriever implements Route {
     List<ItemProxy> allItems = new ArrayList<>();
     try {
       allItems = this.genFitApp.getDb().getAllItemsByAttributes(typeAttr,
-          typeQueries);
+          typeQueries, userId);
     } catch (SQLException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

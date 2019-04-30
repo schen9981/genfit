@@ -12,10 +12,10 @@
       <span id="addSpan" class="close">&times;</span>
       <form id="addOutfitForm">
         <div class="tab" id="outfit-info">
-          <button id="add-outer">+</button>
-          <button id="add-top">+</button>
-          <button id="add-bottom">+</button>
-          <button id="add-shoes">+</button>
+          <button id="add-outer" onclick="navigateToTab(0)">+</button>
+          <button id="add-top" onclick="navigateToTab(1)>+</button>
+          <button id="add-bottom" onclick="navigateToTab(2)>+</button>
+          <button id="add-shoes" onclick="navigateToTab(3)>+</button>
         </div>
 
         <div class="tab" id="outer-select">Select an outer:
