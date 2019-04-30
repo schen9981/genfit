@@ -2,6 +2,7 @@
     <link rel="stylesheet"
           href="<#if cssPath?has_content>${cssPath}</#if>css/frontpage.css">
     <script>
+        $(".sidenav").remove();
         if (getLoginStatus()) {
             window.location.replace("/user");
         }
@@ -47,4 +48,4 @@
     </div>
 </#assign>
 <#include "main.ftl">
-<script src="js/frontpage.js"></script>
+<script src="js/user-form.js"></script>

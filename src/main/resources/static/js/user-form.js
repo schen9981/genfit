@@ -1,6 +1,12 @@
 $(document).ready(function() {
 
-    let signUpPassword = document.getElementById("signuppwd");
+    let signUpPassword = null;
+    if (window.location.pathname === "/") {
+        signUpPassword = document.getElementById("signuppwd");
+    } else if (window.location.pathname === "/user") {
+        signUpPassword = document.getElementById("newpwd");
+    }
+
     let letter = document.getElementById("letter");
     let capital = document.getElementById("capital");
     let number = document.getElementById("number");
@@ -8,16 +14,15 @@ $(document).ready(function() {
     // document.getElementById("message").style.display = "none";
     document.getElementById("message").style.display = "none";
 
-    $("#signuppwd").focus(function() {
+    $("#signuppwd, #newpwd").focus(function() {
         document.getElementById("message").style.display = "block";
     });
 
-    $("#signuppwd").blur(function() {
+    $("#signuppwd, #newpwd").blur(function() {
         document.getElementById("message").style.display = "none";
     });
 
-
-    $("#signuppwd").keyup(event => {
+    $("#signuppwd, #newpwd").keyup(event => {
         let lowerCaseLetters = /[a-z]/g;
         if(signUpPassword.value.match(lowerCaseLetters)) {
             letter.classList.remove("invalid");
@@ -72,5 +77,11 @@ $(document).ready(function() {
         signup(name, username, password);
     });
 
-    $(".sidenav").remove();
+    $("#changepwd-form").submit(function(e) {
+        e.preventDefault();
+        let username = localStorage.getItem("username");
+        let currenpwd = $("#currentpwd").val();
+        let newpwd = $("#newpwd").val();
+        changePwd(username, currenpwd, newpwd);
+    })
 });

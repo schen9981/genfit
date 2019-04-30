@@ -250,7 +250,8 @@ function populateTabItems(compId, currTab) {
 
 $(document).ready(() => {
   username = localStorage.username;
-  displayUserOutfits(username);
-  itemModalAnimation();
+  // displayUserItems(username);
+  // itemModalAnimation();
   // addItemFormSubmit();
+  $(".name").html(localStorage.getItem('name'));
 });

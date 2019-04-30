@@ -1,13 +1,13 @@
 // map from id -> item array (?)
 // let itemCache = new Map([]);
-
 // username of current user
 let username;
-
+$(".name").html(localStorage.getItem('name'));
 // generate html content (ie. item information) for card
 function generateCardContent(item) {
-  // item represented as array [id, name, color, type, pattern, season, formality]
-  let itemContent = '<h5>' + item[1] + '</h5><br>';
+  // item represented as array [id, name, color, type, pattern, season, formality, image src]
+  let itemContent = '<img src="' + item[7] +'">';
+  itemContent += '<h5>' + item[1] + '</h5><br>';
   itemContent += '<p>Color:' + item[2] + '</p></br>';
   itemContent += '<p>Type:' + item[3] + '</p></br>';
   itemContent += '<p>Pattern:' + item[4] + '</p></br>';
@@ -41,13 +41,13 @@ function animateItemModal(itemId) {
 
 // generates the modal/cards for each item from a list
 function generateCards(listOfItems) {
-  for (i = 0; i < listOfItems.length; i++) {
+  for (let i = 0; i < listOfItems.length; i++) {
     // get current item json
     let item = listOfItems[i];
 
     // generate modal html
     let id = item[0];
-    let buttonHTML = '<button class="item" id="item-' + id + '">' + id + '</button>';
+    let buttonHTML = '<button class="item" id="item-' + id + '"></button>';
     let modalHTML = '<div class="modal" id="modal-' + id + '">';
     modalHTML += '<div class="modal-content">';
     modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
@@ -59,6 +59,11 @@ function generateCards(listOfItems) {
     $('#items').append(buttonHTML);
     $('#items').append(modalHTML);
 
+    //Set image
+    let imageSource = item[7];
+    $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
+    $('#item-' + id).css("background-size", "100%");
+
     // add popup functionality to given modal
     animateItemModal(id);
 
@@ -67,6 +72,8 @@ function generateCards(listOfItems) {
   }
   // set dimensions of cards
   $('.item').css("width", "20%");
+  let itemWidth = $('.item').width();
+  $('.item').height(itemWidth * 1.2);
 }
 
 // add button functionality to remove an item
@@ -188,4 +195,5 @@ $(document).ready(() => {
   displayUserItems(username);
   itemModalAnimation();
   addItemFormSubmit();
+  $(".name").html(localStorage.getItem('name'));
 });

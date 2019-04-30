@@ -1,5 +1,6 @@
 package com.genfit.database;
 
+import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +20,6 @@ import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
 import com.genfit.attribute.SeasonAttribute;
 import com.genfit.attribute.TypeAttribute;
-import com.genfit.attribute.attributevals.AttributeEnum;
 import com.genfit.attribute.attributevals.Color;
 import com.genfit.attribute.attributevals.FormalityEnum;
 import com.genfit.attribute.attributevals.PatternEnum;
@@ -34,6 +34,17 @@ import com.genfit.users.User;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.mindrot.jbcrypt.BCrypt;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class Database {
   private Connection conn;
@@ -61,8 +72,8 @@ public class Database {
   private PreparedStatement addUserPrep;
 
   private final String addItemSQL = "INSERT IGNORE INTO item"
-      + " (name, type, formality, color, pattern, season)"
-      + " VALUES (?, ?, ?, ?, ?, ?);";
+      + " (name, type, formality, color, pattern, season, image)"
+      + " VALUES (?, ?, ?, ?, ?, ?, ?);";
   private final String addItemToUserSQL = "INSERT INTO user_item "
       + "(user_id, item_id) VALUES (?, ?);";
   private PreparedStatement addItemPrep, addItemToUserPrep;
@@ -94,18 +105,21 @@ public class Database {
 
   // Misc Statements
   private final String lastInsertIDSQL = "SELECT LAST_INSERT_ID();";
+  private final String changePasswordSQL = "UPDATE user SET password = ? WHERE email = ?";
+  private PreparedStatement changePasswordPrep;
   private PreparedStatement lastInsertID;
-
   private LoadingCache<String, User> userCache;
   private LoadingCache<Integer, Item> itemCache;
   private LoadingCache<Integer, Outfit> outfitCache;
 
+
+  private Map<Integer, String> defaultImageMap = new HashMap<>();
   public Database(Connection conn) {
     try {
       this.conn = conn;
       Statement stmt = conn.createStatement();
       stmt.execute("USE genfit;");
-
+      this.changePasswordPrep = conn.prepareStatement(this.changePasswordSQL);
       this.checkLoginPrep = conn.prepareStatement(this.checkLoginSQL);
       this.checkSignupPrep = conn.prepareStatement(this.checkSignupSQL);
       this.getUserInfoPrep = conn.prepareStatement(this.getUserInfoSQL);
@@ -133,6 +147,11 @@ public class Database {
       this.deleteUserOutfitPrep = conn
           .prepareStatement(this.deleteUserOutfitSQL);
       this.lastInsertID = conn.prepareStatement(this.lastInsertIDSQL);
+
+      defaultImageMap.put(TypeEnum.OUTER.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/outer_jacket.png");
+      defaultImageMap.put(TypeEnum.TOP.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/tshirt.png");
+      defaultImageMap.put(TypeEnum.BOTTOM.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/pants.png");
+      defaultImageMap.put(TypeEnum.SHOES.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/sneakers.png");
     } catch (SQLException e) {
       System.out.println("ERROR: SQLExeception when prepare statement"
           + "in Database constructor");
@@ -223,8 +242,13 @@ public class Database {
     return this.outfitCache.get(id);
   }
 
-  public boolean checkLogin(String username, String clientHashPwd)
-      throws Exception {
+  public void changePassword(String email, String newPwdHash) throws Exception {
+    this.changePasswordPrep.setString(1, newPwdHash);
+    this.changePasswordPrep.setString(2, email);
+    this.changePasswordPrep.executeUpdate();
+  }
+
+  public boolean checkLogin(String username, String clientHashPwd) throws Exception{
     this.checkLoginPrep.setString(1, username);
     ResultSet rs = this.checkLoginPrep.executeQuery();
     String storedHash = null;
@@ -235,8 +259,8 @@ public class Database {
     rs.close();
 
     if (null == storedHash || !storedHash.startsWith("$2a$")) {
-      throw new IllegalArgumentException(
-          "Invalid hash provided for comparison");
+//      throw new IllegalArgumentException("Invalid hash provided for comparison");
+      return false;
     }
 
     return BCrypt.checkpw(clientHashPwd, storedHash);
@@ -297,38 +321,45 @@ public class Database {
       SeasonAttribute season = new SeasonAttribute(
           SeasonEnum.values()[rs.getInt(7)]);
 
+      String image = rs.getString(8);
+
       toReturn = new Item(id, name, season, formality, pattern,
-          new ColorAttribute(colorList.get(0)), type);
+          new ColorAttribute(colorList.get(0)), type, image);
     }
     rs.close();
     return toReturn;
   }
 
-  // TODO: @lawrence will modify this
-  public List<ItemProxy> getAllItemsByAttributes(AttributeEnum attributeEnum,
-      List<Attribute> attribute) throws SQLException {
-    String attributeName = attributeEnum.toString();
+  public List<ItemProxy> getAllItemsByAttributes(Attribute attributeToQuery,
+                                                 List<? extends Attribute>
+                                                         attribute)
+          throws SQLException {
+    String attributeName = attributeToQuery.getAttributeName();
 
-    String getAllItemsByAttributesSQL = "SELECT * FROM item WHERE ?=?";
+    StringBuilder getAllItemsByAttributesSQL = new StringBuilder("SELECT * "
+            + "FROM item "
+            + "WHERE "
+            + attributeName + "=?");
 
     for (int i = 1; i < attribute.size(); i++) {
-      getAllItemsByAttributesSQL += " OR ?=?";
+      getAllItemsByAttributesSQL.append(" OR " + attributeName + "=?");
     }
-    getAllItemsByAttributesSQL += ";";
-    this.getAllItemsByAttributesPrep = this.conn
-        .prepareStatement(getAllItemsByAttributesSQL);
+    getAllItemsByAttributesSQL.append(";");
 
-    if (attributeEnum == AttributeEnum.COLOR) {
-      for (int i = 1; i <= attribute.size() * 2; i += 2) {
-        this.getAllItemsByAttributesPrep.setString(i, attributeName);
-        Color color = (Color) attribute.get(i / 2).getAttributeVal();
-        this.getAllItemsByAttributesPrep.setString(i + 1, color.toString());
+    this.getAllItemsByAttributesPrep = this.conn
+            .prepareStatement(getAllItemsByAttributesSQL.toString());
+
+    if (attributeName.equals(new ColorAttribute(null).getAttributeName())) {
+      for (int i = 1; i <= attribute.size(); i++) {
+        //this.getAllItemsByAttributesPrep.setString(i, attributeName);
+        Color color = (Color) attribute.get(i - 1).getAttributeVal();
+        this.getAllItemsByAttributesPrep.setString(i, color.toString());
       }
     } else {
-      for (int i = 1; i <= attribute.size() * 2; i += 2) {
-        this.getAllItemsByAttributesPrep.setString(i, attributeName);
-        Enum e = (Enum) attribute.get(i / 2).getAttributeVal();
-        this.getAllItemsByAttributesPrep.setInt(i + 1, e.ordinal());
+      for (int i = 1; i <= attribute.size(); i++) {
+        //this.getAllItemsByAttributesPrep.setString(i, attributeName);
+        Enum e = (Enum) attribute.get(i - 1).getAttributeVal();
+        this.getAllItemsByAttributesPrep.setInt(i, e.ordinal());
       }
     }
 
@@ -373,7 +404,7 @@ public class Database {
     itemMap.put(TypeEnum.SHOES, feet);
 
     // TODO: Change parameters for Outfit constructor
-//    return new Outfit(id, name, itemMap);
+//  return new Outfit(id, name, itemMap);
     return null;
   }
 
@@ -415,6 +446,7 @@ public class Database {
     return outfitProxyList;
   }
 
+
   /**
    * Adds a new user.
    *
@@ -439,18 +471,20 @@ public class Database {
     this.addItemPrep.setString(4, color.getAttributeVal().toString());
     this.addItemPrep.setInt(5, pattern.getAttributeVal().ordinal());
     this.addItemPrep.setInt(6, season.getAttributeVal().ordinal());
-
+    this.addItemPrep.setString(7, defaultImageMap.get(type.getAttributeVal().ordinal()));
     this.addItemPrep.executeUpdate();
 
     ResultSet rs = this.lastInsertID.executeQuery();
-    rs.next();
-    int itemID = rs.getInt(1);
+    if(rs.next()) {
+      int itemID = rs.getInt(1);
 
-    this.addItemToUserPrep.setInt(1, userId);
-    this.addItemToUserPrep.setInt(2, itemID);
-    this.addItemToUserPrep.executeUpdate();
-
-    return itemID;
+      this.addItemToUserPrep.setInt(1, userId);
+      this.addItemToUserPrep.setInt(2, itemID);
+      this.addItemToUserPrep.executeUpdate();
+      return itemID;
+    } else {
+      throw new SQLException();
+    }
   }
 
   public void addOutfit(UserProxy userProxy, String outfitName,
@@ -468,12 +502,13 @@ public class Database {
     this.addOutfitPrep.executeUpdate();
 
     ResultSet rs = this.lastInsertID.executeQuery();
-    rs.next();
-    int outfitID = rs.getInt(1);
+    if (rs.next()) {
+      int outfitID = rs.getInt(1);
 
-    this.addOutfitToUserPrep.setInt(1, userProxy.getId());
-    this.addOutfitToUserPrep.setInt(2, outfitID);
-    this.addOutfitToUserPrep.executeUpdate();
+      this.addOutfitToUserPrep.setInt(1, userProxy.getId());
+      this.addOutfitToUserPrep.setInt(2, outfitID);
+      this.addOutfitToUserPrep.executeUpdate();
+    }
   }
 
   /**

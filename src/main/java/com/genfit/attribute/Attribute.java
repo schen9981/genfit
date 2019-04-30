@@ -12,4 +12,6 @@ public interface Attribute<T> {
    * @return value of the attribute.
    */
   T getAttributeVal();
+
+  String getAttributeName();
 }

@@ -29,56 +29,34 @@ public class OutfitComponentsRetriever implements Route {
     int bottomId = Integer.parseInt(qm.value("bottom"));
     int shoesId = Integer.parseInt(qm.value("shoes"));
 
-    String[] outerInfoArr;
-    if (outerId != -1) {
-      Item outer;
-      try {
-        outer = this.genFitApp.getDb().getItemBean(outerId);
+    String[] outerInfoArr = new String[0];
+    String[] topInfoArr = new String[0];
+    String[] bottomInfoArr = new String[0];
+    String[] shoesInfoArr = new String[0];
+
+    try {
+      if (outerId != -1) {
+        Item outer = this.genFitApp.getDb().getItemBean(outerId);
         outerInfoArr = UserItemRetriever.getItemInfoArr(outer);
-      } catch (Exception e) {
-        outerInfoArr = null;
       }
-    } else {
-      outerInfoArr = new String[0];
-    }
 
-    String[] topInfoArr;
-    if (topId != -1) {
-      Item top;
-      try {
-        top = this.genFitApp.getDb().getItemBean(topId);
+      if (topId != -1) {
+        Item top = this.genFitApp.getDb().getItemBean(topId);
         topInfoArr = UserItemRetriever.getItemInfoArr(top);
-      } catch (Exception e) {
-        topInfoArr = null;
       }
-    } else {
-      topInfoArr = new String[0];
-    }
 
-    String[] bottomInfoArr;
-    if (bottomId != -1) {
-      Item bottom;
-      try {
-        bottom = this.genFitApp.getDb().getItemBean(bottomId);
+      if (bottomId != -1) {
+        Item bottom = this.genFitApp.getDb().getItemBean(bottomId);
         bottomInfoArr = UserItemRetriever.getItemInfoArr(bottom);
-      } catch (Exception e) {
-        bottomInfoArr = null;
       }
-    } else {
-      bottomInfoArr = new String[0];
-    }
 
-    String[] shoesInfoArr;
-    if (shoesId != -1) {
-      Item shoes;
-      try {
-        shoes = this.genFitApp.getDb().getItemBean(shoesId);
+      if (shoesId != -1) {
+        Item shoes = this.genFitApp.getDb().getItemBean(shoesId);
         shoesInfoArr = UserItemRetriever.getItemInfoArr(shoes);
-      } catch (Exception e) {
-        shoesInfoArr = null;
       }
-    } else {
-      shoesInfoArr = new String[0];
+    } catch (Exception e) {
+      // TODO: better error handling
+      System.out.println(e.getMessage());
     }
 
     Map<String, Object> variables = ImmutableMap.of("outer", outerInfoArr,
