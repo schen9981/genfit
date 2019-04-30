@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,6 +48,11 @@ public class OutfitSuggester {
     Map<Class, List<? extends Attribute>> outfitAttr =
             AttributeSuggester.getMatchingOutfitAttributes(outfit);
 
+    List<Integer> itemIDsToFilter = new LinkedList<>();
+    for (ItemProxy item : outfit.getItems().values()) {
+      itemIDsToFilter.add(item.getId());
+    }
+
     // get the class that has the minimum number of attributes to query
     Class classToQuery = minAttrToQuery(outfitAttr);
 
@@ -58,9 +64,6 @@ public class OutfitSuggester {
 
     List<? extends Attribute> attrVals = outfitAttr.get(classToQuery);
 
-    //TODO: remove
-    System.out.println("classToQuery" + classToQuery);
-
     if (attrVals != null && attrVals.size() > 0) {
       // get list of items that have matching attributes of smallest query
       try {
@@ -68,7 +71,7 @@ public class OutfitSuggester {
                 attrVals, userID);
 
         suggestions = this.filterByAttribute(eligible,
-                otherClasses);
+                otherClasses, itemIDsToFilter);
       } catch (SQLException e) {
         System.out.println("ERROR: SQL exception when querying for outfit "
                 + "suggestions");
@@ -81,7 +84,8 @@ public class OutfitSuggester {
   private List<ItemProxy> filterByAttribute(List<ItemProxy> originals,
                                             Map<Class, List<?
                                                     extends Attribute>>
-                                                    otherClassVals) {
+                                                    otherClassVals,
+                                            List<Integer> itemIDsToFilter) {
     List<ItemProxy> filtered = new ArrayList<>();
     for (int i = 0; i < originals.size(); i++) {
       ItemProxy itemProxy = originals.get(i);
@@ -94,7 +98,7 @@ public class OutfitSuggester {
           break;
         }
       }
-      if (shouldAdd) {
+      if (shouldAdd && !itemIDsToFilter.contains(itemProxy.getId())) {
         filtered.add(itemProxy);
       }
     }
