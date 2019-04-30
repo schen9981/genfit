@@ -14,8 +14,12 @@ import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.SeasonAttribute;
 import com.genfit.clothing.Item;
 import com.genfit.clothing.Outfit;
+import com.genfit.clothing.OutfitSuggestionEnum;
 import com.genfit.database.Database;
 import com.genfit.proxy.ItemProxy;
+import com.genfit.proxy.OutfitProxy;
+
+import javax.xml.crypto.Data;
 
 /**
  * Utility class that suggests new outfits based on suggested attributes.
@@ -28,8 +32,32 @@ public class OutfitSuggester {
   public OutfitSuggester() {
   }
 
-  private List<Outfit> filterByAttributes() {
-    return new ArrayList<>();
+  /**
+   * Method that determines which class contains the minimum number of
+   * attributes.
+   *
+   * @param attr - map of attributes
+   * @return minimum class
+   */
+  private static Class minAttrToQuery(Map<Class, List<? extends Attribute>> attr) {
+    Class minClass = null;
+    int minSize = Integer.MAX_VALUE;
+    for (Class c : attr.keySet()) {
+      List<? extends Attribute> attrList = attr.get(c);
+      int size;
+      if (attrList != null) {
+        Attribute a = attrList.get(0);
+        // don't allow color attribute to get matched
+        if (!a.getAttributeName().equals(new ColorAttribute(null).getAttributeName())) {
+          size = attrList.size();
+          if (size < minSize) {
+            minSize = size;
+            minClass = c;
+          }
+        }
+      }
+    }
+    return minClass;
   }
 
   /**
@@ -106,31 +134,17 @@ public class OutfitSuggester {
     return filtered;
   }
 
-  /**
-   * Method that determines which class contains the minimum number of
-   * attributes.
-   *
-   * @param attr - map of attributes
-   * @return minimum class
-   */
-  private static Class minAttrToQuery(Map<Class, List<? extends Attribute>> attr) {
-    Class minClass = null;
-    int minSize = Integer.MAX_VALUE;
-    for (Class c : attr.keySet()) {
-      List<? extends Attribute> attrList = attr.get(c);
-      int size;
-      if (attrList != null) {
-        Attribute a = attrList.get(0);
-        // don't allow color attribute to get matched
-        if (!a.getAttributeName().equals(new ColorAttribute(null).getAttributeName())) {
-          size = attrList.size();
-          if (size < minSize) {
-            minSize = size;
-            minClass = c;
-          }
-        }
-      }
+  public Map<OutfitSuggestionEnum, List<OutfitSuggestion>> suggestOutfits(
+          Database db,
+          int userID) {
+    List<OutfitProxy> outfitSuggestions = new ArrayList<>();
+
+    try {
+      List<ItemProxy> items = db.getItemsByUserID(userID);
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
-    return minClass;
+
+    return null;
   }
 }
