@@ -1,13 +1,11 @@
 package com.genfit.userfacing.handlers;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.management.Attribute;
-
 import com.genfit.attribute.TypeAttribute;
-import com.genfit.attribute.attributevals.AttributeEnum;
 import com.genfit.attribute.attributevals.TypeEnum;
 import com.genfit.clothing.Item;
 import com.genfit.proxy.ItemProxy;
@@ -33,18 +31,31 @@ public class OutfitByAttributeRetriever implements Route {
     QueryParamsMap qm = req.queryMap();
 
     String username = qm.value("username");
-    int userId = this.genFitApp.getDb().getUserBean(username).getId();
+    try {
+      int userId = this.genFitApp.getDb().getUserBean(username).getId();
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
     // get the requested type enum
     String component = qm.value("component");
     TypeEnum type = Enum.valueOf(TypeEnum.class, component);
-    List<Attribute> toMatch = new ArrayList<>();
-    toMatch.add(new TypeAttribute(type));
+    TypeAttribute typeAttr = new TypeAttribute(type);
+    List<TypeAttribute> typeQueries = new ArrayList<>();
+    typeQueries.add(typeAttr);
 
+    Class typeToQuery = TypeAttribute.class;
 
     // get all items that are of a certain type
-    List<ItemProxy> allItems = this.genFitApp.getDb()
-        .getAllItemsByAttributes(AttributeEnum.TYPE, toMatch);
+    List<ItemProxy> allItems = new ArrayList<>();
+    try {
+      allItems = this.genFitApp.getDb().getAllItemsByAttributes(typeAttr,
+          typeQueries);
+    } catch (SQLException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
     // construct list of array representation of an item
     List<String[]> itemsByAttr = new ArrayList<>();
@@ -53,7 +64,7 @@ public class OutfitByAttributeRetriever implements Route {
       itemsByAttr.add(UserItemRetriever.getItemInfoArr(curr));
     }
 
-    Map<String, Object> variables = ImmutableMap.of("items" itemsByAttr);
+    Map<String, Object> variables = ImmutableMap.of("items", itemsByAttr);
 
     return Main.GSON.toJson(variables);
   }

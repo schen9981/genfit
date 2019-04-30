@@ -63,3 +63,7 @@ input.invalid {
 .tab {
   display: none;
 }
+
+.item div {
+  outline: 1px solid blue;
+}

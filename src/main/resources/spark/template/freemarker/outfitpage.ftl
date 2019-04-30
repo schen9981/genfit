@@ -11,16 +11,23 @@
     <div class="modal-content">
       <span id="addSpan" class="close">&times;</span>
       <form id="addOutfitForm">
-        <div class="tab">Select an outer:
+        <div class="tab" id="outfit-info">
+          <button id="add-outer">+</button>
+          <button id="add-top">+</button>
+          <button id="add-bottom">+</button>
+          <button id="add-shoes">+</button>
         </div>
 
-        <div class="tab">Select a top:
+        <div class="tab" id="outer-select">Select an outer:
         </div>
 
-        <div class="tab">Select a bottom:
+        <div class="tab" id="top-select">Select a top:
         </div>
 
-        <div class="tab">Select a pair of shoes:
+        <div class="tab" id="bottom-select">Select a bottom:
+        </div>
+
+        <div class="tab" id="shoes-select">Select a pair of shoes:
         </div>
 
         <div style="overflow:auto;">

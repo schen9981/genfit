@@ -95,34 +95,24 @@ function generateCards(listOfOutfits) {
     deleteUserItem(id);
   }
   // set dimensions of cards
-  $('.item').css("width", "20%");
+  $('.outfit').css("width", "20%");
 }
 
-// generates the cards for each item
-function generateOutfitCards(listOfCards) {
+// generates the cards for each item, div to add to
+function generateItemCards(listOfCards, tab) {
   for (i = 0; i < listOfItems.length; i++) {
     // get current item json
     let item = listOfItems[i];
 
     // generate modal html
     let id = item[0];
-    let buttonHTML = '<button class="item" id="item-' + id + '">' + id + '</button>';
-    let modalHTML = '<div class="modal" id="modal-' + id + '">';
-    modalHTML += '<div class="modal-content">';
-    modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
+    let buttonHTML = '<div tabindex="-1" class="item" id="item-' + id + '">'
     modalHTML += generateItemContent(item);
-    modalHTML += '<button id="delete-item-' + id + '">Delete Item</button>';
-    modalHTML += '</div></div>';
+    modalHTML += '</div>';
 
     // add modal to div 'items'
-    $('#items').append(buttonHTML);
-    $('#items').append(modalHTML);
-
-    // add popup functionality to given modal
-    animateItemModal(id);
-
-    // add delete button functionality
-    deleteUserItem(id);
+    tab.append(buttonHTML);
+    tab.append(modalHTML);
   }
   // set dimensions of cards
   $('.item').css("width", "20%");
@@ -181,51 +171,13 @@ function itemModalAnimation() {
   });
 }
 
-function addItemFormSubmit() {
-  $('#addItemForm').on("submit", function(e) {
-    e.preventDefault();
-    // get parameters for post request from form
-    let postParams = {
-      username: username,
-      itemName: $('#item-name').val(),
-      itemColor: $('#item-color').val(),
-      itemType1: $('#type-1').val(),
-      itemPattern: $('#item-pattern').val(),
-      itemSeason: $('#item-season').val(),
-      itemFormality: $('#item-formality').val()
-    }
-    // post request to addItems
-    console.log(postParams);
-    $.post("/addItem", postParams, responseJSON => {
-      let item = JSON.parse(responseJSON);
-      let itemList = [item];
-      generateCards(itemList);
-      $('#addItemModal').css("display", "none");
-    });
-  });
-}
-
-function retrieveItemCorpus(component) {
-
-  let postParams = {
-    username: username,
-    component: component
-  }
-
-  $.post("/outfitByAttribute", postParams, responseJSON => {
-
-    let itemList = JSON.parse(responseJSON).items;
-    generateCards(itemList);
-
-  })
-
-}
 
 // displays tab corresponding to the component (outer: 0, top: 1, bottom: 2, shoes: 3)
 function showTab(compId) {
   // get all the tabs on the page, display the selected component
   let tabs = document.getElementsByClassName("tab");
-  x[compId].style.display = "block";
+  populateTabItems(compId, tabs[compId])
+  tabs[compId].style.display = "block";
   // display the add item and back buttons
   $('#addItem').style.display = "inline";
 }
@@ -233,17 +185,22 @@ function showTab(compId) {
 // function that populates the tab with items of that type
 function populateTabItems(compId, currTab) {
   // generate html components for each item in the tab
-
   let postParams = {
     username: username,
     component: compInd[compId]
   }
-
   $.post("/outfitByAttribute", postParams, responseJSON => {
     let itemList = JSON.parse(responseJSON).items;
-    generateCards(itemList)
+    generateItemCards(itemList, currTab);
   })
+}
 
+function addItemToOutfit() {
+
+}
+
+// navigate back to outfit page
+function backToOutfitPage() {
 
 }
 
