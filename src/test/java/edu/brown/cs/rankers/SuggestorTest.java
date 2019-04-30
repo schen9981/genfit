@@ -9,6 +9,7 @@ import com.genfit.suggester.OutfitSuggester;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SuggestorTest {
@@ -19,10 +20,15 @@ public class SuggestorTest {
       OutfitSuggester os = new OutfitSuggester();
 
       Map<TypeEnum, ItemProxy> itemMap = new HashMap<>();
-      itemMap.put(TypeEnum.TOP, new ItemProxy(db, 1));
+      itemMap.put(TypeEnum.TOP, new ItemProxy(db, 26));
 
       Outfit o = new Outfit(0, "dummy0", itemMap);
-      System.out.println(os.suggestOutfits(o, db, 99));
+
+      List<ItemProxy> items = os.suggestItems(o, db, 101);
+      for (int i = 0; i < items.size(); i++) {
+        ItemProxy itemProxy = items.get(i);
+        System.out.println(itemProxy.getId());
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
