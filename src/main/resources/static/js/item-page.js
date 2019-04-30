@@ -177,7 +177,7 @@ function addItemFormSubmit() {
       itemPattern: $('#item-pattern').val(),
       itemSeason: $('#item-season').val(),
       itemFormality: $('#item-formality').val()
-    }
+    };
     // post request to addItems
     console.log(postParams);
     $.post("/addItem", postParams, responseJSON => {

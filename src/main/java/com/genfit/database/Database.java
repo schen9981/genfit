@@ -62,9 +62,11 @@ public class Database {
       + "user_id=?;";
   private final String getOutfitsByUserIDSQL = "SELECT * FROM user_outfit "
       + "WHERE user_id=?;";
+  private final String getOutfitLikesSQL = "SELECT * FROM outfit WHERE id=?";
   private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
   private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
   private PreparedStatement getAllItemsByAttributesPrep;
+  private PreparedStatement getOutfitLikesPrep;
 
   // Add Statements
   private final String addUserSQL = "INSERT INTO user (name, email, password)"
@@ -90,8 +92,10 @@ public class Database {
       + "user_id=?;";
   private final String deleteAllUserOutfitsSQL = "DELETE FROM user_outfit "
       + "WHERE user_id=?;";
+  private final String incrementLikesSQL = "UPDATE outfit SET likes = "
+      + "(likes + 1) WHERE id = ?";
   private PreparedStatement deleteUserPrep, deleteAllUserItemsPrep,
-      deleteAllUserOutfitsPrep;
+      deleteAllUserOutfitsPrep, incrementLikesPrep;
 
   private final String deleteItemSQL = "DELETE FROM item WHERE id=?;";
   private final String deleteUserItemSQL = "DELETE FROM user_item WHERE "
@@ -129,12 +133,14 @@ public class Database {
           .prepareStatement(this.getItemsByUserIDSQL);
       this.getOutfitsByUserIDPrep = conn
           .prepareStatement(this.getOutfitsByUserIDSQL);
+      this.getOutfitLikesPrep = conn.prepareStatement(this.getOutfitLikesSQL);
 
       this.addUserPrep = conn.prepareStatement(this.addUserSQL);
       this.addItemPrep = conn.prepareStatement(this.addItemSQL);
       this.addItemToUserPrep = conn.prepareStatement(this.addItemToUserSQL);
       this.addOutfitPrep = conn.prepareStatement(this.addOutfitSQL);
       this.addOutfitToUserPrep = conn.prepareStatement(this.addOutfitToUserSQL);
+      this.incrementLikesPrep = conn.prepareStatement(this.incrementLikesSQL);
 
       this.deleteAllUserItemsPrep = conn
           .prepareStatement(this.deleteAllUserItemsSQL);
@@ -447,6 +453,18 @@ public class Database {
   }
 
 
+  public int getOutfitLikes(int id) throws SQLException {
+    this.getOutfitLikesPrep.setInt(1, id);
+    ResultSet rs = this.getOutfitLikesPrep.executeQuery();
+    int likes = 0;
+    while (rs.next()) {
+      likes = rs.getInt(7);
+    }
+    rs.close();
+    return likes;
+  }
+
+
   /**
    * Adds a new user.
    *
@@ -485,6 +503,11 @@ public class Database {
     } else {
       throw new SQLException();
     }
+  }
+
+  public void incrementLikes(int outfitId) throws SQLException {
+    this.incrementLikesPrep.setInt(1, outfitId);
+    this.incrementLikesPrep.executeUpdate();
   }
 
   public void addOutfit(UserProxy userProxy, String outfitName,

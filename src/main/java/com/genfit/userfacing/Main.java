@@ -11,6 +11,7 @@ import com.genfit.userfacing.handlers.DiscoverPageHandler;
 import com.genfit.userfacing.handlers.FrontpageHandler;
 import com.genfit.userfacing.handlers.ItemPageHandler;
 import com.genfit.userfacing.handlers.OutfitComponentsRetriever;
+import com.genfit.userfacing.handlers.OutfitLikeHandler;
 import com.genfit.userfacing.handlers.OutfitPageHandler;
 import com.genfit.userfacing.handlers.UserItemRetriever;
 import com.genfit.userfacing.handlers.UserOutfitRetriever;
@@ -113,6 +114,8 @@ public final class Main {
     // Setup post requests for forms and buttons
     Spark.post("/addItem", new AddItemHandler(this.mainApp));
     Spark.post("/deleteItem", new DeleteItemHandler(this.mainApp));
+
+    Spark.post("/like", new OutfitLikeHandler(this.mainApp));
   }
 
   /**
