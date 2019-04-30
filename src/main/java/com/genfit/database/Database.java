@@ -513,17 +513,16 @@ public class Database {
    * Deletes an outfit from the outfit table and its reference in the
    * user_outfit table.
    *
-   * @param userProxy   - The user proxy that owns the outfit.
-   * @param outfitProxy - The Outfit to be deleted.
+   * @param userId   - id of user that owns the item
+   * @param outfitId - id of item to be deleted
    * @throws SQLException
    */
-  public void deleteOutfit(UserProxy userProxy, OutfitProxy outfitProxy)
-      throws SQLException {
+  public void deleteOutfit(int userId, int outfitId) throws SQLException {
     // TODO: delete outfit (might be referenced by other users)?
 //    deleteOutfitPrep.setString(1, outfit.getId());
 //    deleteOutfitPrep.executeUpdate();
-    this.deleteUserOutfitPrep.setInt(1, userProxy.getId());
-    this.deleteUserOutfitPrep.setInt(2, outfitProxy.getId());
+    this.deleteUserOutfitPrep.setInt(1, userId);
+    this.deleteUserOutfitPrep.setInt(2, outfitId);
     this.deleteUserOutfitPrep.executeUpdate();
   }
 

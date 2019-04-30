@@ -80,5 +80,6 @@ target/
 .classpath
 .idea/
 **.DS_Store**
+.mvn-classpath
 
 **/*.sqlite3

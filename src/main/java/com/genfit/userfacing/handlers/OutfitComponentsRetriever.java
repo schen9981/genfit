@@ -1,7 +1,11 @@
 package com.genfit.userfacing.handlers;
 
+import java.util.Map;
+
 import com.genfit.clothing.Item;
 import com.genfit.userfacing.GenFitApp;
+import com.genfit.userfacing.Main;
+import com.google.common.collect.ImmutableMap;
 
 import spark.QueryParamsMap;
 import spark.Request;
@@ -25,29 +29,61 @@ public class OutfitComponentsRetriever implements Route {
     int bottomId = Integer.parseInt(qm.value("bottom"));
     int shoesId = Integer.parseInt(qm.value("shoes"));
 
+    String[] outerInfoArr;
     if (outerId != -1) {
-      Item outer = this.genFitApp.getDb().getItemBean(outerId);
-      String[] outerInfoAr = UserItemRetriever.getItemInfoArr(outer);
+      Item outer;
+      try {
+        outer = this.genFitApp.getDb().getItemBean(outerId);
+        outerInfoArr = UserItemRetriever.getItemInfoArr(outer);
+      } catch (Exception e) {
+        outerInfoArr = null;
+      }
+    } else {
+      outerInfoArr = new String[0];
     }
 
+    String[] topInfoArr;
     if (topId != -1) {
-      Item top = this.genFitApp.getDb().getItemBean(topId);
-      String[] topInfoArr = UserItemRetriever.getItemInfoArr(top);
+      Item top;
+      try {
+        top = this.genFitApp.getDb().getItemBean(topId);
+        topInfoArr = UserItemRetriever.getItemInfoArr(top);
+      } catch (Exception e) {
+        topInfoArr = null;
+      }
+    } else {
+      topInfoArr = new String[0];
     }
 
+    String[] bottomInfoArr;
     if (bottomId != -1) {
-      Item bottom = this.genFitApp.getDb().getItemBean(bottomId);
-      String[] bottomInfoArr = UserItemRetriever.getItemInfoArr(bottom);
+      Item bottom;
+      try {
+        bottom = this.genFitApp.getDb().getItemBean(bottomId);
+        bottomInfoArr = UserItemRetriever.getItemInfoArr(bottom);
+      } catch (Exception e) {
+        bottomInfoArr = null;
+      }
+    } else {
+      bottomInfoArr = new String[0];
     }
 
+    String[] shoesInfoArr;
     if (shoesId != -1) {
-      Item shoes = this.genFitApp.getDb().getItemBean(shoesId);
-      String[] shoesInfoArr = UserItemRetriever.getItemInfoArr(shoes);
+      Item shoes;
+      try {
+        shoes = this.genFitApp.getDb().getItemBean(shoesId);
+        shoesInfoArr = UserItemRetriever.getItemInfoArr(shoes);
+      } catch (Exception e) {
+        shoesInfoArr = null;
+      }
+    } else {
+      shoesInfoArr = new String[0];
     }
 
-//    Map<String, Object> variables = ImmutableMap.of("outfits", userOutfits);
+    Map<String, Object> variables = ImmutableMap.of("outer", outerInfoArr,
+        "top", topInfoArr, "bottom", bottomInfoArr, "shoes", shoesInfoArr);
 
-//    return Main.GSON.toJson(variables);
-    return null;
+    return Main.GSON.toJson(variables);
   }
 }
