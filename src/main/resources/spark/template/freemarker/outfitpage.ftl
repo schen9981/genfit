@@ -5,7 +5,8 @@
 </div>
 
 <div id="add">
-  <button id="constructOutfit">Construct Outfit</button>
+  <button id="constructOutfit">Construct Full Outfit</button>
+  <button id="suggestOutfit">Get Outfit Suggestions</button>
 
   <div id="addOutfitModal" class="modal">
     <div class="modal-content">
@@ -29,23 +30,30 @@
         </div>
 
         <div class="tab" id="outer-select">
-          <p>Select an outer:</p>
+          <div class="description">
+            <p>Select an outer:</p><br>
+          </div>
         </div>
 
         <div class="tab" id="top-select">
-          <p>Select a top:</p>
+          <div class="description">
+            <p>Select a top:</p><br>
+          </div>
         </div>
 
         <div class="tab" id="bottom-select">
-          <p>Select a bottom:</p>
+          <div class="description">
+            <p>Select a bottom:</p><br>
+          </div>
         </div>
 
         <div class="tab" id="shoes-select">
-          <p>Select a pair of shoes:</p>
+          <div class="description">
+            <p>Select a pair of shoes:</p><br>
+          </div>
         </div>
 
         <button id="addOutfit">Add Outfit</button>
-        <button id="suggestOutfits">Suggest Outfits</button>
 
         <div style="overflow:auto;">
         <div style="float:right;">
