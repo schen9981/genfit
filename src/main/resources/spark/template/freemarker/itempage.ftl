@@ -11,6 +11,10 @@
     <div class="modal-content">
       <span id="addSpan" class="close">&times;</span>
       <form id="addItemForm">
+
+        <input id="image-input" type="file" onchange="previewFile()"><br>
+        <img id="image-preview" src="" height="200" alt="Image preview..."><br>
+
         Item Description:<br>
         <input type="text" id="item-name" name="item-name"><br>
 

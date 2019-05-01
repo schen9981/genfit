@@ -41,6 +41,15 @@ public class Outfit extends ClosetComponent {
     return immutable;
   }
 
+  /**
+   * Setter for items.
+   *
+   * @param items parameter to assign to items
+   **/
+  void setItems(Map<TypeEnum, ItemProxy> items) {
+    this.items = items;
+  }
+
   public int getId() {
     return this.id;
   }

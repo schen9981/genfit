@@ -7,11 +7,16 @@ import com.genfit.attribute.attributevals.SeasonEnum;
 import com.genfit.proxy.ItemProxy;
 
 public class ItemDistanceCalculator {
-  public static final double similarityThresholdCutoff = 1.0;
+  // 1.1 for season
+  // 1.2 for pattern
+  // 1.2 for formality
+  // 0.5 for color because 49 is the edge of perceptibility and the color is
+  // weighted by 1/100
+  public static final double SIMILARITY_THRESHOLD = 1.1 + 1.2 + 1.2 + 0.5;
   private static final double seasonWeight = 1.0;
   private static final double patternWeight = 1.0;
   private static final double formalityWeight = 1.0;
-  private static final double colorWeight = 2.0 / 100.0;
+  private static final double colorWeight = 1.0 / 100.0;
 
   /**
    * Private constructor for utility class.

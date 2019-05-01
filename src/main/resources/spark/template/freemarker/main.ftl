@@ -26,6 +26,7 @@
 <script src="/js/jquery-2.1.1.js"></script>
 <script src="js/authentication.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
 
 <#if additionalScripts?has_content>
     ${additionalScripts}

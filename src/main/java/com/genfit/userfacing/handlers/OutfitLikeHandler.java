@@ -32,7 +32,6 @@ public class OutfitLikeHandler implements Route {
       }
       likes = this.genFitApp.getDb().getOutfitLikes(outfitId);
     } catch (Exception e) {
-//      System.out.println("ERROR: like handler error");
       e.printStackTrace();
     }
 
