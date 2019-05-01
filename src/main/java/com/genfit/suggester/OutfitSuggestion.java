@@ -4,7 +4,7 @@ import com.genfit.attribute.attributevals.TypeEnum;
 import com.genfit.proxy.ItemProxy;
 import com.genfit.proxy.OutfitProxy;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,16 +14,16 @@ import java.util.Map;
  * the user.
  */
 public class OutfitSuggestion {
-  private OutfitProxy referenceOutfit;
+  private OutfitProxy communityOutfit;
   private Map<TypeEnum, ItemProxy> suggestedOutfitMap;
 
   /**
    * Constructor for OutfitSuggestion.
    *
-   * @param referenceOutfit reference outfit for this suggestion
+   * @param communityOutfit reference outfit for this suggestion
    */
-  public OutfitSuggestion(OutfitProxy referenceOutfit) {
-    this.referenceOutfit = referenceOutfit;
+  public OutfitSuggestion(OutfitProxy communityOutfit) {
+    this.communityOutfit = communityOutfit;
     // placeholder ID
     this.suggestedOutfitMap = new HashMap<>();
   }
@@ -44,12 +44,12 @@ public class OutfitSuggestion {
   }
 
   /**
-   * Returns the reference item that the suggestion is based on.
+   * Returns the community item that the suggestion is based on.
    *
    * @return an OutfitProxy specifying the underlying outfit
    */
-  public OutfitProxy getReferenceOutfit() {
-    return this.referenceOutfit;
+  public OutfitProxy getCommunityOutfit() {
+    return this.communityOutfit;
   }
 
   /**
@@ -69,7 +69,20 @@ public class OutfitSuggestion {
    * is complete
    */
   public List<ItemProxy> getItemsNeeded() {
-    return Collections.emptyList();
+    List<ItemProxy> itemsStillNeeded = new ArrayList<>();
+
+    for (TypeEnum typeEnum : TypeEnum.values()) {
+      if (this.suggestedOutfitMap.getOrDefault(typeEnum, null)
+              == null) {
+        ItemProxy stillNeededItem =
+                this.getCommunityOutfit().getItems().get(typeEnum);
+        if (stillNeededItem != null) {
+          itemsStillNeeded.add(stillNeededItem);
+        }
+      }
+    }
+
+    return itemsStillNeeded;
   }
 
   /**

@@ -7,6 +7,7 @@ import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -25,17 +26,15 @@ public class OutfitLikeHandler implements Route {
     int mode = Integer.parseInt(qm.value("mode"));
     int outfitId = Integer.parseInt(qm.value("outfitId"));
     int id;
-    System.out.println(outfitId);
     try {
       id = this.genFitApp.getDb().getUserBean(username).getId();
       this.genFitApp.getDb().changeLikes(outfitId, id, mode);
     } catch (Exception e) {
-//      System.out.println("ERROR: like handler error");
       e.printStackTrace();
     }
 
     Map<String, Object> output =
-        ImmutableMap.of("success", true);
+            ImmutableMap.of("success", true);
     return Main.GSON.toJson(output);
   }
 

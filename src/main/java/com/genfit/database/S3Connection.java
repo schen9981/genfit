@@ -6,13 +6,15 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 /**
- * Created by ericwang on 2019/4/28.
+ * Class containing connection information for the S3 image storage directory.
  */
-public class S3ClientGenerator {
-  private static final String bucket_name = "cs32-term-project-s3-bucket";
+public class S3Connection {
+  private static final String bucketName = "cs32-term-project-s3-bucket";
   private static final String access_key = "AKIAUSTN5WVYFTHPLBSU";
   private static final String secret_key = "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";
   private static final String region = "us-east-1";
+
+  private static final String urlPrefix = "https://s3.amazonaws.com/cs32-term-project-s3-bucket/";
 
   public static AmazonS3 getS3Client() {
     BasicAWSCredentials creds = new BasicAWSCredentials(access_key, secret_key);
@@ -20,5 +22,13 @@ public class S3ClientGenerator {
             .withCredentials(new AWSStaticCredentialsProvider(creds))
             .withRegion(region).build();
     return s3Client;
+  }
+
+  public static String getBucketName() {
+    return bucketName;
+  }
+
+  public static String getUrlPrefix() {
+    return urlPrefix;
   }
 }

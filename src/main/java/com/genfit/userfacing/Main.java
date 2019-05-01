@@ -83,7 +83,6 @@ public final class Main {
     this.repl = new MainREPL(this.mainApp);
 
     if (options.has("gui")) {
-      System.out.println("gui");
       this.runSparkServer((int) options.valueOf("port"));
     }
 

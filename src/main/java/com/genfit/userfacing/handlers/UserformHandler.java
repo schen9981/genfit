@@ -16,6 +16,7 @@ import java.util.Map;
 public class UserformHandler implements Route {
 
   private Database db;
+
   public UserformHandler(Database db) {
     this.db = db;
   }
@@ -39,7 +40,7 @@ public class UserformHandler implements Route {
         // System.out.println("ERROR: Error when checking login info.");
         e.printStackTrace();
       }
-      System.out.println(success);
+
       if (success) {
         try {
           name = this.db.getUserBean(username).getName();
@@ -48,7 +49,7 @@ public class UserformHandler implements Route {
         }
       }
       Map<String, Object> variables =
-          ImmutableMap.of("success", success, "name", name);
+              ImmutableMap.of("success", success, "name", name);
       return Main.GSON.toJson(variables);
 
     } else if (form == 1) {
@@ -92,7 +93,7 @@ public class UserformHandler implements Route {
         e.printStackTrace();
       }
       Map<String, Object> variables =
-          ImmutableMap.of("success", success);
+              ImmutableMap.of("success", success);
       return Main.GSON.toJson(variables);
     }
     return null;
