@@ -12,6 +12,18 @@ function closeForm() {
     document.getElementById("newpwd").value = document.getElementById("newpwd").defaultValue;
 }
 
+function displayOutfitsInfo(username) {
+    let postParams = {
+        username: username
+    };
+    $.post("/userOutfits", postParams, responseJSON => {
+        let userOutfits = JSON.parse(responseJSON).outfits;
+        // console.log(userOutfits);
+        document.getElementById('outfit-overview').innerHTML = "<hr></hr><h2><u>You have " + userOutfits.length + " outfits!</u></h2>";
+
+
+    });
+}
 
 function displayItemsInfo(username) {
     let postParams = {
@@ -30,7 +42,7 @@ function displayItemsInfo(username) {
             allTypes.push(item[3]);
             allFormality.push(item[6]);
         }
-        console.log(allFormality);
+        // console.log(allFormality);
         visualizeItemTypes(allTypes);
         visualizeFormality(allFormality);
     });
@@ -104,4 +116,5 @@ function visualizeFormality(formalityList) {
 
 $(document).ready(() => {
    displayItemsInfo(localStorage.getItem('username'));
+   displayOutfitsInfo(localStorage.getItem('username'));
 });

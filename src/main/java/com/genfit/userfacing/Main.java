@@ -110,7 +110,6 @@ public final class Main {
 
     // Setup spark routes for getting data (ie. json endpoints)
     Spark.post("/userform", new UserformHandler(this.mainApp.getDb()));
-
     Spark.post("/userItems", new UserItemRetriever(this.mainApp));
     Spark.post("/userOutfits", new UserOutfitRetriever(this.mainApp));
     Spark.post("/outfitComponents",

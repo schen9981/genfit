@@ -1,6 +1,8 @@
 package com.genfit.userfacing.handlers;
 
 import com.genfit.proxy.OutfitProxy;
+import com.genfit.suggester.OutfitSuggester;
+import com.genfit.suggester.OutfitSuggestion;
 import com.genfit.userfacing.GenFitApp;
 import com.genfit.userfacing.Main;
 import com.google.common.collect.ImmutableMap;
@@ -28,10 +30,6 @@ public class DiscoverOutfitRetriever implements Route {
     int id;
     List<Integer> likedOutfitIds = new ArrayList<>();
 
-    // TODO: Get outfits of two algorithm;
-    List<OutfitProxy> completeOutfits = new ArrayList<>();
-    List<OutfitProxy> almostOutfits = new ArrayList<>();
-
     try {
       id = this.genFitApp.getDb().getUserBean(username).getId();
       likedOutfitIds = this.genFitApp.getDb().getLikedOutfitIds(id);
@@ -42,6 +40,17 @@ public class DiscoverOutfitRetriever implements Route {
               "likedOutfitIds", new ArrayList<>());
       return Main.GSON.toJson(output);
     }
+
+    OutfitSuggester os = new OutfitSuggester();
+    List<OutfitSuggestion> completeOutfitsSuggestion = os.suggestOutfits(this.genFitApp.getDb(), id);
+//    System.out.println(completeOutfitsSuggestion);
+    List<OutfitProxy> completeOutfits = new ArrayList<>();
+
+    for (OutfitSuggestion suggestion : completeOutfitsSuggestion) {
+      completeOutfits.add(suggestion.getCommunityOutfit());
+    }
+
+    List<OutfitProxy> almostOutfits = new ArrayList<>();
 
     Map<String, Object> output =
         ImmutableMap.of("completeOutfits", completeOutfits,

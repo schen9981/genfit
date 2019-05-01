@@ -1,6 +1,5 @@
 package com.genfit.userfacing.handlers;
 
-import com.genfit.proxy.OutfitProxy;
 import com.genfit.userfacing.GenFitApp;
 import com.genfit.userfacing.Main;
 import com.google.common.collect.ImmutableMap;
@@ -9,7 +8,6 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +25,7 @@ public class LikedOutfitRetriever implements Route {
     String username = qm.value("username");
     int id;
     List<Integer> likedOutfitIds = new ArrayList<>();
+    List<Integer> gotLikedOutfitIds = new ArrayList<>();
 
     try {
       id = this.genFitApp.getDb().getUserBean(username).getId();
