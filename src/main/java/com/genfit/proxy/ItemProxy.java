@@ -1,12 +1,19 @@
 package com.genfit.proxy;
 
+import com.genfit.attribute.Attribute;
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
 import com.genfit.attribute.SeasonAttribute;
 import com.genfit.attribute.TypeAttribute;
+import com.genfit.attribute.attributevals.Color;
+import com.genfit.attribute.attributevals.FormalityEnum;
+import com.genfit.attribute.attributevals.PatternEnum;
+import com.genfit.attribute.attributevals.SeasonEnum;
 import com.genfit.clothing.Item;
 import com.genfit.database.Database;
+
+import java.lang.reflect.Type;
 
 public class ItemProxy {
 
@@ -84,6 +91,23 @@ public class ItemProxy {
       return null;
     } else {
       return i.getPatternAttribute();
+    }
+  }
+
+  public Attribute getAttributeForItem(Class attributeClass) {
+    if (attributeClass.equals(ColorAttribute.class)) {
+      return this.getColorAttribute();
+    } else if (attributeClass.equals(FormalityAttribute.class)) {
+      return this.getFormalityAttribute();
+    } else if (attributeClass.equals(PatternAttribute.class)) {
+      return this.getPatternAttribute();
+    } else if (attributeClass.equals(SeasonAttribute.class)) {
+      return this.getWeatherAttribute();
+    } else if (attributeClass.equals(TypeAttribute.class)) {
+      return this.getTypeAttribute();
+    } else {
+      throw new IllegalArgumentException("ERROR: Invalid class "
+              + attributeClass + "queried in getAttributeForitem");
     }
   }
 

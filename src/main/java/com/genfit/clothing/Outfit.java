@@ -35,33 +35,42 @@ public class Outfit extends ClosetComponent {
    *
    * @return map of items in the outfit
    */
-  public ImmutableMap<TypeEnum, ItemProxy> getItems() {
+  public Map<TypeEnum, ItemProxy> getItems() {
     ImmutableMap<TypeEnum, ItemProxy> immutable = ImmutableMap
-        .copyOf(this.items);
+            .copyOf(this.items);
     return immutable;
   }
 
+  /**
+   * Setter for items.
+   *
+   * @param items parameter to assign to items
+   **/
+  void setItems(Map<TypeEnum, ItemProxy> items) {
+    this.items = items;
+  }
+
   public int getId() {
-    return id;
+    return this.id;
   }
 
   public String getName() {
-    return name;
+    return this.name;
   }
 
   public SeasonAttribute getSeason() {
-    return season;
+    return this.season;
   }
 
   public FormalityAttribute getFormality() {
-    return formality;
+    return this.formality;
   }
 
   public PatternAttribute getPattern() {
-    return pattern;
+    return this.pattern;
   }
 
   public ColorAttribute getColor() {
-    return color;
+    return this.color;
   }
 }

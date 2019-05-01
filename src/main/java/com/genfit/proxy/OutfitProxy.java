@@ -5,6 +5,8 @@ import com.genfit.clothing.Outfit;
 import com.genfit.database.Database;
 import com.google.common.collect.ImmutableMap;
 
+import java.util.Map;
+
 public class OutfitProxy {
 
   // Instance variables describing the OutfitProxy instance
@@ -25,16 +27,17 @@ public class OutfitProxy {
     try {
       this.outfit = this.db.getOutfitBean(this.id);
     } catch (Exception e) {
+      e.printStackTrace();
       System.out.println("ERROR: Exception when getting OutfitBean");
     }
     return this.outfit;
   }
 
-  public ImmutableMap<TypeEnum, ItemProxy> getItems() {
+  public Map<TypeEnum, ItemProxy> getItems() {
     return this.getOutfit().getItems();
   }
 
   public int getId() {
-    return id;
+    return this.id;
   }
 }

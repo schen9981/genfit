@@ -81,5 +81,6 @@ classpath
 **.DS_Store*
 cs32*
 cs32-group-project.iml
+>>>>>>> 8b7e976d97c0f5b419db6e428356d3cf47ac9570
 
 **/*.sqlite3

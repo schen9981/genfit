@@ -6,11 +6,16 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import com.genfit.userfacing.handlers.AddItemHandler;
+import com.genfit.userfacing.handlers.AddOutfitHandler;
 import com.genfit.userfacing.handlers.DeleteItemHandler;
+import com.genfit.userfacing.handlers.DeleteOutfitHandler;
+import com.genfit.userfacing.handlers.DiscoverOutfitRetriever;
 import com.genfit.userfacing.handlers.DiscoverPageHandler;
 import com.genfit.userfacing.handlers.FrontpageHandler;
 import com.genfit.userfacing.handlers.ItemPageHandler;
+import com.genfit.userfacing.handlers.OutfitByAttributeRetriever;
 import com.genfit.userfacing.handlers.OutfitComponentsRetriever;
+import com.genfit.userfacing.handlers.OutfitLikeHandler;
 import com.genfit.userfacing.handlers.OutfitPageHandler;
 import com.genfit.userfacing.handlers.UploadImageHandler;
 import com.genfit.userfacing.handlers.UserItemRetriever;
@@ -61,7 +66,7 @@ public final class Main {
       config.setDirectoryForTemplateLoading(templates);
     } catch (IOException ioe) {
       System.out.printf("ERROR: Unable use %s for template loading.%n",
-          templates);
+              templates);
       System.exit(1);
     }
     return new FreeMarkerEngine(config);
@@ -72,13 +77,12 @@ public final class Main {
     OptionParser parser = new OptionParser();
     parser.accepts("gui");
     parser.accepts("port").withRequiredArg().ofType(Integer.class)
-        .defaultsTo(DEFAULT_PORT);
+            .defaultsTo(DEFAULT_PORT);
     OptionSet options = parser.parse(this.args);
     this.mainApp = new GenFitApp();
     this.repl = new MainREPL(this.mainApp);
 
     if (options.has("gui")) {
-      System.out.println("gui");
       this.runSparkServer((int) options.valueOf("port"));
     }
 
@@ -109,11 +113,18 @@ public final class Main {
     Spark.post("/userItems", new UserItemRetriever(this.mainApp));
     Spark.post("/userOutfits", new UserOutfitRetriever(this.mainApp));
     Spark.post("/outfitComponents",
-        new OutfitComponentsRetriever(this.mainApp));
+            new OutfitComponentsRetriever(this.mainApp));
+    Spark.post("/outfitByAttribute",
+            new OutfitByAttributeRetriever(this.mainApp));
 
     // Setup post requests for forms and buttons
     Spark.post("/addItem", new AddItemHandler(this.mainApp));
     Spark.post("/deleteItem", new DeleteItemHandler(this.mainApp));
+
+    Spark.post("/like", new OutfitLikeHandler(this.mainApp));
+    Spark.post("/discover", new DiscoverOutfitRetriever(this.mainApp));
+    Spark.post("/addOutfit", new AddOutfitHandler(this.mainApp));
+    Spark.post("/deleteOutfit", new DeleteOutfitHandler(this.mainApp));
   }
 
   /**

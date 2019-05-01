@@ -54,7 +54,7 @@ public class DatabaseTest {
 //              "default");16
     UserProxy user = new UserProxy(db, "wenhuang_zeng@brown.edu");
     OutfitProxy outfitProxy = new OutfitProxy(db, 16);
-    db.deleteOutfit(user, outfitProxy);
+    db.deleteOutfit(0, 2);
     connection.close();
   }
 

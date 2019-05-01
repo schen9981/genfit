@@ -5,58 +5,117 @@
 </div>
 
 <div id="add">
-  <button id="addOutfit">Add Outfit</button>
+  <button id="constructOutfit">Construct Full Outfit</button>
+  <button id="suggestOutfit">Get Outfit Suggestions</button>
 
   <div id="addOutfitModal" class="modal">
     <div class="modal-content">
       <span id="addSpan" class="close">&times;</span>
       <form id="addOutfitForm">
-        Item Description:<br>
-        <input type="text" id="item-name" name="item-name"><br>
-
-        Color(s):<br>
-        <div id="item-colors">
-          <input type="color" id="item-color" name="item-color" value="#ff0000"><br>
+        <div class="tab-add" id="outfit-info">
+          Outfit Name:<br>
+          <input type="text" id="outfit-name" name="outfit-name"><br>
+          <div class="add" id="outer-item">
+            <button id="add-outer-item" onclick="navigateToTab(event, 1)">Add Outer</button>
+          </div>
+          <div class="add" id="top-item">
+            <button id="add-top-item" onclick="navigateToTab(event, 2)">Add Top</button>
+          </div>
+          <div class="add" id="bottom-item">
+            <button id="add-bottom-item" onclick="navigateToTab(event, 3)">Add Bottom</button>
+          </div>
+          <div class="add" id="shoes-item">
+            <button id="add-shoes-item" onclick="navigateToTab(event, 4)">Add Shoes</button>
+          </div>
         </div>
-        <button id="addColor">+</button><br>
 
-        Type:<br>
-        <select id="type-1" name="item-type-1">
-          <option value="OUTER">Outerwear</option>
-          <option value="TOP">Top</option>
-          <option value="BOTTOM">Bottom</option>
-          <option value="SHOES">Shoes</option>
-        </select>
-        <select id="type-2" name="item-type-2">
-          <option value="outer-coat">Outer Coat</option>
-          <option value="suit">Suit</option>
-        </select><br>
+        <div class="tab-add" id="outer-select">
+          <div class="description">
+            <p>Select an outer:</p><br>
+          </div>
+        </div>
 
-        Pattern:<br>
-        <select id="item-pattern" name="item-pattern">
-          <option value="SOLID">Solid</option>
-          <option value="STRIPED">Striped</option>
-          <option value="CHECKERED">Checkered</option>
-          <option value="OTHER">Other</option>
-        </select><br>
+        <div class="tab-add" id="top-select">
+          <div class="description">
+            <p>Select a top:</p><br>
+          </div>
+        </div>
 
-        Season:<br>
-        <select id="item-season" name="item-season">
-          <option value="SPRING">Spring</option>
-          <option value="SUMMER">Summer</option>
-          <option value="FALL">Fall</option>
-          <option value="WINTER">Winter</option>
-        </select><br>
+        <div class="tab-add" id="bottom-select">
+          <div class="description">
+            <p>Select a bottom:</p><br>
+          </div>
+        </div>
 
-        Formality:<br>
-        <select id="item-formality" name="item-formality">
-          <option value="FORMAL">Formal</option>
-          <option value="BUSINESS_CASUAL">Business Casual</option>
-          <option value="CASUAL">Casual</option>
-          <option value="ULTRA_CASUAL">Ultra Casual</option>
-        </select><br>
+        <div class="tab-add" id="shoes-select">
+          <div class="description">
+            <p>Select a pair of shoes:</p><br>
+          </div>
+        </div>
 
-        <input type="submit" value="Submit">
+        <button id="addOutfit">Add Outfit</button>
+
+        <div style="overflow:auto;">
+        <div style="float:right;">
+          <button type="button" id="addItem" onclick="addItemToOutfit(event)">Add to Outfit</button>
+          <button type="button" id="back" onclick="navigateToTab(event, 0)">Back</button>
+        </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="suggestOutfitModal" class="modal">
+    <div class="modal-content">
+      <span id="suggestSpan" class="close">&times;</span>
+      <form id="suggestOutfitForm">
+        <div class="tab-suggest" id="outfit-info">
+          Outfit Name:<br>
+          <input type="text" id="outfit-name" name="outfit-name"><br>
+          <div class="add-suggest" id="outer-item">
+            <button id="suggest-outer-item" onclick="navigateToSuggestTab(event, 1)">Add Outer</button>
+          </div>
+          <div class="add-suggest" id="top-item">
+            <button id="suggest-top-item" onclick="navigateToSuggestTab(event, 2)">Add Top</button>
+          </div>
+          <div class="add-suggest" id="bottom-item">
+            <button id="suggest-bottom-item" onclick="navigateToSuggestTab(event, 3)">Add Bottom</button>
+          </div>
+          <div class="add-suggest" id="shoes-item">
+            <button id="suggest-shoes-item" onclick="navigateToSuggestTab(event, 4)">Add Shoes</button>
+          </div>
+        </div>
+
+        <div class="tab-suggest" id="outer-select">
+          <div class="description">
+            <p>Select an outer:</p><br>
+          </div>
+        </div>
+
+        <div class="tab-suggest" id="top-select">
+          <div class="description">
+            <p>Select a top:</p><br>
+          </div>
+        </div>
+
+        <div class="tab-suggest" id="bottom-select">
+          <div class="description">
+            <p>Select a bottom:</p><br>
+          </div>
+        </div>
+
+        <div class="tab-suggest" id="shoes-select">
+          <div class="description">
+            <p>Select a pair of shoes:</p><br>
+          </div>
+        </div>
+
+        <div style="overflow:auto;">
+        <div style="float:right;">
+          <button type="button" id="addItem" onclick="addItemToOutfit(event)">Add to Outfit</button>
+          <button type="button" id="back" onclick="navigateToSuggestTab(event, 0)">Back</button>
+        </div>
+        </div>
       </form>
     </div>
   </div>

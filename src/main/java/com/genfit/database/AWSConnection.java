@@ -32,7 +32,7 @@ public class AWSConnection {
   private static final int RDS_INSTANCE_PORT = 3306;
   private static final String REGION_NAME = "us-east-1f";
   private static final String DB_USER = "genfitRDS";
-  private static final String JDBC_URL = "jdbc:mysql://" + RDS_INSTANCE_HOSTNAME + ":" + RDS_INSTANCE_PORT;
+  private static final String JDBC_URL = "jdbc:mysql://" + RDS_INSTANCE_HOSTNAME + ":" + RDS_INSTANCE_PORT + "?allowMultiQueries=true";
 
   private static final String SSL_CERTIFICATE = "rds-combined-ca-bundle.pem";
 
@@ -59,7 +59,7 @@ public class AWSConnection {
     rs.close();
     stmt.close();
     connection.close();
-
+    System.out.println(JDBC_URL);
     clearSslProperties();
 
   }
