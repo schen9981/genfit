@@ -89,3 +89,47 @@ input {
 .delete {
   margin-bottom: 10px;
 }
+
+#outfits {
+  display: flex;
+}
+
+.outfit {
+  width: 100px;
+  max-width: 100%;
+  display: flex;
+  /*flex-direction: row;*/
+  box-sizing: border-box;
+  flex-flow: row;
+  flex-wrap: wrap;
+}
+
+.outfit-card {
+  display: flex;
+  /*width: 25%;*/
+  /*min-width: 50px;*/
+  flex-flow: column;
+  /*flex-grow: 1;*/
+  /*padding: 5px;*/
+  /*box-sizing: border-box;*/
+  min-width: 200px;
+  box-sizing: border-box;
+  flex-grow: 1;
+}
+
+.outfit-card p {
+  margin: 0;
+}
+
+.like-wrapper {
+  padding-bottom: 10px;
+  display: flex;
+}
+
+.like-button.not-liked{
+  background: white;
+}
+
+.like-button.liked{
+  background: blue;
+}

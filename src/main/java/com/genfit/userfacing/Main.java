@@ -13,6 +13,7 @@ import com.genfit.userfacing.handlers.DiscoverOutfitRetriever;
 import com.genfit.userfacing.handlers.DiscoverPageHandler;
 import com.genfit.userfacing.handlers.FrontpageHandler;
 import com.genfit.userfacing.handlers.ItemPageHandler;
+import com.genfit.userfacing.handlers.LikedOutfitRetriever;
 import com.genfit.userfacing.handlers.OutfitByAttributeRetriever;
 import com.genfit.userfacing.handlers.OutfitComponentsRetriever;
 import com.genfit.userfacing.handlers.OutfitLikeHandler;
@@ -123,6 +124,7 @@ public final class Main {
 
     Spark.post("/like", new OutfitLikeHandler(this.mainApp));
     Spark.post("/discover", new DiscoverOutfitRetriever(this.mainApp));
+    Spark.post("/liked", new LikedOutfitRetriever(this.mainApp));
     Spark.post("/addOutfit", new AddOutfitHandler(this.mainApp));
     Spark.post("/deleteOutfit", new DeleteOutfitHandler(this.mainApp));
   }

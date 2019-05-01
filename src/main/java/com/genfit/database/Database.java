@@ -49,8 +49,7 @@ public class Database {
   private final String getOutfitsByUserIDSQL = "SELECT * FROM user_outfit "
       + "WHERE user_id=?;";
 
-  private final String getOutfitLikesSQL = "SELECT * FROM outfit WHERE id=?"
-      + "WHERE user_id=?;";
+  private final String getOutfitLikesSQL = "SELECT * FROM outfit WHERE id=?;";
   private final String getLikedOutfitIdsSQL = "SELECT * FROM user_liked WHERE user_id=?";
 
   private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
@@ -490,10 +489,10 @@ public class Database {
     return outfitProxyList;
   }
 
-  public int getOutfitLikes(int id) throws SQLException {
+  public synchronized int getOutfitLikes(int id) throws SQLException {
+    int likes = 0;
     this.getOutfitLikesPrep.setInt(1, id);
     ResultSet rs = this.getOutfitLikesPrep.executeQuery();
-    int likes = 0;
     while (rs.next()) {
       likes = rs.getInt(7);
     }
@@ -501,7 +500,7 @@ public class Database {
     return likes;
   }
 
-  public List<Integer> getLikedOutfitIds(int userId) throws SQLException {
+  public synchronized List<Integer> getLikedOutfitIds(int userId) throws SQLException {
     this.getLikedOutfitIdsPrep.setInt(1, userId);
     ResultSet rs = this.getLikedOutfitIdsPrep.executeQuery();
     List<Integer> outfitIds = new ArrayList<>();
@@ -569,6 +568,7 @@ public class Database {
       rs.close();
       return itemID;
     } else {
+      rs.close();
       throw new SQLException();
     }
   }
@@ -616,6 +616,7 @@ public class Database {
       rs.close();
       return outfitID;
     } else {
+      rs.close();
       throw new SQLException();
     }
   }
