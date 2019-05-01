@@ -142,24 +142,29 @@ public class OutfitSuggester {
       // shuffle order of outfits found from database
       Collections.shuffle(allOtherOutfits, new Random());
 
+      // sort user item by type of item
       Map<TypeEnum, List<ItemProxy>> userItemsSortedByType =
               this.sortItemsIntoTypes(userItems);
 
-      // iterate through all outfits
-      for (OutfitProxy referenceOutfit : allOtherOutfits) {
-        Map<TypeEnum, ItemProxy> itemsInOutfit = referenceOutfit.getItems();
+      // iterate through all community outfits
+      for (OutfitProxy communityOutfit : allOtherOutfits) {
+        // get community items
+        Map<TypeEnum, ItemProxy> itemsInCommunityOutfit =
+                communityOutfit.getItems();
 
-        int numItemsMatched = 0;
-        int numItemsInReferenceOutfit = 0;
-        OutfitSuggestion suggestion = new OutfitSuggestion(referenceOutfit);
+        int numUserItemsMatched = 0;
+        int numItemsInCommunityOutfit = 0;
+        OutfitSuggestion suggestion = new OutfitSuggestion(communityOutfit);
 
-        // iterate through types of clothing in each outfit
+        // iterate through types of clothing in each community outfit
         for (TypeEnum typeEnum : TypeEnum.values()) {
-          ItemProxy itemOfType = itemsInOutfit.getOrDefault(typeEnum,
-                  null);
+          ItemProxy communityItemOfType =
+                  itemsInCommunityOutfit.getOrDefault(typeEnum,
+                          null);
 
-          if (itemOfType != null) {
-            numItemsInReferenceOutfit++;
+          if (communityItemOfType != null) {
+            numItemsInCommunityOutfit++;
+            // user items matching this type
             List<ItemProxy> userItemsOfType =
                     userItemsSortedByType.getOrDefault(typeEnum,
                             Collections.emptyList());
@@ -170,10 +175,10 @@ public class OutfitSuggester {
             for (ItemProxy userItemOfType : userItemsOfType) {
               double similarity =
                       ItemDistanceCalculator.getSimilarity(userItemOfType,
-                              itemOfType);
-              if (similarity < ItemDistanceCalculator.SIMILARITY_THRESHOLD) {
+                              communityItemOfType);
+              if (similarity <= ItemDistanceCalculator.SIMILARITY_THRESHOLD) {
                 suggestion.addSuggestedItem(userItemOfType);
-                numItemsMatched++;
+                numUserItemsMatched++;
                 // recommend the first user item of that type that was found
                 // to meet the threshold
                 break;
@@ -182,7 +187,7 @@ public class OutfitSuggester {
           }
         }
 
-        if ((numItemsInReferenceOutfit - numItemsMatched) < 1) {
+        if ((numItemsInCommunityOutfit - numUserItemsMatched) < 1) {
           outfitSuggestions.add(suggestion);
         }
       }
@@ -198,6 +203,7 @@ public class OutfitSuggester {
     for (int i = 0; i < items.size(); i++) {
       ItemProxy itemProxy = items.get(i);
       List<ItemProxy> itemList = new ArrayList<>();
+      itemList.add(itemProxy);
       sortedItems.merge(itemProxy.getTypeAttribute().getAttributeVal(),
               itemList, (oldList, newList) -> {
                 oldList.addAll(newList);

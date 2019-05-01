@@ -14,16 +14,16 @@ import java.util.Map;
  * the user.
  */
 public class OutfitSuggestion {
-  private OutfitProxy referenceOutfit;
+  private OutfitProxy communityOutfit;
   private Map<TypeEnum, ItemProxy> suggestedOutfitMap;
 
   /**
    * Constructor for OutfitSuggestion.
    *
-   * @param referenceOutfit reference outfit for this suggestion
+   * @param communityOutfit reference outfit for this suggestion
    */
-  public OutfitSuggestion(OutfitProxy referenceOutfit) {
-    this.referenceOutfit = referenceOutfit;
+  public OutfitSuggestion(OutfitProxy communityOutfit) {
+    this.communityOutfit = communityOutfit;
     // placeholder ID
     this.suggestedOutfitMap = new HashMap<>();
   }
@@ -44,12 +44,12 @@ public class OutfitSuggestion {
   }
 
   /**
-   * Returns the reference item that the suggestion is based on.
+   * Returns the community item that the suggestion is based on.
    *
    * @return an OutfitProxy specifying the underlying outfit
    */
-  public OutfitProxy getReferenceOutfit() {
-    return this.referenceOutfit;
+  public OutfitProxy getCommunityOutfit() {
+    return this.communityOutfit;
   }
 
   /**
