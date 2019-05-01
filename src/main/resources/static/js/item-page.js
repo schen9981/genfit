@@ -1,6 +1,23 @@
 // map from id -> item array (?)
 // let itemCache = new Map([]);
 // username of current user
+
+let bucketName = 'cs32-term-project-s3-bucket';
+let bucketRegion = 'us-east-1';
+let IdentityPoolId = 'us-east-1:36e7dd92-26e7-4a4e-ac8f-5b91ee5968ef';
+
+AWS.config.update({
+    region: bucketRegion,
+    credentials: new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: IdentityPoolId
+    })
+});
+
+let s3 = new AWS.S3({
+    apiVersion: '2006-03-01',
+    params: {Bucket: bucketName}
+});
+
 let username;
 $(".name").html(localStorage.getItem('name'));
 // generate html content (ie. item information) for card
@@ -71,7 +88,7 @@ function generateCards(listOfItems) {
     deleteUserItem(id);
   }
   // set dimensions of cards
-  $('.item').css("width", "20%");
+  $('.item').css("width", "10%");
   let itemWidth = $('.item').width();
   $('.item').height(itemWidth * 1.2);
 }
@@ -89,6 +106,14 @@ function deleteUserItem(itemId) {
     $.post("/deleteItem", postParams, responseJSON => {
       $('#item-' + itemId).remove();
       $('#modal-' + itemId).remove();
+      let imageKey = JSON.parse(responseJSON)[0];
+      s3.deleteObject({Key: imageKey}, function(err, data) {
+          if (err) {
+              alert('There was an error deleting your photo: ', err.message);
+          } else {
+              console.log('Successfully deleted photo.');
+          }
+      });
     });
 
     window.location.reload();
@@ -105,7 +130,6 @@ function displayUserItems(username) {
   $.post("/userItems", postParams, responseJSON => {
     //get the items of the user
     let userItems = JSON.parse(responseJSON).items;
-    console.log(userItems);
     generateCards(userItems);
   });
 }
@@ -155,14 +179,33 @@ function itemModalAnimation() {
 
   // open modal when button clicked
   btn.click(function() {
-    console.log('clicked');
-    modal.css("display", "block");
+      modal.css("display", "block");
   });
 
   // close modal when user clicks 'x'
   span.click(function() {
     modal.css("display", "none");
   });
+}
+
+let encodedImage = "";
+
+//function fot previewing user uploaded images
+function previewFile(){
+    let preview = $('#image-preview').get(0); //selects the query named img
+    let fileElement    = $('#image-input').get(0); //sames as here
+    let file = fileElement.files[0];
+    let reader = new FileReader();
+    reader.onloadend = function (e) {
+        preview.src = reader.result;
+        encodedImage = reader.result.split(",")[1];
+    };
+
+    if (file) {
+        reader.readAsDataURL(file); //reads the data as a URL
+    } else {
+        preview.src = "";
+    }
 }
 
 function addItemFormSubmit() {
@@ -176,19 +219,49 @@ function addItemFormSubmit() {
       itemType1: $('#type-1').val(),
       itemPattern: $('#item-pattern').val(),
       itemSeason: $('#item-season').val(),
-      itemFormality: $('#item-formality').val()
+      itemFormality: $('#item-formality').val(),
+      imageKey: "default"
     }
-    // post request to addItems
-    console.log(postParams);
-    $.post("/addItem", postParams, responseJSON => {
+    //check if user uploaded an image
+    if ($('#image-input').get(0).files.length !== 0) {
+      let file = $('#image-input').get(0).files[0];
+      uploadImageAndPost(username, file, postParams);
+    } else {
+      addItemPost(postParams);
+    }
+  });
+}
+
+// post request to addItems
+function addItemPost(postParams) {
+  $.post("/addItem", postParams, responseJSON => {
       let item = JSON.parse(responseJSON);
       let itemList = [item];
       generateCards(itemList);
       $('#addItemModal').css("display", "none");
-    });
+      $('#image-input').val('');
   });
 }
 
+//attempts to upload image and calls addItemPost accordingly
+function uploadImageAndPost(username, file, postParams) {
+    let fileName = new Date().getTime();
+    let photoKey = username.replace("@", ".") + "/" + fileName;
+    s3.upload({
+        Key: photoKey,
+        Body: file,
+        ACL: 'public-read'
+    }, function(err, data) {
+        if (err) {
+            alert("Error in file upload, using default images");
+            addItemPost(postParams);
+        } else {
+            postParams.imageKey = photoKey;
+            addItemPost(postParams)
+        }
+    });
+    return photoKey;
+}
 
 $(document).ready(() => {
   username = localStorage.username;

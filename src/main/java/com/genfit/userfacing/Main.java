@@ -12,6 +12,7 @@ import com.genfit.userfacing.handlers.FrontpageHandler;
 import com.genfit.userfacing.handlers.ItemPageHandler;
 import com.genfit.userfacing.handlers.OutfitComponentsRetriever;
 import com.genfit.userfacing.handlers.OutfitPageHandler;
+import com.genfit.userfacing.handlers.UploadImageHandler;
 import com.genfit.userfacing.handlers.UserItemRetriever;
 import com.genfit.userfacing.handlers.UserOutfitRetriever;
 import com.genfit.userfacing.handlers.UserPageHandler;

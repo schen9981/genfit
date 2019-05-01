@@ -1,5 +1,7 @@
 package com.genfit.userfacing.handlers;
 
+import com.amazonaws.AmazonServiceException;
+import com.genfit.database.S3Connection;
 import com.genfit.userfacing.GenFitApp;
 import com.genfit.userfacing.Main;
 
@@ -26,8 +28,17 @@ public class DeleteItemHandler implements Route {
 
     int itemId = Integer.parseInt(qm.value("itemId"));
 
+    String image = this.genFitApp.getDb().getItemBean(itemId).getImage();
+    String imageKey = "";
+    try {
+      String[] urlSplit = image.split(S3Connection.getUrlPrefix());
+      imageKey = urlSplit[1];
+    } catch (ArrayIndexOutOfBoundsException e) {
+      System.out.println(e.getMessage());
+    }
     this.genFitApp.getDb().deleteItem(userId, itemId);
-
-    return Main.GSON.toJson("Successful Remove");
+    String[] toReturn = new String[1];
+    toReturn[0] = imageKey;
+    return Main.GSON.toJson(toReturn);
   }
 }

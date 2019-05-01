@@ -99,7 +99,7 @@ public class Database {
   private PreparedStatement deleteItemPrep, deleteUserItemPrep;
 
   private final String deleteOutfitSQL = "DELETE FROM outfit WHERE id=?;";
-  private final String deleteUserOutfitSQL = "DELETE FROM user_item WHERE "
+  private final String deleteUserOutfitSQL = "DELETE FROM user_outfit WHERE "
       + "user_id=? AND outfit_id=?;";
   private PreparedStatement deleteOutfitPrep, deleteUserOutfitPrep;
 
@@ -111,7 +111,6 @@ public class Database {
   private LoadingCache<String, User> userCache;
   private LoadingCache<Integer, Item> itemCache;
   private LoadingCache<Integer, Outfit> outfitCache;
-
 
   private Map<Integer, String> defaultImageMap = new HashMap<>();
   public Database(Connection conn) {
@@ -148,10 +147,10 @@ public class Database {
           .prepareStatement(this.deleteUserOutfitSQL);
       this.lastInsertID = conn.prepareStatement(this.lastInsertIDSQL);
 
-      defaultImageMap.put(TypeEnum.OUTER.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/outer_jacket.png");
-      defaultImageMap.put(TypeEnum.TOP.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/tshirt.png");
-      defaultImageMap.put(TypeEnum.BOTTOM.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/pants.png");
-      defaultImageMap.put(TypeEnum.SHOES.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/sneakers.png");
+      defaultImageMap.put(TypeEnum.OUTER.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/default/outer_jacket.png");
+      defaultImageMap.put(TypeEnum.TOP.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/default/tshirt.png");
+      defaultImageMap.put(TypeEnum.BOTTOM.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/default/pants.png");
+      defaultImageMap.put(TypeEnum.SHOES.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/default/sneakers.png");
     } catch (SQLException e) {
       System.out.println("ERROR: SQLExeception when prepare statement"
           + "in Database constructor");
@@ -464,14 +463,18 @@ public class Database {
 
   public int addItem(int userId, String name, TypeAttribute type,
       FormalityAttribute formality, ColorAttribute color,
-      PatternAttribute pattern, SeasonAttribute season) throws SQLException {
+      PatternAttribute pattern, SeasonAttribute season, String imageKey) throws SQLException {
     this.addItemPrep.setString(1, name);
     this.addItemPrep.setInt(2, type.getAttributeVal().ordinal());
     this.addItemPrep.setInt(3, formality.getAttributeVal().ordinal());
     this.addItemPrep.setString(4, color.getAttributeVal().toString());
     this.addItemPrep.setInt(5, pattern.getAttributeVal().ordinal());
     this.addItemPrep.setInt(6, season.getAttributeVal().ordinal());
-    this.addItemPrep.setString(7, defaultImageMap.get(type.getAttributeVal().ordinal()));
+    if (imageKey.equals("default")) {
+      this.addItemPrep.setString(7, defaultImageMap.get(type.getAttributeVal().ordinal()));
+    } else {
+      this.addItemPrep.setString(7, S3Connection.getUrlPrefix() + imageKey);
+    }
     this.addItemPrep.executeUpdate();
 
     ResultSet rs = this.lastInsertID.executeQuery();
