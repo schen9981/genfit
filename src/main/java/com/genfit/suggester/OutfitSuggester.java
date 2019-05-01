@@ -1,7 +1,10 @@
 package com.genfit.suggester;
 
+import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,7 +15,9 @@ import java.util.Set;
 import com.genfit.attribute.Attribute;
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.SeasonAttribute;
+import com.genfit.attribute.attributevals.TypeEnum;
 import com.genfit.clothing.Item;
+import com.genfit.clothing.ItemDistanceCalculator;
 import com.genfit.clothing.Outfit;
 import com.genfit.clothing.OutfitSuggestionEnum;
 import com.genfit.database.Database;
@@ -140,11 +145,40 @@ public class OutfitSuggester {
     List<OutfitProxy> outfitSuggestions = new ArrayList<>();
 
     try {
-      List<ItemProxy> items = db.getItemsByUserID(userID);
+      List<ItemProxy> userItems = db.getItemsByUserID(userID);
+      List<OutfitProxy> allOtherOutfits = db.getOutfitsExcludeUser(userID);
+      Map<TypeEnum, List<ItemProxy>> userItemsSortedByType =
+              this.sortItemsIntoTypes(userItems);
+
+      // iterate through all outfits
+      for (OutfitProxy outfit : allOtherOutfits) {
+        Map<TypeEnum, ItemProxy> itemsInOutfit = outfit.getItems();
+
+        // iterate through types of clothing in each outfit
+        for (TypeEnum typeEnum : TypeEnum.values()) {
+          ItemProxy itemOfType = itemsInOutfit.getOrDefault(typeEnum,
+                  null);
+
+          if (itemOfType != null) {
+            List<ItemProxy> userItemsOfType =
+                    userItemsSortedByType.getOrDefault(typeEnum,
+                            Collections.emptyList());
+            // loop through user items of that type to find distance
+            for (ItemProxy userItemOfType : userItemsOfType) {
+              ItemDistanceCalculator.getSimilarity(userItemOfType, itemOfType);
+            }
+          }
+        }
+      }
     } catch (SQLException e) {
       e.printStackTrace();
     }
 
+    return null;
+  }
+
+  // TODO:implement
+  private Map<TypeEnum, List<ItemProxy>> sortItemsIntoTypes(List<ItemProxy> items) {
     return null;
   }
 }

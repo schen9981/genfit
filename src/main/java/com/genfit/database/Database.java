@@ -35,71 +35,82 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 public class Database {
-  private Connection conn;
-
   // Check statements
   private final String checkLoginSQL = "SELECT * FROM user WHERE email = ?;";
   private final String checkSignupSQL = "SELECT * FROM user WHERE email = ?;";
-  private PreparedStatement checkLoginPrep, checkSignupPrep;
-
   // Get Statements
   private final String getUserInfoSQL = "SELECT * FROM user WHERE email=?;";
   private final String getItemInfoSQL = "SELECT * FROM item WHERE id=?;";
   private final String getOutfitInfoSQL = "SELECT * FROM outfit WHERE id=?;";
+  private final String getOutfitsExcludeUserSQL = "SELECT outfit_id FROM "
+      + "user_outfit " + "WHERE " + "user_id!=?;";
   private final String getItemsByUserIDSQL = "SELECT * FROM user_item WHERE "
       + "user_id=?;";
   private final String getOutfitsByUserIDSQL = "SELECT * FROM user_outfit "
       + "WHERE user_id=?;";
+
+  private final String getOutfitLikesSQL = "SELECT * FROM outfit WHERE id=?"
+      + "WHERE user_id=?;";
+  private final String getLikedOutfitIdsSQL = "SELECT * FROM user_liked WHERE user_id=?";
+
   private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
   private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
   private PreparedStatement getAllItemsByAttributesPrep;
+  private PreparedStatement getOutfitLikesPrep, getLikedOutfitIdsPrep;
 
   // Add Statements
   private final String addUserSQL = "INSERT INTO user (name, email, password)"
       + " values (?, ?, ?);";
-  private PreparedStatement addUserPrep;
-
   private final String addItemSQL = "INSERT IGNORE INTO item"
       + " (name, type, formality, color, pattern, season, image)"
       + " VALUES (?, ?, ?, ?, ?, ?, ?);";
   private final String addItemToUserSQL = "INSERT INTO user_item "
       + "(user_id, item_id) VALUES (?, ?);";
-  private PreparedStatement addItemPrep, addItemToUserPrep;
-
   private final String addOutfitSQL = "INSERT IGNORE INTO outfit"
       + " (name, `outer`, top, bottom, feet) VALUES (?, ?, ?, ?, ?);";
   private final String addOutfitToUserSQL = "INSERT INTO user_outfit"
       + " (user_id, outfit_id) VALUES (?, ?);";
-  private PreparedStatement addOutfitPrep, addOutfitToUserPrep;
-
   // Delete Statements
   private final String deleteUserSQL = "DELETE FROM user WHERE id=?;";
   private final String deleteAllUserItemsSQL = "DELETE FROM user_item WHERE "
       + "user_id=?;";
   private final String deleteAllUserOutfitsSQL = "DELETE FROM user_outfit "
       + "WHERE user_id=?;";
+
+  private final String incrementLikesSQL = "UPDATE outfit SET likes = "
+      + "(likes + ?) WHERE id = ?; INSERT INTO user_liked (user_id, outfit_id) "
+      + "VALUES (?, ?);";
+
+  private final String decrementLikesSQL = "UPDATE outfit SET likes = "
+      + "(likes + ?) WHERE id = ?; DELETE FROM user_liked WHERE (user_id = ?) "
+      + "and (outfit_id = ?);";
+
   private PreparedStatement deleteUserPrep, deleteAllUserItemsPrep,
-      deleteAllUserOutfitsPrep;
+      deleteAllUserOutfitsPrep, incrementLikesPrep, decrementLikesPrep;
 
   private final String deleteItemSQL = "DELETE FROM item WHERE id=?;";
   private final String deleteUserItemSQL = "DELETE FROM user_item WHERE "
       + "user_id=? AND item_id=?;";
-  private PreparedStatement deleteItemPrep, deleteUserItemPrep;
-
   private final String deleteOutfitSQL = "DELETE FROM outfit WHERE id=?;";
   private final String deleteUserOutfitSQL = "DELETE FROM user_outfit WHERE "
       + "user_id=? AND outfit_id=?;";
-  private PreparedStatement deleteOutfitPrep, deleteUserOutfitPrep;
-
   // Misc Statements
   private final String lastInsertIDSQL = "SELECT LAST_INSERT_ID();";
   private final String changePasswordSQL = "UPDATE user SET password = ? "
       + "WHERE email = ?";
+  private Connection conn;
+  private PreparedStatement addUserPrep;
+  private PreparedStatement addItemPrep, addItemToUserPrep;
+  private PreparedStatement addOutfitPrep, addOutfitToUserPrep;
+  private PreparedStatement deleteItemPrep, deleteUserItemPrep;
+  private PreparedStatement deleteOutfitPrep, deleteUserOutfitPrep;
   private PreparedStatement changePasswordPrep;
   private PreparedStatement lastInsertID;
   private LoadingCache<String, User> userCache;
   private LoadingCache<Integer, Item> itemCache;
   private LoadingCache<Integer, Outfit> outfitCache;
+  private PreparedStatement checkLoginPrep, checkSignupPrep;
+  private PreparedStatement getOutfitsExcludeUserPrep;
 
   private Map<Integer, String> defaultImageMap = new HashMap<>();
 
@@ -114,16 +125,23 @@ public class Database {
       this.getUserInfoPrep = conn.prepareStatement(this.getUserInfoSQL);
       this.getItemInfoPrep = conn.prepareStatement(this.getItemInfoSQL);
       this.getOutfitInfoPrep = conn.prepareStatement(this.getOutfitInfoSQL);
+      this.getOutfitsExcludeUserPrep = conn
+          .prepareStatement(this.getOutfitsExcludeUserSQL);
       this.getItemsByUserIDPrep = conn
           .prepareStatement(this.getItemsByUserIDSQL);
       this.getOutfitsByUserIDPrep = conn
           .prepareStatement(this.getOutfitsByUserIDSQL);
+      this.getOutfitLikesPrep = conn.prepareStatement(this.getOutfitLikesSQL);
+      this.getLikedOutfitIdsPrep = conn
+          .prepareStatement(this.getLikedOutfitIdsSQL);
 
       this.addUserPrep = conn.prepareStatement(this.addUserSQL);
       this.addItemPrep = conn.prepareStatement(this.addItemSQL);
       this.addItemToUserPrep = conn.prepareStatement(this.addItemToUserSQL);
       this.addOutfitPrep = conn.prepareStatement(this.addOutfitSQL);
       this.addOutfitToUserPrep = conn.prepareStatement(this.addOutfitToUserSQL);
+      this.incrementLikesPrep = conn.prepareStatement(this.incrementLikesSQL);
+      this.decrementLikesPrep = conn.prepareStatement(this.decrementLikesSQL);
 
       this.deleteAllUserItemsPrep = conn
           .prepareStatement(this.deleteAllUserItemsSQL);
@@ -137,14 +155,17 @@ public class Database {
           .prepareStatement(this.deleteUserOutfitSQL);
       this.lastInsertID = conn.prepareStatement(this.lastInsertIDSQL);
 
-      defaultImageMap.put(TypeEnum.OUTER.ordinal(),
-          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/outer_jacket.png");
-      defaultImageMap.put(TypeEnum.TOP.ordinal(),
-          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/tshirt.png");
-      defaultImageMap.put(TypeEnum.BOTTOM.ordinal(),
+      this.defaultImageMap.put(TypeEnum.OUTER.ordinal(),
+          "https://s3.amazonaws.com/cs32-term-project-s3-bucket"
+              + "/outer_jacket.png");
+      this.defaultImageMap.put(TypeEnum.TOP.ordinal(),
+          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/tshirt"
+              + ".png");
+      this.defaultImageMap.put(TypeEnum.BOTTOM.ordinal(),
           "https://s3.amazonaws.com/cs32-term-project-s3-bucket/pants.png");
-      defaultImageMap.put(TypeEnum.SHOES.ordinal(),
-          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/sneakers.png");
+      this.defaultImageMap.put(TypeEnum.SHOES.ordinal(),
+          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/sneakers"
+              + ".png");
     } catch (SQLException e) {
       System.out.println("ERROR: SQLExeception when prepare statement"
           + "in Database constructor");
@@ -283,9 +304,12 @@ public class Database {
   private User getUserInfo(String email) throws SQLException {
     this.getUserInfoPrep.setString(1, email);
     ResultSet rs = this.getUserInfoPrep.executeQuery();
-    rs.next();
-    int id = rs.getInt(1);
-    String name = rs.getString(2);
+    int id = 0;
+    String name = "";
+    while (rs.next()) {
+      id = rs.getInt(1);
+      name = rs.getString(2);
+    }
     rs.close();
     return new User(id, name, email, this.getItemsByUserID(id),
         this.getOutfitsByUserID(id));
@@ -340,8 +364,8 @@ public class Database {
       // TODO: change this
       getAllItemsByAttributesSQL = new StringBuilder(
           "SELECT * " + "FROM item, user_item " + "WHERE "
-              + "user_item.item_id=item.id AND " + "user_item.user_Id=? AND ("
-              + attributeName + "=?");
+              + "user_item.item_id=item.id AND " + "user_item"
+              + ".user_Id=? AND (" + attributeName + "=?");
       setAttributeStartNum = 2;
     } else {
       getAllItemsByAttributesSQL = new StringBuilder(
@@ -466,6 +490,47 @@ public class Database {
     return outfitProxyList;
   }
 
+  public int getOutfitLikes(int id) throws SQLException {
+    this.getOutfitLikesPrep.setInt(1, id);
+    ResultSet rs = this.getOutfitLikesPrep.executeQuery();
+    int likes = 0;
+    while (rs.next()) {
+      likes = rs.getInt(7);
+    }
+    rs.close();
+    return likes;
+  }
+
+  public List<Integer> getLikedOutfitIds(int userId) throws SQLException {
+    this.getLikedOutfitIdsPrep.setInt(1, userId);
+    ResultSet rs = this.getLikedOutfitIdsPrep.executeQuery();
+    List<Integer> outfitIds = new ArrayList<>();
+    while (rs.next()) {
+      outfitIds.add(rs.getInt(2));
+    }
+    rs.close();
+    return outfitIds;
+  }
+
+  /**
+   * Gets all the outfits in database except those belonging to a certain user.
+   *
+   * @param id user ID to exclude
+   * @return List of OutfitProxy instances
+   * @throws SQLException
+   */
+  public List<OutfitProxy> getOutfitsExcludeUser(int id) throws SQLException {
+    List<OutfitProxy> outfitProxyList = new ArrayList<>();
+    this.getOutfitsExcludeUserPrep.setInt(1, id);
+    ResultSet rs = this.getOutfitsExcludeUserPrep.executeQuery();
+    while (rs.next()) {
+      int outfitID = rs.getInt(1);
+      outfitProxyList.add(new OutfitProxy(this, outfitID));
+    }
+    rs.close();
+    return outfitProxyList;
+  }
+
   /**
    * Adds a new user.
    *
@@ -491,7 +556,7 @@ public class Database {
     this.addItemPrep.setInt(5, pattern.getAttributeVal().ordinal());
     this.addItemPrep.setInt(6, season.getAttributeVal().ordinal());
     this.addItemPrep.setString(7,
-        defaultImageMap.get(type.getAttributeVal().ordinal()));
+        this.defaultImageMap.get(type.getAttributeVal().ordinal()));
     this.addItemPrep.executeUpdate();
 
     ResultSet rs = this.lastInsertID.executeQuery();
@@ -508,8 +573,27 @@ public class Database {
     }
   }
 
+  public synchronized void changeLikes(int outfitId, int userId, int change)
+      throws SQLException {
+    if (change == -1) {
+      this.decrementLikesPrep.setInt(1, change);
+      this.decrementLikesPrep.setInt(2, outfitId);
+      this.decrementLikesPrep.setInt(3, userId);
+      this.decrementLikesPrep.setInt(4, outfitId);
+      this.decrementLikesPrep.executeUpdate();
+    } else if (change == 1) {
+      this.incrementLikesPrep.setInt(1, change);
+      this.incrementLikesPrep.setInt(2, outfitId);
+      this.incrementLikesPrep.setInt(3, userId);
+      this.incrementLikesPrep.setInt(4, outfitId);
+      this.incrementLikesPrep.executeUpdate();
+    }
+
+  }
+
   public int addOutfit(int userId, String outfitName,
       Map<TypeEnum, Integer> items) throws SQLException {
+
     int outerId = items.get(TypeEnum.OUTER);
     int topId = items.get(TypeEnum.TOP);
     int bottomId = items.get(TypeEnum.BOTTOM);

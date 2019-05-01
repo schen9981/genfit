@@ -1,6 +1,7 @@
 package com.genfit.userfacing.handlers;
 
 import com.genfit.database.Database;
+import com.genfit.userfacing.Main;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import org.mindrot.jbcrypt.BCrypt;
@@ -14,7 +15,6 @@ import java.util.Map;
 
 public class UserformHandler implements Route {
 
-  private static final Gson GSON = new Gson();
   private Database db;
   public UserformHandler(Database db) {
     this.db = db;
@@ -49,7 +49,7 @@ public class UserformHandler implements Route {
       }
       Map<String, Object> variables =
           ImmutableMap.of("success", success, "name", name);
-      return GSON.toJson(variables);
+      return Main.GSON.toJson(variables);
 
     } else if (form == 1) {
       // Sign up
@@ -75,7 +75,7 @@ public class UserformHandler implements Route {
       }
 
       Map<String, Object> variables = ImmutableMap.of("success", newUsername);
-      return GSON.toJson(variables);
+      return Main.GSON.toJson(variables);
 
     } else if (form == 2) {
       // Change Password
@@ -93,7 +93,7 @@ public class UserformHandler implements Route {
       }
       Map<String, Object> variables =
           ImmutableMap.of("success", success);
-      return GSON.toJson(variables);
+      return Main.GSON.toJson(variables);
     }
     return null;
   }
