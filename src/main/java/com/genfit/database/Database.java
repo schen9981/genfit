@@ -157,14 +157,14 @@ public class Database {
 
       this.defaultImageMap.put(TypeEnum.OUTER.ordinal(),
           "https://s3.amazonaws.com/cs32-term-project-s3-bucket"
-              + "/outer_jacket.png");
+              + "/default/outer_jacket.png");
       this.defaultImageMap.put(TypeEnum.TOP.ordinal(),
-          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/tshirt"
+          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/default/tshirt"
               + ".png");
       this.defaultImageMap.put(TypeEnum.BOTTOM.ordinal(),
-          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/pants.png");
+          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/default/pants.png");
       this.defaultImageMap.put(TypeEnum.SHOES.ordinal(),
-          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/sneakers"
+          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/default/sneakers"
               + ".png");
     } catch (SQLException e) {
       System.out.println("ERROR: SQLExeception when prepare statement"
@@ -548,15 +548,20 @@ public class Database {
 
   public int addItem(int userId, String name, TypeAttribute type,
       FormalityAttribute formality, ColorAttribute color,
-      PatternAttribute pattern, SeasonAttribute season) throws SQLException {
+      PatternAttribute pattern, SeasonAttribute season, String imageKey) throws SQLException {
     this.addItemPrep.setString(1, name);
     this.addItemPrep.setInt(2, type.getAttributeVal().ordinal());
     this.addItemPrep.setInt(3, formality.getAttributeVal().ordinal());
     this.addItemPrep.setString(4, color.getAttributeVal().toString());
     this.addItemPrep.setInt(5, pattern.getAttributeVal().ordinal());
     this.addItemPrep.setInt(6, season.getAttributeVal().ordinal());
-    this.addItemPrep.setString(7,
-        this.defaultImageMap.get(type.getAttributeVal().ordinal()));
+    if (imageKey.equals("default")) {
+      this.addItemPrep.setString(7,
+              defaultImageMap.get(type.getAttributeVal().ordinal()));
+    } else {
+      this.addItemPrep.setString(7,
+              S3Connection.getUrlPrefix() + imageKey);
+    }
     this.addItemPrep.executeUpdate();
 
     ResultSet rs = this.lastInsertID.executeQuery();

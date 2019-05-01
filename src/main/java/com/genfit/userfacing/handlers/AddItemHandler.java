@@ -1,5 +1,6 @@
 package com.genfit.userfacing.handlers;
 
+import com.amazonaws.AmazonServiceException;
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
@@ -10,6 +11,7 @@ import com.genfit.attribute.attributevals.FormalityEnum;
 import com.genfit.attribute.attributevals.PatternEnum;
 import com.genfit.attribute.attributevals.SeasonEnum;
 import com.genfit.attribute.attributevals.TypeEnum;
+import com.genfit.database.S3Connection;
 import com.genfit.userfacing.GenFitApp;
 import com.genfit.userfacing.Main;
 
@@ -17,6 +19,13 @@ import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import sun.misc.BASE64Decoder;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 
 public class AddItemHandler implements Route {
 
@@ -30,7 +39,7 @@ public class AddItemHandler implements Route {
   public String handle(Request request, Response response) throws Exception {
 
     QueryParamsMap qm = request.queryMap();
-    String[] toReturn = new String[8];
+    String[] toReturn = new String[9];
 
     String name = qm.value("itemName");
     toReturn[1] = name;
@@ -60,14 +69,17 @@ public class AddItemHandler implements Route {
     FormalityAttribute formality = new FormalityAttribute(
         Enum.valueOf(FormalityEnum.class, formalityStr));
 
+    String imageKey = qm.value("imageKey");
+
     // get id of current user
     int id = this.genFitApp.getDb().getUserBean(qm.value("username")).getId();
     // add item
     int itemId = this.genFitApp.getDb().addItem(id, name, type1, formality,
-        color, pattern, season);
+        color, pattern, season, imageKey);
 
     toReturn[0] = Integer.toString(itemId);
     toReturn[7] = this.genFitApp.getDb().getItemBean(itemId).getImage();
+
 
     // return an item to add to html page
     return Main.GSON.toJson(toReturn);
