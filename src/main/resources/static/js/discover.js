@@ -5,14 +5,18 @@ function displayOutfitSuggestions(username) {
 
     $.post("/discover", postParams, responseJSON => {
         let response = JSON.parse(responseJSON);
-        // let completeOutfits = response.completeOutfits;
-        // let almostOutfits = response.almostOutfits;
+        let completeOutfits = response.completeOutfits;
+        let almostOutfits = response.almostOutfits;
         let likedOutfitIds = response.likedOutfitIds;
 
-        console.log(likedOutfitIds);
-        // console.log(completeOutfits);
+        // console.log(likedOutfitIds);
+        console.log(almostOutfits);
+        console.log(completeOutfits);
     })
 }
+
+
+
 
 $(document).ready(() => {
     username = localStorage.username;

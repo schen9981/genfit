@@ -1,5 +1,8 @@
 package com.genfit.userfacing.handlers;
 
+import com.genfit.attribute.attributevals.TypeEnum;
+import com.genfit.clothing.Outfit;
+import com.genfit.proxy.ItemProxy;
 import com.genfit.proxy.OutfitProxy;
 import com.genfit.suggester.OutfitSuggester;
 import com.genfit.suggester.OutfitSuggestion;
@@ -44,13 +47,19 @@ public class DiscoverOutfitRetriever implements Route {
     OutfitSuggester os = new OutfitSuggester();
     List<OutfitSuggestion> completeOutfitsSuggestion = os.suggestOutfits(this.genFitApp.getDb(), id);
 //    System.out.println(completeOutfitsSuggestion);
-    List<OutfitProxy> completeOutfits = new ArrayList<>();
 
+    List<String[]> completeOutfits = new ArrayList<>();
+    List<String[]> almostOutfits = new ArrayList<>();
     for (OutfitSuggestion suggestion : completeOutfitsSuggestion) {
-      completeOutfits.add(suggestion.getCommunityOutfit());
+      Map<TypeEnum, ItemProxy> outfitComp = suggestion.getCommunityOutfit().getItems();
+      Outfit currOut = suggestion.getCommunityOutfit().getOutfit();
+      String[] outfitInfoArr = UserOutfitRetriever.getOutfitInfoArr(currOut, outfitComp);
+      if (suggestion.isComplete()) {
+        completeOutfits.add(outfitInfoArr);
+      } else {
+        almostOutfits.add(outfitInfoArr);
+      }
     }
-
-    List<OutfitProxy> almostOutfits = new ArrayList<>();
 
     Map<String, Object> output =
         ImmutableMap.of("completeOutfits", completeOutfits,

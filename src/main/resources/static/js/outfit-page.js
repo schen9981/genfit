@@ -143,12 +143,10 @@ function generateItemCards(listOfItems, tabId) {
             $('.tab-add #item-' + id).css("background-size", "100%");
 
             // add event listener for focus (ie user selection)
-            $('.tab #item-' + id).focus(function () {
-                // console.log(id);
-                $('.tab-add #item-' + id).focus(function () {
-                    console.log(id);
-                    $selected = this;
-                })
+
+            $('.tab-add #item-' + id).focus(function () {
+                console.log(id);
+                $selected = this;
             })
         }
         // set dimensions of cards
@@ -161,7 +159,6 @@ function generateItemCards(listOfItems, tabId) {
 
 // function to retrieve and display a user's outfits
 function displayUserOutfits(username) {
-
     let postParams = {
         username: username
     };
@@ -240,13 +237,14 @@ function showTab(compId) {
         document.getElementById("addItem").style.display = "none";
         document.getElementById("back").style.display = "none";
         document.getElementById("addOutfit").style.display = "inline";
+        document.getElementById("suggestOutfit").style.display = "inline";
     } else {
         populateTabItems(compId, tabs[compId].id);
         tabs[compId].style.display = "table";
         document.getElementById("addItem").style.display = "inline";
         document.getElementById("back").style.display = "inline";
         document.getElementById("addOutfit").style.display = "none";
-        // document.getElementById("suggestOutfits").style.display = "none";
+        document.getElementById("suggestOutfit").style.display = "none";
     }
 }
 
@@ -270,7 +268,7 @@ function getIntId(str) {
 // function that adds a fully constructed outfit to the database
 function addOutfit() {
     $('#addOutfit').on("click", function (e) {
-        e.preventDefault();
+        // e.preventDefault();
         // get all items in the div
         let outer = document.getElementById("outer-item").getElementsByClassName("item")[0];
         let top = document.getElementById("top-item").getElementsByClassName("item")[0];
@@ -284,9 +282,7 @@ function addOutfit() {
             top: getIntId(top.id),
             bottom: getIntId(bottom.id),
             shoes: getIntId(shoes.id)
-        }
-
-        // console.log(postParams);
+        };
 
         // post request to addItems
         $.post("/addOutfit", postParams, responseJSON => {
