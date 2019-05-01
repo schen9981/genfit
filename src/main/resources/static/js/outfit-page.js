@@ -238,6 +238,7 @@ function showTab(compId) {
         document.getElementById("addItem").style.display = "none";
         document.getElementById("back").style.display = "none";
         document.getElementById("addOutfit").style.display = "inline";
+        document.getElementById("suggestOutfit").style.display = "inline";
     } else {
         populateTabItems(compId, tabs[compId].id);
         tabs[compId].style.display = "table";

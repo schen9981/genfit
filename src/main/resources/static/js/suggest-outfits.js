@@ -23,7 +23,7 @@ function generateSuggestItemCards(listOfItems, tabId) {
       // add event listener for focus (ie user selection)
       $('.tab-suggest #item-' + id).focus(function() {
         $selected = this;
-      })
+      });
     }
   }
   // set dimensions of cards
@@ -116,6 +116,7 @@ function showSuggestTab(compId) {
     document.getElementById("addFromSuggest").style.display = "none";
     document.getElementById("suggest").style.display = "inline";
     document.getElementById("addOutfitSuggest").style.display = "inline";
+    document.getElementById("suggestOutfit").style.display = "inline";
   } else if (compId == 5) {
     populateSuggestTabItems(compId, tabs[compId].id);
     tabs[compId].style.display = "table";
