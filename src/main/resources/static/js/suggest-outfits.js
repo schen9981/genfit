@@ -98,7 +98,16 @@ function showSuggestTab(compId) {
     // hide and show appropriate buttons
     document.getElementById("addItemSuggest").style.display = "none";
     document.getElementById("backSuggest").style.display = "none";
+    document.getElementById("addFromSuggest").style.display = "none";
     document.getElementById("suggest").style.display = "inline";
+  } else if (compId == 5) {
+    populateSuggestTabItems(compId, tabs[compId].id);
+    tabs[compId].style.display = "table";
+    document.getElementById("addItemSuggest").style.display = "none";
+    document.getElementById("backSuggest").style.display = "inline";
+    document.getElementById("suggest").style.display = "none";
+    document.getElementById("suggestOutfit").style.display = "none";
+    document.getElementById("addFromSuggest").style.display = "inline";
   } else {
     populateSuggestTabItems(compId, tabs[compId].id);
     tabs[compId].style.display = "table";

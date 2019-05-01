@@ -127,6 +127,7 @@
 
         <div style="overflow:auto;">
         <div style="float:right;">
+          <button type="button" id="addFromSuggest" onclick="addItemFromSuggestions(event)">Add Suggestions to Outfit</button>
           <button type="button" id="addItemSuggest" onclick="addItemToOutfitSuggest(event)">Add to Outfit</button>
           <button type="button" id="backSuggest" onclick="navigateToSuggestTab(event, 0)">Back</button>
         </div>
