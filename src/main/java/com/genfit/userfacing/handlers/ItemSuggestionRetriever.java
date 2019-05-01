@@ -39,7 +39,7 @@ public class ItemSuggestionRetriever implements Route {
       userId = this.genFitApp.getDb().getUserBean(username).getId();
     } catch (Exception e) {
       Map<String, Object> output = ImmutableMap.of("suggestions",
-          suggestionsInfo);
+              suggestionsInfo);
       return Main.GSON.toJson(output);
     }
 
@@ -52,40 +52,32 @@ public class ItemSuggestionRetriever implements Route {
     Map<TypeEnum, ItemProxy> items = new HashMap<>();
     if (!outerId.equals("")) {
       items.put(TypeEnum.OUTER,
-          new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(outerId)));
+              new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(outerId)));
     }
 
     if (!topId.equals("")) {
       items.put(TypeEnum.TOP,
-          new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(topId)));
+              new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(topId)));
     }
 
     if (!bottomId.equals("")) {
       items.put(TypeEnum.BOTTOM,
-          new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(bottomId)));
+              new ItemProxy(this.genFitApp.getDb(),
+                      Integer.parseInt(bottomId)));
     }
 
     if (!shoesId.equals("")) {
       items.put(TypeEnum.SHOES,
-          new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(shoesId)));
+              new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(shoesId)));
     }
     Outfit incomplete = new Outfit(-1, "incomplete", items);
 
     // generate item suggestions
     OutfitSuggester os = new OutfitSuggester();
-    List<ItemProxy> suggestions = os.suggestItems(incomplete,
-        this.genFitApp.getDb(), userId);
+    Map<TypeEnum, List<ItemProxy>> suggestions = os.suggestItems(incomplete,
+            this.genFitApp.getDb(), userId);
 
-    for (ItemProxy i : suggestions) {
-      Item itemSuggest = i.getItem();
-      String[] itemInfo = UserItemRetriever.getItemInfoArr(itemSuggest);
-      suggestionsInfo.add(itemInfo);
-    }
-
-    Map<String, Object> output = ImmutableMap.of("suggestions",
-        suggestionsInfo);
-
-    return Main.GSON.toJson(output);
+    return Main.GSON.toJson(suggestions);
   }
 
 }
