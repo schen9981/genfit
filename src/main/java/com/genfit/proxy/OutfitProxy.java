@@ -25,6 +25,7 @@ public class OutfitProxy {
     try {
       this.outfit = this.db.getOutfitBean(this.id);
     } catch (Exception e) {
+      e.printStackTrace();
       System.out.println("ERROR: Exception when getting OutfitBean");
     }
     return this.outfit;

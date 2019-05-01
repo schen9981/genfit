@@ -54,16 +54,11 @@ input {
   border: 1px solid #aaaaaa;
 }
 
-/* Mark input boxes that gets an error on validation: */
-input.invalid {
-  background-color: #ffdddd;
-}
-
 /* Hide all steps by default: */
 .tab {
   display: none;
 }
 
-.item div {
-  outline: 1px solid blue;
+div.item {
+  width: 20%;
 }

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import com.genfit.userfacing.handlers.AddItemHandler;
+import com.genfit.userfacing.handlers.AddOutfitHandler;
 import com.genfit.userfacing.handlers.DeleteItemHandler;
 import com.genfit.userfacing.handlers.DeleteOutfitHandler;
 import com.genfit.userfacing.handlers.DiscoverOutfitRetriever;
@@ -122,6 +123,7 @@ public final class Main {
 
     Spark.post("/like", new OutfitLikeHandler(this.mainApp));
     Spark.post("/discover", new DiscoverOutfitRetriever(this.mainApp));
+    Spark.post("/addOutfit", new AddOutfitHandler(this.mainApp));
     Spark.post("/deleteOutfit", new DeleteOutfitHandler(this.mainApp));
   }
 
