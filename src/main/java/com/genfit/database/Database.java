@@ -50,13 +50,8 @@ public class Database {
           + "WHERE user_id=?;";
 
   private final String getOutfitLikesSQL = "SELECT * FROM outfit WHERE id=?;";
-  private final String getLikedOutfitIdsSQL = "SELECT * FROM user_liked WHERE user_id=?";
-
-  private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
-  private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
-  private PreparedStatement getAllItemsByAttributesPrep;
-  private PreparedStatement getOutfitLikesPrep, getLikedOutfitIdsPrep;
-
+  private final String getLikedOutfitIdsSQL = "SELECT * FROM user_liked WHERE"
+          + " user_id=?";
   // Add Statements
   private final String addUserSQL = "INSERT INTO user (name, email, password)"
           + " values (?, ?, ?);";
@@ -354,7 +349,7 @@ public class Database {
   }
 
   public synchronized List<ItemProxy> getAllItemsByAttributes(Attribute attributeToQuery,
-                                                 List<? extends Attribute> attribute, Integer userID) throws SQLException {
+                                                              List<? extends Attribute> attribute, Integer userID) throws SQLException {
     boolean filterByUser = true;
     if (userID == null) {
       filterByUser = false;
@@ -553,9 +548,11 @@ public class Database {
   }
 
   public synchronized int addItem(int userId, String name, TypeAttribute type,
-                     FormalityAttribute formality, ColorAttribute color,
-                     PatternAttribute pattern, SeasonAttribute season,
-                     String imageKey) throws SQLException {
+                                  FormalityAttribute formality,
+                                  ColorAttribute color,
+                                  PatternAttribute pattern,
+                                  SeasonAttribute season,
+                                  String imageKey) throws SQLException {
     this.addItemPrep.setString(1, name);
     this.addItemPrep.setInt(2, type.getAttributeVal().ordinal());
     this.addItemPrep.setInt(3, formality.getAttributeVal().ordinal());
@@ -604,7 +601,7 @@ public class Database {
   }
 
   public synchronized int addOutfit(int userId, String outfitName,
-                       Map<TypeEnum, Integer> items) throws SQLException {
+                                    Map<TypeEnum, Integer> items) throws SQLException {
 
     int outerId = items.get(TypeEnum.OUTER);
     int topId = items.get(TypeEnum.TOP);
