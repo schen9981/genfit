@@ -18,11 +18,6 @@ public class Color {
     this.colorVal = colorVal;
   }
 
-  @Override
-  public String toString() {
-    return Integer.toHexString(this.colorVal);
-  }
-
   public static int convertToHexVal(int r, int g, int b) {
     r = Math.max(r, 0);
     g = Math.max(g, 0);
@@ -45,4 +40,12 @@ public class Color {
     rgbAsHex += b;
     return rgbAsHex;
   }
+
+  @Override
+  public String toString() {
+    return Integer.toHexString(this.colorVal);
+  }
+
+  //TODO: distance metric conversion using CIELAB
+  //https://www.easyrgb.com/en/math.php
 }
