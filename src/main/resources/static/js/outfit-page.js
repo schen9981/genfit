@@ -106,6 +106,11 @@ function generateOutfitCards(listOfOutfits) {
     $('#outfits').append(buttonHTML);
     $('#outfits').append(modalHTML);
 
+    let outfitCard = document.getElementById("outfit-"+id);
+
+    displayLikes(username, id, 0, outfitCard);
+
+
     generateOutfitContent(outfit, id);
 
     // add popup functionality to given modal
@@ -115,7 +120,7 @@ function generateOutfitCards(listOfOutfits) {
     deleteUserOutfit(id);
   }
   // set dimensions of cards
-  $('.outfit').css("width", "20%");
+  $('.outfit').css("width", "100%");
 }
 
 // add the items to each specific tab (when adding top, bottom, etc.)
@@ -139,6 +144,8 @@ function generateItemCards(listOfItems, tabId) {
       $('.tab-add #item-' + id).css("background-size", "100%");
 
       // add event listener for focus (ie user selection)
+      $('.tab #item-' + id).focus(function() {
+        // console.log(id);
       $('.tab-add #item-' + id).focus(function() {
         console.log(id);
         $selected = this;
@@ -154,6 +161,7 @@ function generateItemCards(listOfItems, tabId) {
 
 // function to retrieve and display a user's outfits
 function displayUserOutfits(username) {
+
   let postParams = {
     username: username
   };
@@ -277,7 +285,7 @@ function addOutfit() {
       shoes: getIntId(shoes.id)
     }
 
-    console.log(postParams);
+    // console.log(postParams);
 
     // post request to addItems
     $.post("/addOutfit", postParams, responseJSON => {
@@ -294,6 +302,77 @@ function resetForm(event) {
   $('#addOutfitForm').html(emptyForm);
   navigateToTab(event, 0);
 }
+
+function displayLikes(username, outfitId, change, outfitCard) {
+
+  const postParams = {
+    username : username
+  };
+  $.post("/liked", postParams, responseJSON => {
+    let likedOutfits = JSON.parse(responseJSON).likedOutfitIds;
+    const postParams = {
+      mode: change,
+      username: username,
+      outfitId: outfitId
+    };
+
+    let likes = 0;
+    $.post("/like", postParams, responseJSON => {
+      // console.log(JSON.parse(responseJSON).success);
+      likes = JSON.parse(responseJSON).likes;
+      if (likedOutfits.includes(Number(outfitId))) {
+        likeClass = "liked";
+      } else {
+        likeClass = "not-liked";
+      }
+      console.log(likes + " " + likeClass);
+      outfitCard.insertAdjacentHTML("afterend", "<div class='like-wrapper'>" +
+          "<button onclick='like(" + outfitId + ")' class='like-button " + likeClass + "' id='like-button-" + outfitId + "'>Like</button>" +
+          "<p id='like-num-" + outfitId + "'>" + likes + " Likes</p>" +
+          "</div>");
+    });
+  });
+}
+
+function like(outfitId) {
+  // console.log(outfitId);
+  let classes = document.getElementById('like-button-' + outfitId);
+  let likeClass = classes.className.split(" ")[1];
+  if (likeClass === "liked") {
+    document.getElementById('like-button-' + outfitId).classList.remove('liked');
+    document.getElementById('like-button-' + outfitId).classList.add('not-liked');
+
+    const postParams = {
+      mode: -1,
+      username: username,
+      outfitId: outfitId
+    };
+
+    $.post("/like", postParams, responseJSON => {
+      let likes = JSON.parse(responseJSON).likes;
+      document.getElementById('like-num-' + outfitId).innerHTML = likes + " Likes";
+      // console.log(document.getElementById('like-num-' + outfitId).innerHTML)
+    })
+
+  } else {
+    document.getElementById('like-button-' + outfitId).classList.remove('not-liked');
+    document.getElementById('like-button-' + outfitId).classList.add('liked');
+
+    const postParams = {
+      mode: 1,
+      username: username,
+      outfitId: outfitId
+    };
+
+    $.post("/like", postParams, responseJSON => {
+      let likes = JSON.parse(responseJSON).likes;
+      document.getElementById('like-num-' + outfitId).innerHTML = likes + " Likes";
+      // console.log(document.getElementById('like-num-' + outfitId).innerHTML)
+    })
+  }
+
+}
+
 
 $(document).ready(() => {
   username = localStorage.username;

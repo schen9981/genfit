@@ -49,10 +49,14 @@ public class Database {
   private final String getOutfitsByUserIDSQL = "SELECT * FROM user_outfit "
           + "WHERE user_id=?;";
 
-  private final String getOutfitLikesSQL = "SELECT * FROM outfit WHERE id=?"
-          + "WHERE user_id=?;";
-  private final String getLikedOutfitIdsSQL = "SELECT * FROM user_liked WHERE"
-          + " user_id=?";
+  private final String getOutfitLikesSQL = "SELECT * FROM outfit WHERE id=?;";
+  private final String getLikedOutfitIdsSQL = "SELECT * FROM user_liked WHERE user_id=?";
+
+  private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
+  private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
+  private PreparedStatement getAllItemsByAttributesPrep;
+  private PreparedStatement getOutfitLikesPrep, getLikedOutfitIdsPrep;
+
   // Add Statements
   private final String addUserSQL = "INSERT INTO user (name, email, password)"
           + " values (?, ?, ?);";
@@ -179,7 +183,7 @@ public class Database {
    * @param colors - the csv String of colors.
    * @return - a list of colors.
    */
-  private List<Color> parseColorCSV(String colors) {
+  private synchronized List<Color> parseColorCSV(String colors) {
     String[] splitComma = colors.split(",");
     List<Color> colorList = new ArrayList<>();
     for (String colorString : splitComma) {
@@ -191,7 +195,7 @@ public class Database {
   /**
    * Setup the loading cache for user, item, and outfit.
    */
-  private void instantiateCacheLoader() {
+  private synchronized void instantiateCacheLoader() {
     final int maxSize = 10000;
     final int expire = 10;
 
@@ -230,7 +234,7 @@ public class Database {
    * @return User instance
    * @throws Exception
    */
-  public User getUserBean(String email) throws Exception {
+  public synchronized User getUserBean(String email) throws Exception {
     return this.userCache.get(email);
   }
 
@@ -241,7 +245,7 @@ public class Database {
    * @return Item instance
    * @throws Exception
    */
-  public Item getItemBean(int id) throws Exception {
+  public synchronized Item getItemBean(int id) throws Exception {
     return this.itemCache.get(id);
   }
 
@@ -252,17 +256,17 @@ public class Database {
    * @return Outfit instance
    * @throws Exception
    */
-  public Outfit getOutfitBean(int id) throws Exception {
+  public synchronized Outfit getOutfitBean(int id) throws Exception {
     return this.outfitCache.get(id);
   }
 
-  public void changePassword(String email, String newPwdHash) throws Exception {
+  public synchronized void changePassword(String email, String newPwdHash) throws Exception {
     this.changePasswordPrep.setString(1, newPwdHash);
     this.changePasswordPrep.setString(2, email);
     this.changePasswordPrep.executeUpdate();
   }
 
-  public boolean checkLogin(String username, String clientHashPwd)
+  public synchronized boolean checkLogin(String username, String clientHashPwd)
           throws Exception {
     this.checkLoginPrep.setString(1, username);
     ResultSet rs = this.checkLoginPrep.executeQuery();
@@ -282,7 +286,7 @@ public class Database {
     return BCrypt.checkpw(clientHashPwd, storedHash);
   }
 
-  public boolean checkSignup(String username) throws Exception {
+  public synchronized boolean checkSignup(String username) throws Exception {
 
     this.checkSignupPrep.setString(1, username);
     ResultSet rs = this.checkSignupPrep.executeQuery();
@@ -301,7 +305,7 @@ public class Database {
    * @return User instance
    * @throws SQLException
    */
-  private User getUserInfo(String email) throws SQLException {
+  private synchronized User getUserInfo(String email) throws SQLException {
     this.getUserInfoPrep.setString(1, email);
     ResultSet rs = this.getUserInfoPrep.executeQuery();
     int id = 0;
@@ -322,7 +326,7 @@ public class Database {
    * @return Item instance
    * @throws SQLException
    */
-  private Item getItemInfo(int id) throws SQLException {
+  private synchronized Item getItemInfo(int id) throws SQLException {
     this.getItemInfoPrep.setInt(1, id);
     ResultSet rs = this.getItemInfoPrep.executeQuery();
     Item toReturn = null;
@@ -349,7 +353,7 @@ public class Database {
     return toReturn;
   }
 
-  public List<ItemProxy> getAllItemsByAttributes(Attribute attributeToQuery,
+  public synchronized List<ItemProxy> getAllItemsByAttributes(Attribute attributeToQuery,
                                                  List<? extends Attribute> attribute, Integer userID) throws SQLException {
     boolean filterByUser = true;
     if (userID == null) {
@@ -422,7 +426,7 @@ public class Database {
    * @return Outfit instance
    * @throws SQLException
    */
-  private Outfit getOutfitInfo(int id) throws SQLException {
+  private synchronized Outfit getOutfitInfo(int id) throws SQLException {
     this.getOutfitInfoPrep.setInt(1, id);
     ResultSet rs = this.getOutfitInfoPrep.executeQuery();
 
@@ -461,7 +465,7 @@ public class Database {
    * @return List of ItemProxy instances
    * @throws SQLException
    */
-  public List<ItemProxy> getItemsByUserID(int id) throws SQLException {
+  public synchronized List<ItemProxy> getItemsByUserID(int id) throws SQLException {
     List<ItemProxy> itemProxyList = new ArrayList<>();
     this.getItemsByUserIDPrep.setInt(1, id);
     ResultSet rs = this.getItemsByUserIDPrep.executeQuery();
@@ -480,7 +484,7 @@ public class Database {
    * @return List of OutfitProxy instances
    * @throws SQLException
    */
-  public List<OutfitProxy> getOutfitsByUserID(int id) throws SQLException {
+  public synchronized List<OutfitProxy> getOutfitsByUserID(int id) throws SQLException {
     List<OutfitProxy> outfitProxyList = new ArrayList<>();
     this.getOutfitsByUserIDPrep.setInt(1, id);
     ResultSet rs = this.getOutfitsByUserIDPrep.executeQuery();
@@ -492,10 +496,10 @@ public class Database {
     return outfitProxyList;
   }
 
-  public int getOutfitLikes(int id) throws SQLException {
+  public synchronized int getOutfitLikes(int id) throws SQLException {
+    int likes = 0;
     this.getOutfitLikesPrep.setInt(1, id);
     ResultSet rs = this.getOutfitLikesPrep.executeQuery();
-    int likes = 0;
     while (rs.next()) {
       likes = rs.getInt(7);
     }
@@ -503,7 +507,7 @@ public class Database {
     return likes;
   }
 
-  public List<Integer> getLikedOutfitIds(int userId) throws SQLException {
+  public synchronized List<Integer> getLikedOutfitIds(int userId) throws SQLException {
     this.getLikedOutfitIdsPrep.setInt(1, userId);
     ResultSet rs = this.getLikedOutfitIdsPrep.executeQuery();
     List<Integer> outfitIds = new ArrayList<>();
@@ -521,7 +525,7 @@ public class Database {
    * @return List of OutfitProxy instances
    * @throws SQLException
    */
-  public List<OutfitProxy> getOutfitsExcludeUser(int id) throws SQLException {
+  public synchronized List<OutfitProxy> getOutfitsExcludeUser(int id) throws SQLException {
     List<OutfitProxy> outfitProxyList = new ArrayList<>();
     this.getOutfitsExcludeUserPrep.setInt(1, id);
     ResultSet rs = this.getOutfitsExcludeUserPrep.executeQuery();
@@ -540,7 +544,7 @@ public class Database {
    * @param email - the user's email.
    * @throws SQLException
    */
-  public void addUser(String name, String email, String hashPwd)
+  public synchronized void addUser(String name, String email, String hashPwd)
           throws SQLException {
     this.addUserPrep.setString(1, name);
     this.addUserPrep.setString(2, email);
@@ -548,7 +552,7 @@ public class Database {
     this.addUserPrep.executeUpdate();
   }
 
-  public int addItem(int userId, String name, TypeAttribute type,
+  public synchronized int addItem(int userId, String name, TypeAttribute type,
                      FormalityAttribute formality, ColorAttribute color,
                      PatternAttribute pattern, SeasonAttribute season,
                      String imageKey) throws SQLException {
@@ -599,7 +603,7 @@ public class Database {
 
   }
 
-  public int addOutfit(int userId, String outfitName,
+  public synchronized int addOutfit(int userId, String outfitName,
                        Map<TypeEnum, Integer> items) throws SQLException {
 
     int outerId = items.get(TypeEnum.OUTER);
@@ -624,6 +628,7 @@ public class Database {
       rs.close();
       return outfitID;
     } else {
+      rs.close();
       throw new SQLException();
     }
   }
@@ -635,7 +640,7 @@ public class Database {
    * @param userProxy - the user to be deleted
    * @throws SQLException
    */
-  public void deleteUser(UserProxy userProxy) throws SQLException {
+  public synchronized void deleteUser(UserProxy userProxy) throws SQLException {
     this.deleteUserPrep.setInt(1, userProxy.getId());
     this.deleteUserPrep.executeUpdate();
     this.deleteAllUserItemsPrep.setInt(1, userProxy.getId());
@@ -652,7 +657,7 @@ public class Database {
    * @param itemId - id of item to be deleted
    * @throws SQLException
    */
-  public void deleteItem(int userId, int itemId) throws SQLException {
+  public synchronized void deleteItem(int userId, int itemId) throws SQLException {
     // TODO: delete item (might be referenced by other users)?
 //    deleteItemPrep.setString(1, item.getId());
 //    deleteItemPrep.executeUpdate();
@@ -669,7 +674,7 @@ public class Database {
    * @param outfitId - id of item to be deleted
    * @throws SQLException
    */
-  public void deleteOutfit(int userId, int outfitId) throws SQLException {
+  public synchronized void deleteOutfit(int userId, int outfitId) throws SQLException {
     // TODO: delete outfit (might be referenced by other users)?
 //    deleteOutfitPrep.setString(1, outfit.getId());
 //    deleteOutfitPrep.executeUpdate();

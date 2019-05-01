@@ -22,6 +22,7 @@ let nolike = 0;
 let like = 1;
 let unlike = -1;
 
+
 function changeLikes(username, outfitId, change) {
     const postParams = {
         mode : change,
@@ -31,5 +32,6 @@ function changeLikes(username, outfitId, change) {
     console.log(postParams);
     $.post("/like", postParams, responseJSON => {
         console.log(JSON.parse(responseJSON).success);
+        likes = JSON.parse(responseJSON.likes);
     });
 }
