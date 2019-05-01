@@ -26,6 +26,36 @@ public class UserOutfitRetriever implements Route {
     this.genFitApp = genFitApp;
   }
 
+  public static String[] getOutfitInfoArr(Outfit o,
+                                          Map<TypeEnum, ItemProxy> outfitComp) {
+    String[] outfitInfoArr = new String[6];
+
+    outfitInfoArr[0] = Integer.toString(o.getId());
+    outfitInfoArr[1] = o.getName();
+    outfitInfoArr[2] = getIdIfExists(outfitComp, TypeEnum.OUTER);
+    outfitInfoArr[3] = getIdIfExists(outfitComp, TypeEnum.TOP);
+    outfitInfoArr[4] = getIdIfExists(outfitComp, TypeEnum.BOTTOM);
+    outfitInfoArr[5] = getIdIfExists(outfitComp, TypeEnum.SHOES);
+
+    return outfitInfoArr;
+  }
+
+  /**
+   * Gets the id of the outfit component (item) if exists, -1 if doesn't.
+   *
+   * @param map - map of outfit components.
+   * @param key - outfit component (type) to search for.
+   * @return
+   */
+  public static String getIdIfExists(Map<TypeEnum, ItemProxy> map,
+                                     TypeEnum key) {
+    if (map.get(key) == null) {
+      return Integer.toString(-1);
+    } else {
+      return Integer.toString(map.get(key).getItem().getId());
+    }
+  }
+
   @Override
   public String handle(Request req, Response res) {
     QueryParamsMap qm = req.queryMap();
@@ -54,7 +84,6 @@ public class UserOutfitRetriever implements Route {
       return Main.GSON.toJson(variables);
     }
 
-    System.out.println(userOutfitProxies);
     for (OutfitProxy o : userOutfitProxies) {
       Map<TypeEnum, ItemProxy> outfitComp = o.getItems();
       Outfit currOut = o.getOutfit();
@@ -65,35 +94,5 @@ public class UserOutfitRetriever implements Route {
 
     Map<String, Object> variables = ImmutableMap.of("outfits", userOutfits);
     return Main.GSON.toJson(variables);
-  }
-
-  public static String[] getOutfitInfoArr(Outfit o,
-      Map<TypeEnum, ItemProxy> outfitComp) {
-    String[] outfitInfoArr = new String[6];
-
-    outfitInfoArr[0] = Integer.toString(o.getId());
-    outfitInfoArr[1] = o.getName();
-    outfitInfoArr[2] = getIdIfExists(outfitComp, TypeEnum.OUTER);
-    outfitInfoArr[3] = getIdIfExists(outfitComp, TypeEnum.TOP);
-    outfitInfoArr[4] = getIdIfExists(outfitComp, TypeEnum.BOTTOM);
-    outfitInfoArr[5] = getIdIfExists(outfitComp, TypeEnum.SHOES);
-
-    return outfitInfoArr;
-  }
-
-  /**
-   * Gets the id of the outfit component (item) if exists, -1 if doesn't.
-   *
-   * @param map - map of outfit components.
-   * @param key - outfit component (type) to search for.
-   * @return
-   */
-  public static String getIdIfExists(Map<TypeEnum, ItemProxy> map,
-      TypeEnum key) {
-    if (map.get(key) == null) {
-      return Integer.toString(-1);
-    } else {
-      return Integer.toString(map.get(key).getItem().getId());
-    }
   }
 }

@@ -65,7 +65,7 @@ public final class Main {
       config.setDirectoryForTemplateLoading(templates);
     } catch (IOException ioe) {
       System.out.printf("ERROR: Unable use %s for template loading.%n",
-          templates);
+              templates);
       System.exit(1);
     }
     return new FreeMarkerEngine(config);
@@ -76,13 +76,12 @@ public final class Main {
     OptionParser parser = new OptionParser();
     parser.accepts("gui");
     parser.accepts("port").withRequiredArg().ofType(Integer.class)
-        .defaultsTo(DEFAULT_PORT);
+            .defaultsTo(DEFAULT_PORT);
     OptionSet options = parser.parse(this.args);
     this.mainApp = new GenFitApp();
     this.repl = new MainREPL(this.mainApp);
 
     if (options.has("gui")) {
-      System.out.println("gui");
       this.runSparkServer((int) options.valueOf("port"));
     }
 
@@ -113,9 +112,9 @@ public final class Main {
     Spark.post("/userItems", new UserItemRetriever(this.mainApp));
     Spark.post("/userOutfits", new UserOutfitRetriever(this.mainApp));
     Spark.post("/outfitComponents",
-        new OutfitComponentsRetriever(this.mainApp));
+            new OutfitComponentsRetriever(this.mainApp));
     Spark.post("/outfitByAttribute",
-        new OutfitByAttributeRetriever(this.mainApp));
+            new OutfitByAttributeRetriever(this.mainApp));
 
     // Setup post requests for forms and buttons
     Spark.post("/addItem", new AddItemHandler(this.mainApp));

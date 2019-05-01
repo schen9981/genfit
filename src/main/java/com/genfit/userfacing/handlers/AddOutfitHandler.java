@@ -52,14 +52,13 @@ public class AddOutfitHandler implements Route {
 
     // get id of current user
     int userId = this.genFitApp.getDb().getUserBean(qm.value("username"))
-        .getId();
+            .getId();
 
     // add item
     int outfitId = this.genFitApp.getDb().addOutfit(userId, outfitName,
-        components);
+            components);
     toReturn[0] = Integer.toString(outfitId);
 
-    System.out.println(Arrays.toString(toReturn));
     // return an outfit to add to html page
     return Main.GSON.toJson(toReturn);
   }

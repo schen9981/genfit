@@ -19,7 +19,6 @@ public class OutfitSuggestorTest {
 
       for (int i = 0; i < l.size(); i++) {
         OutfitSuggestion suggestion = l.get(i);
-        System.out.println(suggestion.getReferenceOutfit());
       }
     } catch (Exception e) {
       e.printStackTrace();
