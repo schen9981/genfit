@@ -94,7 +94,7 @@ function generateOutfitCards(listOfOutfits) {
 
         // generate modal html
         let id = outfit[0];
-        let buttonHTML = '<button class="outfit" id="outfit-' + id + '">' + outfit[1] + '</button>';
+        let buttonHTML = '<div class="outfit-card"><button class="outfit" id="outfit-' + id + '">' + outfit[1] + '</button></div>';
         let modalHTML = '<div class="modal" id="modal-' + id + '">';
         modalHTML += '<div class="modal-content">';
         modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
