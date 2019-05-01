@@ -2,13 +2,17 @@ package com.genfit.suggester;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.genfit.attribute.Attribute;
 import com.genfit.attribute.ColorAttribute;
+import com.genfit.attribute.SeasonAttribute;
+import com.genfit.clothing.Item;
 import com.genfit.clothing.Outfit;
 import com.genfit.database.Database;
 import com.genfit.proxy.ItemProxy;
@@ -34,49 +38,72 @@ public class OutfitSuggester {
    *
    * @param outfit partially specified outfit to use as base for suggestions
    * @param db     database to pull suggestions from
-   * @return list of outfits to suggest
+   * @return list of items suggested based on incomplete outfit
    */
-  public List<Outfit> suggestOutfits(Outfit outfit,
-                                     Database db,
-                                     int userID) {
-    List<Outfit> suggestions = new ArrayList<>();
+  public List<ItemProxy> suggestItems(Outfit outfit,
+                                      Database db,
+                                      int userID) {
+    List<ItemProxy> suggestions = new ArrayList<>();
 
     Map<Class, List<? extends Attribute>> outfitAttr =
             AttributeSuggester.getMatchingOutfitAttributes(outfit);
+
+    List<Integer> itemIDsToFilter = new LinkedList<>();
+    for (ItemProxy item : outfit.getItems().values()) {
+      itemIDsToFilter.add(item.getId());
+    }
 
     // get the class that has the minimum number of attributes to query
     Class classToQuery = minAttrToQuery(outfitAttr);
 
     // create set of all other classes to query on (exclude min)
-    Set<Class> otherClasses = new HashSet<>();
-    otherClasses.addAll(outfitAttr.keySet());
+    Map<Class, List<? extends Attribute>> otherClasses =
+            new HashMap<>(outfitAttr);
     otherClasses.remove(classToQuery);
+    otherClasses.remove(ColorAttribute.class);
 
     List<? extends Attribute> attrVals = outfitAttr.get(classToQuery);
-
-    System.out.println("classToQuery" + classToQuery);
 
     if (attrVals != null && attrVals.size() > 0) {
       // get list of items that have matching attributes of smallest query
       try {
         List<ItemProxy> eligible = db.getAllItemsByAttributes(attrVals.get(0),
-                attrVals);
+                attrVals, userID);
 
-        System.out.println(eligible.size());
-
-        for (int i = 0; i < eligible.size(); i++) {
-          ItemProxy itemProxy = eligible.get(i);
-        }
+        suggestions = this.filterByAttribute(eligible,
+                otherClasses, itemIDsToFilter);
       } catch (SQLException e) {
         System.out.println("ERROR: SQL exception when querying for outfit "
                 + "suggestions");
       }
-
-      // sort through for the other attributes
-      // TODO: write method for sorting through other attributes.
     }
 
     return suggestions;
+  }
+
+  private List<ItemProxy> filterByAttribute(List<ItemProxy> originals,
+                                            Map<Class, List<?
+                                                    extends Attribute>>
+                                                    otherClassVals,
+                                            List<Integer> itemIDsToFilter) {
+    List<ItemProxy> filtered = new ArrayList<>();
+    for (int i = 0; i < originals.size(); i++) {
+      ItemProxy itemProxy = originals.get(i);
+      boolean shouldAdd = true;
+      for (Class otherClass : otherClassVals.keySet()) {
+        List<? extends Attribute> otherAttrVals =
+                otherClassVals.get(otherClass);
+        if (!otherAttrVals.contains(itemProxy.getAttributeForItem(otherClass))) {
+          shouldAdd = false;
+          break;
+        }
+      }
+      if (shouldAdd && !itemIDsToFilter.contains(itemProxy.getId())) {
+        filtered.add(itemProxy);
+      }
+    }
+
+    return filtered;
   }
 
   /**

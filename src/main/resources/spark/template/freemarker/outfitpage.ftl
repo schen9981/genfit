@@ -11,52 +11,31 @@
     <div class="modal-content">
       <span id="addSpan" class="close">&times;</span>
       <form id="addOutfitForm">
-        Item Description:<br>
-        <input type="text" id="item-name" name="item-name"><br>
-
-        Color(s):<br>
-        <div id="item-colors">
-          <input type="color" id="item-color" name="item-color" value="#ff0000"><br>
+        <div class="tab" id="outfit-info">
+          <button id="add-outer" onclick="navigateToTab(0)">+</button>
+          <button id="add-top" onclick="navigateToTab(1)>+</button>
+          <button id="add-bottom" onclick="navigateToTab(2)>+</button>
+          <button id="add-shoes" onclick="navigateToTab(3)>+</button>
         </div>
-        <button id="addColor">+</button><br>
 
-        Type:<br>
-        <select id="type-1" name="item-type-1">
-          <option value="OUTER">Outerwear</option>
-          <option value="TOP">Top</option>
-          <option value="BOTTOM">Bottom</option>
-          <option value="SHOES">Shoes</option>
-        </select>
-        <select id="type-2" name="item-type-2">
-          <option value="outer-coat">Outer Coat</option>
-          <option value="suit">Suit</option>
-        </select><br>
+        <div class="tab" id="outer-select">Select an outer:
+        </div>
 
-        Pattern:<br>
-        <select id="item-pattern" name="item-pattern">
-          <option value="SOLID">Solid</option>
-          <option value="STRIPED">Striped</option>
-          <option value="CHECKERED">Checkered</option>
-          <option value="OTHER">Other</option>
-        </select><br>
+        <div class="tab" id="top-select">Select a top:
+        </div>
 
-        Season:<br>
-        <select id="item-season" name="item-season">
-          <option value="SPRING">Spring</option>
-          <option value="SUMMER">Summer</option>
-          <option value="FALL">Fall</option>
-          <option value="WINTER">Winter</option>
-        </select><br>
+        <div class="tab" id="bottom-select">Select a bottom:
+        </div>
 
-        Formality:<br>
-        <select id="item-formality" name="item-formality">
-          <option value="FORMAL">Formal</option>
-          <option value="BUSINESS_CASUAL">Business Casual</option>
-          <option value="CASUAL">Casual</option>
-          <option value="ULTRA_CASUAL">Ultra Casual</option>
-        </select><br>
+        <div class="tab" id="shoes-select">Select a pair of shoes:
+        </div>
 
-        <input type="submit" value="Submit">
+        <div style="overflow:auto;">
+        <div style="float:right;">
+          <button type="button" id="addItem" onclick="addItemToOutfit()">Add to Outfit</button>
+          <button type="button" id="back" onclick="back()">Back</button>
+        </div>
+        </div>
       </form>
     </div>
   </div>

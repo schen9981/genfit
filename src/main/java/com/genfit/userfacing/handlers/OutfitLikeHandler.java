@@ -20,6 +20,7 @@ public class OutfitLikeHandler implements Route {
   @Override
   public String handle(Request req, Response res) {
     QueryParamsMap qm = req.queryMap();
+    int mode = Integer.parseInt(qm.value("mode"));
     int outfitId = Integer.parseInt(qm.value("outfitId"));
     System.out.println(outfitId);
     try {

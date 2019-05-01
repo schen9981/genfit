@@ -15,8 +15,12 @@ $(document).ready(() => {
     // displayOutfitSuggestions(username);
 });
 
+let nolike = 0;
+let like = 1;
+let unlike = -1;
 function incrementLikes(outfitId) {
     const postParams = {
+        mode : like,
         outfitId : outfitId
     };
     console.log(postParams);
