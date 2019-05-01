@@ -3,6 +3,7 @@
 // username of current user
 let username;
 $(".name").html(localStorage.getItem('name'));
+
 // generate html content (ie. item information) for card
 function generateCardContent(item) {
   // item represented as array [id, name, color, type, pattern, season, formality, image src]
@@ -47,7 +48,7 @@ function generateCards(listOfItems) {
 
     // generate modal html
     let id = item[0];
-    let buttonHTML = '<button class="item" id="item-' + id + '"></button>';
+    let buttonHTML = '<button class="item" id="item-' + id + '">' + item[1] + '</button>';
     let modalHTML = '<div class="modal" id="modal-' + id + '">';
     modalHTML += '<div class="modal-content">';
     modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
@@ -59,7 +60,7 @@ function generateCards(listOfItems) {
     $('#items').append(buttonHTML);
     $('#items').append(modalHTML);
 
-    //Set image
+    // Set image
     let imageSource = item[7];
     $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
     $('#item-' + id).css("background-size", "100%");
