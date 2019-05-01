@@ -108,13 +108,15 @@ function deleteUserItem(itemId) {
       $('#item-' + itemId).remove();
       $('#modal-' + itemId).remove();
       let imageKey = JSON.parse(responseJSON)[0];
-      s3.deleteObject({Key: imageKey}, function(err, data) {
-          if (err) {
-              alert('There was an error deleting your photo: ', err.message);
-          } else {
-              console.log('Successfully deleted photo.');
-          }
-      });
+      if (imageKey !== "default") {
+          s3.deleteObject({Key: imageKey}, function(err, data) {
+              if (err) {
+                  alert('There was an error deleting your photo: ', err.message);
+              } else {
+                  console.log('Successfully deleted photo.');
+              }
+          });
+      }
     });
 
     window.location.reload();
@@ -246,8 +248,9 @@ function addItemPost(postParams) {
 
 //attempts to upload image and calls addItemPost accordingly
 function uploadImageAndPost(username, file, postParams) {
-    let fileName = new Date().getTime();
-    let photoKey = username.replace("@", ".") + "/" + fileName;
+    let time = new Date().getTime();
+    let filename = file.name;
+    let photoKey = username.replace("@", ".") + "/" + time + "_" + filename;
     s3.upload({
         Key: photoKey,
         Body: file,

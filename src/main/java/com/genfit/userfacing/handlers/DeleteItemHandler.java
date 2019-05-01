@@ -29,10 +29,13 @@ public class DeleteItemHandler implements Route {
     int itemId = Integer.parseInt(qm.value("itemId"));
 
     String image = this.genFitApp.getDb().getItemBean(itemId).getImage();
-    String imageKey = "";
+    String imageKey = "default";
+    String[] urlSplit = image.split(S3Connection.getUrlPrefix());
+
     try {
-      String[] urlSplit = image.split(S3Connection.getUrlPrefix());
-      imageKey = urlSplit[1];
+      if (!urlSplit[1].contains("default")) {
+        imageKey = urlSplit[1];
+      }
     } catch (ArrayIndexOutOfBoundsException e) {
       System.out.println(e.getMessage());
     }
