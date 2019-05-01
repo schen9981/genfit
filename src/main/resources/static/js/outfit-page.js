@@ -88,6 +88,10 @@ function generateOutfitCards(listOfOutfits) {
     // generate modal html
     let id = outfit[0];
     let buttonHTML = '<button class="outfit" id="outfit-' + id + '">' + outfit[1] + '</button>';
+
+    // let outfitCard = document.getElementsById("outfit-"+id);
+    // outfitCard.insertAdjacentHTML("<input>");
+
     let modalHTML = '<div class="modal" id="modal-' + id + '">';
     modalHTML += '<div class="modal-content">';
     modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
