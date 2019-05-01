@@ -47,59 +47,55 @@ public class Database {
           + "WHERE "
           + "user_id!=?;";
   private final String getItemsByUserIDSQL = "SELECT * FROM user_item WHERE "
-      + "user_id=?;";
+          + "user_id=?;";
   private final String getOutfitsByUserIDSQL = "SELECT * FROM user_outfit "
-      + "WHERE user_id=?;";
-  private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
-  private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
-  private PreparedStatement getAllItemsByAttributesPrep;
-
+          + "WHERE user_id=?;";
   // Add Statements
   private final String addUserSQL = "INSERT INTO user (name, email, password)"
-      + " values (?, ?, ?);";
-  private PreparedStatement addUserPrep;
-
+          + " values (?, ?, ?);";
   private final String addItemSQL = "INSERT IGNORE INTO item"
           + " (name, type, formality, color, pattern, season, image)"
           + " VALUES (?, ?, ?, ?, ?, ?, ?);";
   private final String addItemToUserSQL = "INSERT INTO user_item "
-      + "(user_id, item_id) VALUES (?, ?);";
-  private PreparedStatement addItemPrep, addItemToUserPrep;
-
+          + "(user_id, item_id) VALUES (?, ?);";
   private final String addOutfitSQL = "INSERT IGNORE INTO outfit"
-      + " (name, `outer`, top, bottom, feet) VALUES (?, ?, ?, ?, ?);";
+          + " (name, `outer`, top, bottom, feet) VALUES (?, ?, ?, ?, ?);";
   private final String addOutfitToUserSQL = "INSERT INTO user_outfit"
-      + " (user_id, outfit_id) VALUES (?, ?);";
-  private PreparedStatement addOutfitPrep, addOutfitToUserPrep;
-
+          + " (user_id, outfit_id) VALUES (?, ?);";
   // Delete Statements
   private final String deleteUserSQL = "DELETE FROM user WHERE id=?;";
   private final String deleteAllUserItemsSQL = "DELETE FROM user_item WHERE "
-      + "user_id=?;";
+          + "user_id=?;";
   private final String deleteAllUserOutfitsSQL = "DELETE FROM user_outfit "
-      + "WHERE user_id=?;";
-  private PreparedStatement deleteUserPrep, deleteAllUserItemsPrep,
-      deleteAllUserOutfitsPrep;
-
+          + "WHERE user_id=?;";
   private final String deleteItemSQL = "DELETE FROM item WHERE id=?;";
   private final String deleteUserItemSQL = "DELETE FROM user_item WHERE "
-      + "user_id=? AND item_id=?;";
-  private PreparedStatement deleteItemPrep, deleteUserItemPrep;
-
+          + "user_id=? AND item_id=?;";
   private final String deleteOutfitSQL = "DELETE FROM outfit WHERE id=?;";
   private final String deleteUserOutfitSQL = "DELETE FROM user_item WHERE "
-      + "user_id=? AND outfit_id=?;";
-  private PreparedStatement deleteOutfitPrep, deleteUserOutfitPrep;
-
+          + "user_id=? AND outfit_id=?;";
   // Misc Statements
   private final String lastInsertIDSQL = "SELECT LAST_INSERT_ID();";
   private final String changePasswordSQL = "UPDATE user SET password = ? "
-      + "WHERE email = ?";
+          + "WHERE email = ?";
+  private Connection conn;
+  private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
+  private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
+  private PreparedStatement getAllItemsByAttributesPrep;
+  private PreparedStatement addUserPrep;
+  private PreparedStatement addItemPrep, addItemToUserPrep;
+  private PreparedStatement addOutfitPrep, addOutfitToUserPrep;
+  private PreparedStatement deleteUserPrep, deleteAllUserItemsPrep,
+          deleteAllUserOutfitsPrep;
+  private PreparedStatement deleteItemPrep, deleteUserItemPrep;
+  private PreparedStatement deleteOutfitPrep, deleteUserOutfitPrep;
   private PreparedStatement changePasswordPrep;
   private PreparedStatement lastInsertID;
   private LoadingCache<String, User> userCache;
   private LoadingCache<Integer, Item> itemCache;
   private LoadingCache<Integer, Outfit> outfitCache;
+  private PreparedStatement checkLoginPrep, checkSignupPrep;
+  private PreparedStatement getOutfitsExcludeUserPrep;
 
   private Map<Integer, String> defaultImageMap = new HashMap<>();
 
@@ -117,9 +113,9 @@ public class Database {
       this.getOutfitsExcludeUserPrep =
               conn.prepareStatement(this.getOutfitsExcludeUserSQL);
       this.getItemsByUserIDPrep = conn
-          .prepareStatement(this.getItemsByUserIDSQL);
+              .prepareStatement(this.getItemsByUserIDSQL);
       this.getOutfitsByUserIDPrep = conn
-          .prepareStatement(this.getOutfitsByUserIDSQL);
+              .prepareStatement(this.getOutfitsByUserIDSQL);
 
       this.addUserPrep = conn.prepareStatement(this.addUserSQL);
       this.addItemPrep = conn.prepareStatement(this.addItemSQL);
@@ -128,28 +124,31 @@ public class Database {
       this.addOutfitToUserPrep = conn.prepareStatement(this.addOutfitToUserSQL);
 
       this.deleteAllUserItemsPrep = conn
-          .prepareStatement(this.deleteAllUserItemsSQL);
+              .prepareStatement(this.deleteAllUserItemsSQL);
       this.deleteAllUserOutfitsPrep = conn
-          .prepareStatement(this.deleteAllUserOutfitsSQL);
+              .prepareStatement(this.deleteAllUserOutfitsSQL);
       this.deleteUserPrep = conn.prepareStatement(this.deleteUserSQL);
       this.deleteItemPrep = conn.prepareStatement(this.deleteItemSQL);
       this.deleteUserItemPrep = conn.prepareStatement(this.deleteUserItemSQL);
       this.deleteOutfitPrep = conn.prepareStatement(this.deleteOutfitSQL);
       this.deleteUserOutfitPrep = conn
-          .prepareStatement(this.deleteUserOutfitSQL);
+              .prepareStatement(this.deleteUserOutfitSQL);
       this.lastInsertID = conn.prepareStatement(this.lastInsertIDSQL);
 
-      defaultImageMap.put(TypeEnum.OUTER.ordinal(),
-          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/outer_jacket.png");
-      defaultImageMap.put(TypeEnum.TOP.ordinal(),
-          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/tshirt.png");
-      defaultImageMap.put(TypeEnum.BOTTOM.ordinal(),
-          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/pants.png");
-      defaultImageMap.put(TypeEnum.SHOES.ordinal(),
-          "https://s3.amazonaws.com/cs32-term-project-s3-bucket/sneakers.png");
+      this.defaultImageMap.put(TypeEnum.OUTER.ordinal(),
+              "https://s3.amazonaws.com/cs32-term-project-s3-bucket"
+                      + "/outer_jacket.png");
+      this.defaultImageMap.put(TypeEnum.TOP.ordinal(),
+              "https://s3.amazonaws.com/cs32-term-project-s3-bucket/tshirt"
+                      + ".png");
+      this.defaultImageMap.put(TypeEnum.BOTTOM.ordinal(),
+              "https://s3.amazonaws.com/cs32-term-project-s3-bucket/pants.png");
+      this.defaultImageMap.put(TypeEnum.SHOES.ordinal(),
+              "https://s3.amazonaws.com/cs32-term-project-s3-bucket/sneakers"
+                      + ".png");
     } catch (SQLException e) {
       System.out.println("ERROR: SQLExeception when prepare statement"
-          + "in Database constructor");
+              + "in Database constructor");
     }
     this.instantiateCacheLoader();
   }
@@ -177,31 +176,31 @@ public class Database {
     final int expire = 10;
 
     this.userCache = CacheBuilder.newBuilder().maximumSize(maxSize)
-        .expireAfterWrite(expire, TimeUnit.MINUTES)
-        .build(new CacheLoader<String, User>() {
-          @Override
-          public User load(String key) throws Exception {
-            return Database.this.getUserInfo(key);
-          }
-        });
+            .expireAfterWrite(expire, TimeUnit.MINUTES)
+            .build(new CacheLoader<String, User>() {
+              @Override
+              public User load(String key) throws Exception {
+                return Database.this.getUserInfo(key);
+              }
+            });
 
     this.itemCache = CacheBuilder.newBuilder().maximumSize(maxSize)
-        .expireAfterWrite(expire, TimeUnit.MINUTES)
-        .build(new CacheLoader<Integer, Item>() {
-          @Override
-          public Item load(Integer key) throws Exception {
-            return Database.this.getItemInfo(key);
-          }
-        });
+            .expireAfterWrite(expire, TimeUnit.MINUTES)
+            .build(new CacheLoader<Integer, Item>() {
+              @Override
+              public Item load(Integer key) throws Exception {
+                return Database.this.getItemInfo(key);
+              }
+            });
 
     this.outfitCache = CacheBuilder.newBuilder().maximumSize(maxSize)
-        .expireAfterWrite(expire, TimeUnit.MINUTES)
-        .build(new CacheLoader<Integer, Outfit>() {
-          @Override
-          public Outfit load(Integer key) throws Exception {
-            return Database.this.getOutfitInfo(key);
-          }
-        });
+            .expireAfterWrite(expire, TimeUnit.MINUTES)
+            .build(new CacheLoader<Integer, Outfit>() {
+              @Override
+              public Outfit load(Integer key) throws Exception {
+                return Database.this.getOutfitInfo(key);
+              }
+            });
   }
 
   /**
@@ -244,7 +243,7 @@ public class Database {
   }
 
   public boolean checkLogin(String username, String clientHashPwd)
-      throws Exception {
+          throws Exception {
     this.checkLoginPrep.setString(1, username);
     ResultSet rs = this.checkLoginPrep.executeQuery();
     String storedHash = null;
@@ -290,7 +289,7 @@ public class Database {
     String name = rs.getString(2);
     rs.close();
     return new User(id, name, email, this.getItemsByUserID(id),
-        this.getOutfitsByUserID(id));
+            this.getOutfitsByUserID(id));
   }
 
   /**
@@ -308,15 +307,15 @@ public class Database {
       String name = rs.getString(2);
       TypeAttribute type = new TypeAttribute(TypeEnum.values()[rs.getInt(3)]);
       FormalityAttribute formality = new FormalityAttribute(
-          FormalityEnum.values()[rs.getInt(4)]);
+              FormalityEnum.values()[rs.getInt(4)]);
 
       String colorCSV = rs.getString(5);
       List<Color> colorList = this.parseColorCSV(colorCSV);
 
       PatternAttribute pattern = new PatternAttribute(
-          PatternEnum.values()[rs.getInt(6)]);
+              PatternEnum.values()[rs.getInt(6)]);
       SeasonAttribute season = new SeasonAttribute(
-          SeasonEnum.values()[rs.getInt(7)]);
+              SeasonEnum.values()[rs.getInt(7)]);
 
       String image = rs.getString(8);
 
@@ -328,7 +327,7 @@ public class Database {
   }
 
   public List<ItemProxy> getAllItemsByAttributes(Attribute attributeToQuery,
-      List<? extends Attribute> attribute, Integer userID) throws SQLException {
+                                                 List<? extends Attribute> attribute, Integer userID) throws SQLException {
     boolean filterByUser = true;
     if (userID == null) {
       filterByUser = false;
@@ -341,13 +340,14 @@ public class Database {
       // ,user_item
       // TODO: change this
       getAllItemsByAttributesSQL = new StringBuilder(
-          "SELECT * " + "FROM item, user_item " + "WHERE "
-              + "user_item.item_id=item.id AND " + "user_item.user_Id=? AND ("
-              + attributeName + "=?");
+              "SELECT * " + "FROM item, user_item " + "WHERE "
+                      + "user_item.item_id=item.id AND " + "user_item"
+                      + ".user_Id=? AND ("
+                      + attributeName + "=?");
       setAttributeStartNum = 2;
     } else {
       getAllItemsByAttributesSQL = new StringBuilder(
-          "SELECT * " + "FROM item " + "WHERE " + attributeName + "=?");
+              "SELECT * " + "FROM item " + "WHERE " + attributeName + "=?");
       setAttributeStartNum = 1;
     }
 
@@ -361,7 +361,7 @@ public class Database {
     getAllItemsByAttributesSQL.append(";");
 
     this.getAllItemsByAttributesPrep = this.conn
-        .prepareStatement(getAllItemsByAttributesSQL.toString());
+            .prepareStatement(getAllItemsByAttributesSQL.toString());
 
     if (filterByUser) {
       this.getAllItemsByAttributesPrep.setInt(1, userID);
@@ -372,14 +372,14 @@ public class Database {
         // this.getAllItemsByAttributesPrep.setString(i, attributeName);
         Color color = (Color) attribute.get(i).getAttributeVal();
         this.getAllItemsByAttributesPrep.setString(setAttributeStartNum + i,
-            color.toString());
+                color.toString());
       }
     } else {
       for (int i = 0; i < attribute.size(); i++) {
         // this.getAllItemsByAttributesPrep.setString(i, attributeName);
         Enum e = (Enum) attribute.get(i).getAttributeVal();
         this.getAllItemsByAttributesPrep.setInt(setAttributeStartNum + i,
-            e.ordinal());
+                e.ordinal());
       }
     }
 
@@ -495,7 +495,7 @@ public class Database {
    * @throws SQLException
    */
   public void addUser(String name, String email, String hashPwd)
-      throws SQLException {
+          throws SQLException {
     this.addUserPrep.setString(1, name);
     this.addUserPrep.setString(2, email);
     this.addUserPrep.setString(3, hashPwd);
@@ -503,8 +503,8 @@ public class Database {
   }
 
   public int addItem(int userId, String name, TypeAttribute type,
-      FormalityAttribute formality, ColorAttribute color,
-      PatternAttribute pattern, SeasonAttribute season) throws SQLException {
+                     FormalityAttribute formality, ColorAttribute color,
+                     PatternAttribute pattern, SeasonAttribute season) throws SQLException {
     this.addItemPrep.setString(1, name);
     this.addItemPrep.setInt(2, type.getAttributeVal().ordinal());
     this.addItemPrep.setInt(3, formality.getAttributeVal().ordinal());
@@ -512,7 +512,7 @@ public class Database {
     this.addItemPrep.setInt(5, pattern.getAttributeVal().ordinal());
     this.addItemPrep.setInt(6, season.getAttributeVal().ordinal());
     this.addItemPrep.setString(7,
-        defaultImageMap.get(type.getAttributeVal().ordinal()));
+            this.defaultImageMap.get(type.getAttributeVal().ordinal()));
     this.addItemPrep.executeUpdate();
 
     ResultSet rs = this.lastInsertID.executeQuery();
@@ -530,7 +530,7 @@ public class Database {
   }
 
   public int addOutfit(int userId, String outfitName,
-      Map<TypeEnum, Integer> items) throws SQLException {
+                       Map<TypeEnum, Integer> items) throws SQLException {
     int outerId = items.get(TypeEnum.OUTER);
     int topId = items.get(TypeEnum.TOP);
     int bottomId = items.get(TypeEnum.BOTTOM);
