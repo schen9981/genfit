@@ -7,7 +7,7 @@ import com.genfit.attribute.attributevals.SeasonEnum;
 import com.genfit.proxy.ItemProxy;
 
 public class ItemDistanceCalculator {
-  public static final double similarityThresholdCutoff = 1.0;
+  public static final double SIMILARITY_THRESHOLD = 1.0;
   private static final double seasonWeight = 1.0;
   private static final double patternWeight = 1.0;
   private static final double formalityWeight = 1.0;

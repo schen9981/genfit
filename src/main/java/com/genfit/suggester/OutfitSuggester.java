@@ -2,15 +2,7 @@ package com.genfit.suggester;
 
 import java.lang.reflect.Type;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.genfit.attribute.Attribute;
 import com.genfit.attribute.ColorAttribute;
@@ -139,20 +131,27 @@ public class OutfitSuggester {
     return filtered;
   }
 
-  public Map<OutfitSuggestionEnum, List<OutfitSuggestion>> suggestOutfits(
+  public List<OutfitSuggestion> suggestOutfits(
           Database db,
           int userID) {
-    List<OutfitProxy> outfitSuggestions = new ArrayList<>();
+    List<OutfitSuggestion> outfitSuggestions = new ArrayList<>();
 
     try {
       List<ItemProxy> userItems = db.getItemsByUserID(userID);
       List<OutfitProxy> allOtherOutfits = db.getOutfitsExcludeUser(userID);
+      // shuffle order of outfits found from database
+      Collections.shuffle(allOtherOutfits, new Random());
+
       Map<TypeEnum, List<ItemProxy>> userItemsSortedByType =
               this.sortItemsIntoTypes(userItems);
 
       // iterate through all outfits
-      for (OutfitProxy outfit : allOtherOutfits) {
-        Map<TypeEnum, ItemProxy> itemsInOutfit = outfit.getItems();
+      for (OutfitProxy referenceOutfit : allOtherOutfits) {
+        Map<TypeEnum, ItemProxy> itemsInOutfit = referenceOutfit.getItems();
+
+        int numItemsMatched = 0;
+        int numItemsInReferenceOutfit = 0;
+        OutfitSuggestion suggestion = new OutfitSuggestion(referenceOutfit);
 
         // iterate through types of clothing in each outfit
         for (TypeEnum typeEnum : TypeEnum.values()) {
@@ -160,25 +159,51 @@ public class OutfitSuggester {
                   null);
 
           if (itemOfType != null) {
+            numItemsInReferenceOutfit++;
             List<ItemProxy> userItemsOfType =
                     userItemsSortedByType.getOrDefault(typeEnum,
                             Collections.emptyList());
+            // shuffle order of user items presented
+            Collections.shuffle(userItemsOfType, new Random());
+
             // loop through user items of that type to find distance
             for (ItemProxy userItemOfType : userItemsOfType) {
-              ItemDistanceCalculator.getSimilarity(userItemOfType, itemOfType);
+              double similarity =
+                      ItemDistanceCalculator.getSimilarity(userItemOfType,
+                              itemOfType);
+              if (similarity < ItemDistanceCalculator.SIMILARITY_THRESHOLD) {
+                suggestion.addSuggestedItem(userItemOfType);
+                numItemsMatched++;
+                // recommend the first user item of that type that was found
+                // to meet the threshold
+                break;
+              }
             }
           }
+        }
+
+        if ((numItemsInReferenceOutfit - numItemsMatched) < 1) {
+          outfitSuggestions.add(suggestion);
         }
       }
     } catch (SQLException e) {
       e.printStackTrace();
     }
 
-    return null;
+    return outfitSuggestions;
   }
 
-  // TODO:implement
   private Map<TypeEnum, List<ItemProxy>> sortItemsIntoTypes(List<ItemProxy> items) {
-    return null;
+    Map<TypeEnum, List<ItemProxy>> sortedItems = new HashMap<>();
+    for (int i = 0; i < items.size(); i++) {
+      ItemProxy itemProxy = items.get(i);
+      List<ItemProxy> itemList = new ArrayList<>();
+      sortedItems.merge(itemProxy.getTypeAttribute().getAttributeVal(),
+              itemList, (oldList, newList) -> {
+                oldList.addAll(newList);
+                return oldList;
+              });
+    }
+    return sortedItems;
   }
 }
