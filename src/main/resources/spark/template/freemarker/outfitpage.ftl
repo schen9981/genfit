@@ -5,7 +5,8 @@
 </div>
 
 <div id="add">
-  <button id="constructOutfit">Construct Outfit</button>
+  <button id="constructOutfit">Construct Full Outfit</button>
+  <button id="suggestOutfit">Get Outfit Suggestions</button>
 
   <div id="addOutfitModal" class="modal">
     <div class="modal-content">
@@ -53,7 +54,6 @@
         </div>
 
         <button id="addOutfit">Add Outfit</button>
-        <button id="suggestOutfits">Suggest Outfits</button>
 
         <div style="overflow:auto;">
         <div style="float:right;">

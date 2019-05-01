@@ -23,8 +23,6 @@ function generateOutfitContent(outfit, id) {
     shoes: outfit[5]
   }
 
-  console.log(postParams);
-
   // post request to get outfit components as array
   $.post("/outfitComponents", postParams, responseJSON => {
     let outfitContent = '<div class="fullOutfit">';
@@ -35,7 +33,6 @@ function generateOutfitContent(outfit, id) {
     outfitContent += '</div>';
 
     $('#modal-' + id + ' .modal-content').append(outfitContent);
-    $('#modal-' + id + ' .modal-content').append('<button class="delete" id="delete-outfit-' + id + '">Delete Outfit</button>');
   });
 }
 
@@ -101,8 +98,8 @@ function generateOutfitCards(listOfOutfits) {
     let buttonHTML = '<button class="outfit" id="outfit-' + id + '">' + outfit[1] + '</button>';
     let modalHTML = '<div class="modal" id="modal-' + id + '">';
     modalHTML += '<div class="modal-content">';
-    modalHTML += '<div class="close-span"><span class="close" id="close-' + id + '">&times;</span></div>';
-    // modalHTML += '<button class="delete" id="delete-outfit-' + id + '">Delete Outfit</button>';
+    modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
+    modalHTML += '<button class="delete" id="delete-outfit-' + id + '">Delete Outfit</button>';
     modalHTML += '</div></div>';
 
     // add modal to div 'items'
@@ -171,7 +168,6 @@ function displayUserOutfits(username) {
 function deleteUserOutfit(outfitId) {
   // event handler for removing item
   $('#delete-outfit-' + outfitId).on('click', function(e) {
-    console.log(outfitId);
     let postParams = {
       username: username,
       outfitId: outfitId
@@ -195,7 +191,6 @@ function outfitModalAnimation() {
 
   // open modal when button clicked
   btn.click(function() {
-    console.log('clicked');
     modal.css("display", "block");
   });
 
@@ -304,7 +299,6 @@ function resetForm(event) {
 $(document).ready(() => {
   username = localStorage.username;
   emptyForm = $('#addOutfitForm').html();
-  console.log(emptyForm);
   displayUserOutfits(username);
   showTab(0);
   outfitModalAnimation();

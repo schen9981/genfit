@@ -80,16 +80,12 @@ input {
   display: table;
 }
 
-.fullOutfit .item {
+.item {
   display: table-cell;
   width: 20%;
   height: 200px;
 }
 
-.fullOutfit {
-  display: table-row;
-}
-
-.close-span {
-  display: table-row;
+.delete {
+  margin-bottom: 10px;
 }
