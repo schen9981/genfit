@@ -128,18 +128,18 @@ function generateItemCards(listOfItems, tabId) {
     let id = item[0];
 
     // check if item already exists on page
-    if ($('.tab #item-' + id).html() == null) {
+    if ($('.tab-add #item-' + id).html() == null) {
       // set item html
       let divHTML = generateItemIcon(item, id);
       $('#' + tabId).append(divHTML);
 
       // add image for icon
       let imageSource = item[7];
-      $('.tab #item-' + id).css("background", "url(" + imageSource + ") no-repeat");
-      $('.tab #item-' + id).css("background-size", "100%");
+      $('.tab-add #item-' + id).css("background", "url(" + imageSource + ") no-repeat");
+      $('.tab-add #item-' + id).css("background-size", "100%");
 
       // add event listener for focus (ie user selection)
-      $('.tab #item-' + id).focus(function() {
+      $('.tab-add #item-' + id).focus(function() {
         console.log(id);
         $selected = this;
       })
@@ -223,7 +223,7 @@ function addItemToOutfit(event) {
 // displays tab corresponding to the component (outer: 1, top: 2, bottom: 3, shoes: 4)
 function showTab(compId) {
   // get all the tabs on the page, display the selected component
-  let tabs = document.getElementsByClassName("tab");
+  let tabs = document.getElementsByClassName("tab-add");
   if (compId == 0) {
     // want the generic outfit page
     tabs[0].style.display = "block";
@@ -231,7 +231,6 @@ function showTab(compId) {
     document.getElementById("addItem").style.display = "none";
     document.getElementById("back").style.display = "none";
     document.getElementById("addOutfit").style.display = "inline";
-    document.getElementById("suggestOutfits").style.display = "inline";
   } else {
     populateTabItems(compId, tabs[compId].id);
     tabs[compId].style.display = "table";
@@ -245,7 +244,7 @@ function showTab(compId) {
 // navigate to appropriate tab upon click of button
 function navigateToTab(event, tabInd) {
   event.preventDefault();
-  let tabs = document.getElementsByClassName("tab");
+  let tabs = document.getElementsByClassName("tab-add");
   // hide the current tab
   tabs[currentTab].style.display = "none";
   // set current tab index to new tab index
