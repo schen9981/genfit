@@ -30,7 +30,6 @@ public class ItemSuggestionRetriever implements Route {
   public String handle(Request req, Response res) {
 
     QueryParamsMap qm = req.queryMap();
-    List<String[]> suggestionsInfo = new ArrayList<>();
 
     // get user id
     String username = qm.value("username");
@@ -38,8 +37,9 @@ public class ItemSuggestionRetriever implements Route {
     try {
       userId = this.genFitApp.getDb().getUserBean(username).getId();
     } catch (Exception e) {
+      List<String[]> suggestionsInfo = new ArrayList<>();
       Map<String, Object> output = ImmutableMap.of("suggestions",
-              suggestionsInfo);
+          suggestionsInfo);
       return Main.GSON.toJson(output);
     }
 
@@ -52,32 +52,72 @@ public class ItemSuggestionRetriever implements Route {
     Map<TypeEnum, ItemProxy> items = new HashMap<>();
     if (!outerId.equals("")) {
       items.put(TypeEnum.OUTER,
-              new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(outerId)));
+          new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(outerId)));
     }
 
     if (!topId.equals("")) {
       items.put(TypeEnum.TOP,
-              new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(topId)));
+          new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(topId)));
     }
 
     if (!bottomId.equals("")) {
       items.put(TypeEnum.BOTTOM,
-              new ItemProxy(this.genFitApp.getDb(),
-                      Integer.parseInt(bottomId)));
+          new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(bottomId)));
     }
 
     if (!shoesId.equals("")) {
       items.put(TypeEnum.SHOES,
-              new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(shoesId)));
+          new ItemProxy(this.genFitApp.getDb(), Integer.parseInt(shoesId)));
     }
     Outfit incomplete = new Outfit(-1, "incomplete", items);
 
     // generate item suggestions
     OutfitSuggester os = new OutfitSuggester();
     Map<TypeEnum, List<ItemProxy>> suggestions = os.suggestItems(incomplete,
-            this.genFitApp.getDb(), userId);
+        this.genFitApp.getDb(), userId);
 
-    return Main.GSON.toJson(suggestions);
+    List<String[]> outerSuggestions = new ArrayList<>();
+    if (suggestions.get(TypeEnum.OUTER) != null) {
+      for (ItemProxy i : suggestions.get(TypeEnum.OUTER)) {
+        Item itemSuggest = i.getItem();
+        String[] itemInfo = UserItemRetriever.getItemInfoArr(itemSuggest);
+        outerSuggestions.add(itemInfo);
+      }
+    }
+
+    List<String[]> topSuggestions = new ArrayList<>();
+    if (suggestions.get(TypeEnum.TOP) != null) {
+      for (ItemProxy i : suggestions.get(TypeEnum.TOP)) {
+        Item itemSuggest = i.getItem();
+        String[] itemInfo = UserItemRetriever.getItemInfoArr(itemSuggest);
+        topSuggestions.add(itemInfo);
+      }
+    }
+
+    List<String[]> bottomSuggestions = new ArrayList<>();
+    if (suggestions.get(TypeEnum.BOTTOM) != null) {
+      for (ItemProxy i : suggestions.get(TypeEnum.BOTTOM)) {
+        Item itemSuggest = i.getItem();
+        String[] itemInfo = UserItemRetriever.getItemInfoArr(itemSuggest);
+        bottomSuggestions.add(itemInfo);
+      }
+    }
+
+    List<String[]> shoesSuggestions = new ArrayList<>();
+    if (suggestions.get(TypeEnum.SHOES) != null) {
+      for (ItemProxy i : suggestions.get(TypeEnum.SHOES)) {
+        Item itemSuggest = i.getItem();
+        String[] itemInfo = UserItemRetriever.getItemInfoArr(itemSuggest);
+        shoesSuggestions.add(itemInfo);
+      }
+    }
+
+    Map<String, Object> output = ImmutableMap.of("topSuggestions",
+        topSuggestions, "outerSuggestions", outerSuggestions,
+        "bottomSuggestions", bottomSuggestions, "shoesSuggestions",
+        shoesSuggestions);
+
+    return Main.GSON.toJson(output);
   }
 
 }
