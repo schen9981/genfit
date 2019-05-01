@@ -13,6 +13,9 @@ function displayOutfitSuggestions(username) {
     })
 }
 
+
+
+
 $(document).ready(() => {
     username = localStorage.username;
     displayOutfitSuggestions(username);

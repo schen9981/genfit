@@ -22,7 +22,6 @@ function generateOutfitContent(outfit, id) {
         bottom: outfit[4],
         shoes: outfit[5]
     }
-
     // post request to get outfit components as array
     $.post("/outfitComponents", postParams, responseJSON => {
         let outfitContent = '<div class="fullOutfit">';
@@ -159,7 +158,6 @@ function generateItemCards(listOfItems, tabId) {
 
 // function to retrieve and display a user's outfits
 function displayUserOutfits(username) {
-
     let postParams = {
         username: username
     };
