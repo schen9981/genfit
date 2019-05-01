@@ -143,12 +143,10 @@ function generateItemCards(listOfItems, tabId) {
             $('.tab-add #item-' + id).css("background-size", "100%");
 
             // add event listener for focus (ie user selection)
-            $('.tab #item-' + id).focus(function () {
-                // console.log(id);
-                $('.tab-add #item-' + id).focus(function () {
-                    console.log(id);
-                    $selected = this;
-                })
+
+            $('.tab-add #item-' + id).focus(function () {
+                console.log(id);
+                $selected = this;
             })
         }
         // set dimensions of cards
@@ -246,7 +244,7 @@ function showTab(compId) {
         document.getElementById("addItem").style.display = "inline";
         document.getElementById("back").style.display = "inline";
         document.getElementById("addOutfit").style.display = "none";
-        document.getElementById("suggestOutfits").style.display = "none";
+        document.getElementById("suggestOutfit").style.display = "none";
     }
 }
 
@@ -285,8 +283,6 @@ function addOutfit() {
             bottom: getIntId(bottom.id),
             shoes: getIntId(shoes.id)
         }
-
-        // console.log(postParams);
 
         // post request to addItems
         $.post("/addOutfit", postParams, responseJSON => {
