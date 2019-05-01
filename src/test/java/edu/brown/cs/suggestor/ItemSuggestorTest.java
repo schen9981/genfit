@@ -26,7 +26,7 @@ public class ItemSuggestorTest {
 
       Outfit o = new Outfit(0, "dummy0", itemMap);
 
-      List<ItemProxy> items = os.suggestItems(o, db, 104);
+      Map<TypeEnum, List<ItemProxy>> items = os.suggestItems(o, db, 104);
 
       assertEquals(11, items.size());
 
@@ -54,7 +54,7 @@ public class ItemSuggestorTest {
 
       Outfit o = new Outfit(0, "dummy0", itemMap);
 
-      List<ItemProxy> items = os.suggestItems(o, db, 104);
+      Map<TypeEnum, List<ItemProxy>> items = os.suggestItems(o, db, 104);
       assertEquals(7, items.size());
     } catch (Exception e) {
       e.printStackTrace();
