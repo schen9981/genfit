@@ -7,6 +7,9 @@ let currentTab = 0;
 // save selected item that user wants to add to an oufit
 let $selected;
 
+// save empty form html
+let emptyForm;
+
 // ordering of component types (for indices of tab)
 let compInd = ["ALL", "OUTER", "TOP", "BOTTOM", "SHOES"];
 
@@ -24,12 +27,15 @@ function generateOutfitContent(outfit, id) {
 
   // post request to get outfit components as array
   $.post("/outfitComponents", postParams, responseJSON => {
-    let outfitContent = generateItemContent(JSON.parse(responseJSON).outer, outfit[2]);
+    let outfitContent = '<div class="fullOutfit">';
+    outfitContent += generateItemContent(JSON.parse(responseJSON).outer, outfit[2]);
     outfitContent += generateItemContent(JSON.parse(responseJSON).top, outfit[3]);
     outfitContent += generateItemContent(JSON.parse(responseJSON).bottom, outfit[4]);
     outfitContent += generateItemContent(JSON.parse(responseJSON).shoes, outfit[5]);
+    outfitContent += '</div>';
 
     $('#modal-' + id + ' .modal-content').append(outfitContent);
+    $('#modal-' + id + ' .modal-content').append('<button class="delete" id="delete-outfit-' + id + '">Delete Outfit</button>');
   });
 }
 
@@ -39,14 +45,19 @@ function generateItemContent(item, id) {
   if (item.length == 0) {
     itemContent = '<div class="item" id="item-empty">' + N/A + "</div>";
   } else {
-    itemContent = '<div tabindex="-1" class="item" id="item-' + id + '">';
-    itemContent += '<h5>' + item[1] + '</h5><br>';
-    itemContent += '<p>Top:' + item[2] + '</p><br>';
-    itemContent += '<p>Type:' + item[3] + '</p><br>';
-    itemContent += '<p>Pattern:' + item[4] + '</p><br>';
-    itemContent += '<p>Season:' + item[5] + '</p><br>';
-    itemContent += '<p>Formality:' + item[6] + '</p><br>';
-    itemContent += '</div>';
+    // itemContent = '<div tabindex="-1" class="item" id="item-' + id + '">';
+    // itemContent += '<h5>' + item[1] + '</h5><br>';
+    // itemContent += '<p>Color:' + item[2] + '</p><br>';
+    // itemContent += '<p>Type:' + item[3] + '</p><br>';
+    // itemContent += '<p>Pattern:' + item[4] + '</p><br>';
+    // itemContent += '<p>Season:' + item[5] + '</p><br>';
+    // itemContent += '<p>Formality:' + item[6] + '</p><br>';
+    // itemContent += '</div>';
+    itemContent = generateItemIcon(item, id);
+
+    let imageSource = item[7];
+    $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
+    $('#item-' + id).css("background-size", "100%");
   }
   return itemContent;
 }
@@ -90,9 +101,8 @@ function generateOutfitCards(listOfOutfits) {
     let buttonHTML = '<button class="outfit" id="outfit-' + id + '">' + outfit[1] + '</button>';
     let modalHTML = '<div class="modal" id="modal-' + id + '">';
     modalHTML += '<div class="modal-content">';
-    modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
-    // modalHTML += generateOutfitContent(outfit);
-    modalHTML += '<button id="delete-outfit-' + id + '">Delete Outfit</button>';
+    modalHTML += '<div class="close-span"><span class="close" id="close-' + id + '">&times;</span></div>';
+    // modalHTML += '<button class="delete" id="delete-outfit-' + id + '">Delete Outfit</button>';
     modalHTML += '</div></div>';
 
     // add modal to div 'items'
@@ -103,6 +113,9 @@ function generateOutfitCards(listOfOutfits) {
 
     // add popup functionality to given modal
     animateOutfitModal(id);
+
+    // add delete button functionality
+    deleteUserOutfit(id);
   }
   // set dimensions of cards
   $('.outfit').css("width", "20%");
@@ -138,7 +151,7 @@ function generateItemCards(listOfItems, tabId) {
   // set dimensions of cards
   $('.item').css("width", "20%");
   let itemWidth = $('.item').width();
-  $('.item').height(itemWidth * 1.2);
+  $('.item').height('200px');
 }
 
 
@@ -154,10 +167,11 @@ function displayUserOutfits(username) {
   });
 }
 
-// TODO: add button functionality to remove an outfit
+// add button functionality to remove an outfit
 function deleteUserOutfit(outfitId) {
   // event handler for removing item
-  $('#delete-item-' + itemId).on('click', function(e) {
+  $('#delete-outfit-' + outfitId).on('click', function(e) {
+    console.log(outfitId);
     let postParams = {
       username: username,
       outfitId: outfitId
@@ -165,7 +179,7 @@ function deleteUserOutfit(outfitId) {
 
     // post request to remove item
     $.post("/deleteOutfit", postParams, responseJSON => {
-      $('#item-' + outfitId).remove();
+      $('#outfit-' + outfitId).remove();
       $('#modal-' + outfitId).remove();
     });
 
@@ -225,7 +239,7 @@ function showTab(compId) {
     document.getElementById("suggestOutfits").style.display = "inline";
   } else {
     populateTabItems(compId, tabs[compId].id);
-    tabs[compId].style.display = "block";
+    tabs[compId].style.display = "table";
     document.getElementById("addItem").style.display = "inline";
     document.getElementById("back").style.display = "inline";
     document.getElementById("addOutfit").style.display = "none";
@@ -277,13 +291,20 @@ function addOutfit() {
       let outfitList = [outfit];
       generateOutfitCards(outfitList);
       $("#addOutfitModal").css("display", "none");
+      resetForm(e);
     });
   });
 }
 
+function resetForm(event) {
+  $('#addOutfitForm').html(emptyForm);
+  navigateToTab(event, 0);
+}
 
 $(document).ready(() => {
   username = localStorage.username;
+  emptyForm = $('#addOutfitForm').html();
+  console.log(emptyForm);
   displayUserOutfits(username);
   showTab(0);
   outfitModalAnimation();

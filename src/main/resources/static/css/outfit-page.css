@@ -59,6 +59,37 @@ input {
   display: none;
 }
 
-div.item {
+#addOutfitModal .item {
+  display: table-cell;
   width: 20%;
+  height: 200px;
+  transition: box-shadow .3s;
+  border-radius:10px;
+  border: 1px solid #ccc;
+}
+
+.description {
+  display: table-row;
+}
+
+.item:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
+
+.modal-content {
+  display: table;
+}
+
+.fullOutfit .item {
+  display: table-cell;
+  width: 20%;
+  height: 200px;
+}
+
+.fullOutfit {
+  display: table-row;
+}
+
+.close-span {
+  display: table-row;
 }

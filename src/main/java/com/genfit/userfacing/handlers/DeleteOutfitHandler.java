@@ -26,6 +26,9 @@ public class DeleteOutfitHandler implements Route {
 
     int outfitId = Integer.parseInt(qm.value("outfitId"));
 
+    System.out.println(userId);
+    System.out.println(outfitId);
+
     this.genFitApp.getDb().deleteOutfit(userId, outfitId);
 
     return Main.GSON.toJson("Successful Remove");

@@ -87,7 +87,7 @@ public class Database {
   private PreparedStatement deleteItemPrep, deleteUserItemPrep;
 
   private final String deleteOutfitSQL = "DELETE FROM outfit WHERE id=?;";
-  private final String deleteUserOutfitSQL = "DELETE FROM user_item WHERE "
+  private final String deleteUserOutfitSQL = "DELETE FROM user_outfit WHERE "
       + "user_id=? AND outfit_id=?;";
   private PreparedStatement deleteOutfitPrep, deleteUserOutfitPrep;
 

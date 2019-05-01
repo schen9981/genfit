@@ -29,19 +29,27 @@
         </div>
 
         <div class="tab" id="outer-select">
-          <p>Select an outer:</p>
+          <div class="description">
+            <p>Select an outer:</p><br>
+          </div>
         </div>
 
         <div class="tab" id="top-select">
-          <p>Select a top:</p>
+          <div class="description">
+            <p>Select a top:</p><br>
+          </div>
         </div>
 
         <div class="tab" id="bottom-select">
-          <p>Select a bottom:</p>
+          <div class="description">
+            <p>Select a bottom:</p><br>
+          </div>
         </div>
 
         <div class="tab" id="shoes-select">
-          <p>Select a pair of shoes:</p>
+          <div class="description">
+            <p>Select a pair of shoes:</p><br>
+          </div>
         </div>
 
         <button id="addOutfit">Add Outfit</button>
