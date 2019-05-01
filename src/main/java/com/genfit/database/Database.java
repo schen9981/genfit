@@ -65,10 +65,11 @@ public class Database {
       + "WHERE user_id=?;";
   private final String getOutfitLikesSQL = "SELECT * FROM outfit WHERE id=?"
           + "WHERE user_id=?;";
+  private final String getLikedOutfitIdsSQL = "SELECT * FROM user_liked WHERE user_id=?";
   private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
   private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
   private PreparedStatement getAllItemsByAttributesPrep;
-  private PreparedStatement getOutfitLikesPrep;
+  private PreparedStatement getOutfitLikesPrep, getLikedOutfitIdsPrep;
 
   // Add Statements
   private final String addUserSQL = "INSERT INTO user (name, email, password)"
@@ -94,10 +95,17 @@ public class Database {
           + "user_id=?;";
   private final String deleteAllUserOutfitsSQL = "DELETE FROM user_outfit "
           + "WHERE user_id=?;";
+
   private final String incrementLikesSQL = "UPDATE outfit SET likes = "
-      + "(likes + 1) WHERE id = ?";
+      + "(likes + ?) WHERE id = ?; INSERT INTO user_liked (user_id, outfit_id) "
+      + "VALUES (?, ?);";
+
+  private final String decrementLikesSQL = "UPDATE outfit SET likes = "
+      + "(likes + ?) WHERE id = ?; DELETE FROM user_liked WHERE (user_id = ?) "
+      + "and (outfit_id = ?);";
+
   private PreparedStatement deleteUserPrep, deleteAllUserItemsPrep,
-          deleteAllUserOutfitsPrep, incrementLikesPrep;
+          deleteAllUserOutfitsPrep, incrementLikesPrep, decrementLikesPrep;
 
   private final String deleteItemSQL = "DELETE FROM item WHERE id=?;";
   private final String deleteUserItemSQL = "DELETE FROM user_item WHERE "
@@ -137,6 +145,7 @@ public class Database {
       this.getOutfitsByUserIDPrep = conn
           .prepareStatement(this.getOutfitsByUserIDSQL);
       this.getOutfitLikesPrep = conn.prepareStatement(this.getOutfitLikesSQL);
+      this.getLikedOutfitIdsPrep = conn.prepareStatement(this.getLikedOutfitIdsSQL);
 
       this.addUserPrep = conn.prepareStatement(this.addUserSQL);
       this.addItemPrep = conn.prepareStatement(this.addItemSQL);
@@ -144,6 +153,7 @@ public class Database {
       this.addOutfitPrep = conn.prepareStatement(this.addOutfitSQL);
       this.addOutfitToUserPrep = conn.prepareStatement(this.addOutfitToUserSQL);
       this.incrementLikesPrep = conn.prepareStatement(this.incrementLikesSQL);
+      this.decrementLikesPrep = conn.prepareStatement(this.decrementLikesSQL);
 
       this.deleteAllUserItemsPrep = conn
               .prepareStatement(this.deleteAllUserItemsSQL);
@@ -298,9 +308,12 @@ public class Database {
   private User getUserInfo(String email) throws SQLException {
     this.getUserInfoPrep.setString(1, email);
     ResultSet rs = this.getUserInfoPrep.executeQuery();
-    rs.next();
-    int id = rs.getInt(1);
-    String name = rs.getString(2);
+    int id = 0;
+    String name = "";
+    while(rs.next()) {
+      id = rs.getInt(1);
+      name = rs.getString(2);
+    }
     rs.close();
     return new User(id, name, email, this.getItemsByUserID(id),
             this.getOutfitsByUserID(id));
@@ -498,6 +511,17 @@ public class Database {
     return likes;
   }
 
+  public List<Integer> getLikedOutfitIds(int userId) throws SQLException {
+    this.getLikedOutfitIdsPrep.setInt(1, userId);
+    ResultSet rs = this.getLikedOutfitIdsPrep.executeQuery();
+    List<Integer> outfitIds = new ArrayList<>();
+    while (rs.next()) {
+      outfitIds.add(rs.getInt(2));
+    }
+    rs.close();
+    return outfitIds;
+  }
+
 
   /**
    * Adds a new user.
@@ -539,9 +563,21 @@ public class Database {
     }
   }
 
-  public void incrementLikes(int outfitId) throws SQLException {
-    this.incrementLikesPrep.setInt(1, outfitId);
-    this.incrementLikesPrep.executeUpdate();
+  public synchronized void changeLikes(int outfitId, int userId, int change) throws SQLException {
+    if (change == -1) {
+      this.decrementLikesPrep.setInt(1, change);
+      this.decrementLikesPrep.setInt(2, outfitId);
+      this.decrementLikesPrep.setInt(3, userId);
+      this.decrementLikesPrep.setInt(4, outfitId);
+      this.decrementLikesPrep.executeUpdate();
+    } else if (change == 1) {
+      this.incrementLikesPrep.setInt(1, change);
+      this.incrementLikesPrep.setInt(2, outfitId);
+      this.incrementLikesPrep.setInt(3, userId);
+      this.incrementLikesPrep.setInt(4, outfitId);
+      this.incrementLikesPrep.executeUpdate();
+    }
+
   }
 
   public void addOutfit(UserProxy userProxy, String outfitName,

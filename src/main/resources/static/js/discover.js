@@ -7,20 +7,25 @@ function displayOutfitSuggestions(username) {
         let response = JSON.parse(responseJSON);
         let completeOutfits = response.completeOutfits;
         let almostOutfits = response.almostOutfits;
+        let likedOutfitIds = response.likedOutfitIds;
+
+        console.log(likedOutfitIds);
     })
 }
 
 $(document).ready(() => {
     username = localStorage.username;
-    // displayOutfitSuggestions(username);
+    displayOutfitSuggestions(username);
 });
 
 let nolike = 0;
 let like = 1;
 let unlike = -1;
-function incrementLikes(outfitId) {
+
+function changeLikes(username, outfitId, change) {
     const postParams = {
-        mode : like,
+        mode : change,
+        username : username,
         outfitId : outfitId
     };
     console.log(postParams);
