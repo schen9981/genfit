@@ -5,35 +5,52 @@
 </div>
 
 <div id="add">
-  <button id="addOutfit">Add Outfit</button>
+  <button id="constructOutfit">Construct Outfit</button>
 
   <div id="addOutfitModal" class="modal">
     <div class="modal-content">
       <span id="addSpan" class="close">&times;</span>
       <form id="addOutfitForm">
         <div class="tab" id="outfit-info">
-          <button id="add-outer" onclick="navigateToTab(0)">+</button>
-          <button id="add-top" onclick="navigateToTab(1)>+</button>
-          <button id="add-bottom" onclick="navigateToTab(2)>+</button>
-          <button id="add-shoes" onclick="navigateToTab(3)>+</button>
+          Outfit Name:<br>
+          <input type="text" id="outfit-name" name="outfit-name"><br>
+          <div class="add" id="outer-item">
+            <button id="add-outer-item" onclick="navigateToTab(event, 1)">Add Outer</button>
+          </div>
+          <div class="add" id="top-item">
+            <button id="add-top-item" onclick="navigateToTab(event, 2)">Add Top</button>
+          </div>
+          <div class="add" id="bottom-item">
+            <button id="add-bottom-item" onclick="navigateToTab(event, 3)">Add Bottom</button>
+          </div>
+          <div class="add" id="shoes-item">
+            <button id="add-shoes-item" onclick="navigateToTab(event, 4)">Add Shoes</button>
+          </div>
         </div>
 
-        <div class="tab" id="outer-select">Select an outer:
+        <div class="tab" id="outer-select">
+          <p>Select an outer:</p>
         </div>
 
-        <div class="tab" id="top-select">Select a top:
+        <div class="tab" id="top-select">
+          <p>Select a top:</p>
         </div>
 
-        <div class="tab" id="bottom-select">Select a bottom:
+        <div class="tab" id="bottom-select">
+          <p>Select a bottom:</p>
         </div>
 
-        <div class="tab" id="shoes-select">Select a pair of shoes:
+        <div class="tab" id="shoes-select">
+          <p>Select a pair of shoes:</p>
         </div>
+
+        <button id="addOutfit">Add Outfit</button>
+        <button id="suggestOutfits">Suggest Outfits</button>
 
         <div style="overflow:auto;">
         <div style="float:right;">
-          <button type="button" id="addItem" onclick="addItemToOutfit()">Add to Outfit</button>
-          <button type="button" id="back" onclick="back()">Back</button>
+          <button type="button" id="addItem" onclick="addItemToOutfit(event)">Add to Outfit</button>
+          <button type="button" id="back" onclick="navigateToTab(event, 0)">Back</button>
         </div>
         </div>
       </form>

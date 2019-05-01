@@ -54,26 +54,31 @@ public class UserOutfitRetriever implements Route {
       return Main.GSON.toJson(variables);
     }
 
+    System.out.println(userOutfitProxies);
     for (OutfitProxy o : userOutfitProxies) {
       Map<TypeEnum, ItemProxy> outfitComp = o.getItems();
       Outfit currOut = o.getOutfit();
 
-      String[] outfitInfoArr = new String[8];
-      outfitInfoArr[0] = Integer.toString(o.getId());
-      outfitInfoArr[1] = currOut.getName();
-      outfitInfoArr[2] = getIdIfExists(outfitComp, TypeEnum.OUTER);
-      outfitInfoArr[3] = getIdIfExists(outfitComp, TypeEnum.TOP);
-      outfitInfoArr[4] = getIdIfExists(outfitComp, TypeEnum.BOTTOM);
-      outfitInfoArr[5] = getIdIfExists(outfitComp, TypeEnum.SHOES);
-      outfitInfoArr[6] = currOut.getSeason().getAttributeVal().toString();
-      outfitInfoArr[7] = currOut.getFormality().getAttributeVal().toString();
-
+      String[] outfitInfoArr = getOutfitInfoArr(currOut, outfitComp);
       userOutfits.add(outfitInfoArr);
     }
 
     Map<String, Object> variables = ImmutableMap.of("outfits", userOutfits);
-
     return Main.GSON.toJson(variables);
+  }
+
+  public static String[] getOutfitInfoArr(Outfit o,
+      Map<TypeEnum, ItemProxy> outfitComp) {
+    String[] outfitInfoArr = new String[6];
+
+    outfitInfoArr[0] = Integer.toString(o.getId());
+    outfitInfoArr[1] = o.getName();
+    outfitInfoArr[2] = getIdIfExists(outfitComp, TypeEnum.OUTER);
+    outfitInfoArr[3] = getIdIfExists(outfitComp, TypeEnum.TOP);
+    outfitInfoArr[4] = getIdIfExists(outfitComp, TypeEnum.BOTTOM);
+    outfitInfoArr[5] = getIdIfExists(outfitComp, TypeEnum.SHOES);
+
+    return outfitInfoArr;
   }
 
   /**

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import com.genfit.userfacing.handlers.AddItemHandler;
+import com.genfit.userfacing.handlers.AddOutfitHandler;
 import com.genfit.userfacing.handlers.DeleteItemHandler;
 import com.genfit.userfacing.handlers.DeleteOutfitHandler;
 import com.genfit.userfacing.handlers.DiscoverPageHandler;
@@ -117,6 +118,7 @@ public final class Main {
     // Setup post requests for forms and buttons
     Spark.post("/addItem", new AddItemHandler(this.mainApp));
     Spark.post("/deleteItem", new DeleteItemHandler(this.mainApp));
+    Spark.post("/addOutfit", new AddOutfitHandler(this.mainApp));
     Spark.post("/deleteOutfit", new DeleteOutfitHandler(this.mainApp));
   }
 
