@@ -13,6 +13,7 @@ import com.genfit.userfacing.handlers.DiscoverOutfitRetriever;
 import com.genfit.userfacing.handlers.DiscoverPageHandler;
 import com.genfit.userfacing.handlers.FrontpageHandler;
 import com.genfit.userfacing.handlers.ItemPageHandler;
+import com.genfit.userfacing.handlers.ItemSuggestionRetriever;
 import com.genfit.userfacing.handlers.OutfitByAttributeRetriever;
 import com.genfit.userfacing.handlers.OutfitComponentsRetriever;
 import com.genfit.userfacing.handlers.OutfitLikeHandler;
@@ -116,6 +117,7 @@ public final class Main {
         new OutfitComponentsRetriever(this.mainApp));
     Spark.post("/outfitByAttribute",
         new OutfitByAttributeRetriever(this.mainApp));
+    Spark.post("/itemSuggestions", new ItemSuggestionRetriever(this.mainApp));
 
     // Setup post requests for forms and buttons
     Spark.post("/addItem", new AddItemHandler(this.mainApp));

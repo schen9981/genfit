@@ -70,8 +70,6 @@
       <span id="suggestSpan" class="close">&times;</span>
       <form id="suggestOutfitForm">
         <div class="tab-suggest" id="outfit-info">
-          Outfit Name:<br>
-          <input type="text" id="outfit-name" name="outfit-name"><br>
           <div class="add-suggest" id="outer-item">
             <button id="suggest-outer-item" onclick="navigateToSuggestTab(event, 1)">Add Outer</button>
           </div>
@@ -110,10 +108,15 @@
           </div>
         </div>
 
+        <div class="tab-suggest" id="display-suggestions">
+        </div>
+
+        <button id="suggest">Generate Suggestions</button>
+
         <div style="overflow:auto;">
         <div style="float:right;">
-          <button type="button" id="addItem" onclick="addItemToOutfit(event)">Add to Outfit</button>
-          <button type="button" id="back" onclick="navigateToSuggestTab(event, 0)">Back</button>
+          <button type="button" id="addItemSuggest" onclick="addItemToOutfitSuggest(event)">Add to Outfit</button>
+          <button type="button" id="backSuggest" onclick="navigateToSuggestTab(event, 0)">Back</button>
         </div>
         </div>
       </form>
