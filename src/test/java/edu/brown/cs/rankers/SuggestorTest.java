@@ -20,11 +20,12 @@ public class SuggestorTest {
       OutfitSuggester os = new OutfitSuggester();
 
       Map<TypeEnum, ItemProxy> itemMap = new HashMap<>();
-      itemMap.put(TypeEnum.TOP, new ItemProxy(db, 26));
+      itemMap.put(TypeEnum.TOP, new ItemProxy(db, 61));
+      itemMap.put(TypeEnum.BOTTOM, new ItemProxy(db, 48));
 
       Outfit o = new Outfit(0, "dummy0", itemMap);
 
-      List<ItemProxy> items = os.suggestItems(o, db, 101);
+      List<ItemProxy> items = os.suggestItems(o, db, 104);
       for (int i = 0; i < items.size(); i++) {
         ItemProxy itemProxy = items.get(i);
         System.out.println(itemProxy.getId());
