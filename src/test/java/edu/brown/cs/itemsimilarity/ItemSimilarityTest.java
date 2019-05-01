@@ -1,10 +1,8 @@
 package edu.brown.cs.itemsimilarity;
 
 import com.genfit.attribute.attributevals.Color;
-import com.genfit.clothing.ItemDistanceCalculator;
 import com.genfit.database.AWSConnection;
 import com.genfit.database.Database;
-import com.genfit.proxy.ItemProxy;
 import org.junit.Test;
 
 public class ItemSimilarityTest {

@@ -4,7 +4,7 @@ import com.genfit.attribute.attributevals.TypeEnum;
 import com.genfit.proxy.ItemProxy;
 import com.genfit.proxy.OutfitProxy;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +69,20 @@ public class OutfitSuggestion {
    * is complete
    */
   public List<ItemProxy> getItemsNeeded() {
-    return Collections.emptyList();
+    List<ItemProxy> itemsStillNeeded = new ArrayList<>();
+
+    for (TypeEnum typeEnum : TypeEnum.values()) {
+      if (this.suggestedOutfitMap.getOrDefault(typeEnum, null)
+              == null) {
+        ItemProxy stillNeededItem =
+                this.getCommunityOutfit().getItems().get(typeEnum);
+        if (stillNeededItem != null) {
+          itemsStillNeeded.add(stillNeededItem);
+        }
+      }
+    }
+
+    return itemsStillNeeded;
   }
 
   /**

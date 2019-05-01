@@ -65,9 +65,9 @@ public class OutfitSuggester {
    * @param db     database to pull suggestions from
    * @return list of items suggested based on incomplete outfit
    */
-  public List<ItemProxy> suggestItems(Outfit outfit,
-                                      Database db,
-                                      int userID) {
+  public Map<TypeEnum, List<ItemProxy>> suggestItems(Outfit outfit,
+                                                     Database db,
+                                                     int userID) {
     List<ItemProxy> suggestions = new ArrayList<>();
 
     Map<Class, List<? extends Attribute>> outfitAttr =
@@ -103,7 +103,7 @@ public class OutfitSuggester {
       }
     }
 
-    return suggestions;
+    return this.sortItemsIntoTypes(suggestions);
   }
 
   private List<ItemProxy> filterByAttribute(List<ItemProxy> originals,
