@@ -32,6 +32,38 @@ function generateSuggestItemCards(listOfItems, tabId) {
   $('.item').height('200px');
 }
 
+function generateSuggestionsCards(listOfItems, tabId) {
+  for (i = 0; i < listOfItems.length; i++) {
+    // get current item json
+    let item = listOfItems[i];
+
+    // generate modal html
+    let id = item[0];
+
+    // check if item already exists on page
+    if ($('.tab-suggest #' + tabId + '#item-' + id).html() == null) {
+      // set item html
+      let divHTML = generateItemIcon(item, id);
+      $('#' + tabId).append(divHTML);
+
+
+      // add image for icon
+      let imageSource = item[7];
+      $('.tab-suggest #item-' + id).css("background", "url(" + imageSource + ") no-repeat");
+      $('.tab-suggest #item-' + id).css("background-size", "100%");
+
+      // add event listener for focus (ie user selection)
+      $('.tab-suggest #item-' + id).focus(function() {
+        $selected = this;
+      })
+    }
+  }
+  // set dimensions of cards
+  $('.item').css("width", "20%");
+  let itemWidth = $('.item').width();
+  $('.item').height('200px');
+}
+
 // function that populates the tab with items of that type when adding items
 function populateSuggestTabItems(compId, currTabId) {
   // generate html components for each item in the tab
@@ -52,9 +84,9 @@ function addItemToOutfitSuggest(event) {
   navigateToSuggestTab(event, 0);
 }
 
-// function addItemFromSuggestions(event) {
-//   let compDiv = document.getElementById("")
-// }
+function addItemFromSuggestions(event) {
+  console.log($selected.parent().get(0));
+}
 
 // displays tab corresponding to the component (outer: 1, top: 2, bottom: 3, shoes: 4)
 function showSuggestTab(compId) {
@@ -143,8 +175,15 @@ function getSuggestions() {
     console.log(postParams);
 
     $.post("/itemSuggestions", postParams, responseJSON => {
-      let suggestionsList = JSON.parse(responseJSON).suggestions;
-      generateSuggestItemCards(suggestionsList, 'display-suggestions');
+      let outerSuggestions = JSON.parse(responseJSON).outerSuggestions;
+      let topSuggestions = JSON.parse(responseJSON).topSuggestions;
+      let bottomSuggestions = JSON.parse(responseJSON).bottomSuggestions;
+      let shoesSuggestions = JSON.parse(responseJSON).shoesSuggestions;
+
+      generateSuggestionsCards(outerSuggestions, 'display-outer-suggestions');
+      generateSuggestionsCards(topSuggestions, 'display-top-suggestions');
+      generateSuggestionsCards(bottomSuggestions, 'display-bottom-suggestions');
+      generateSuggestionsCards(shoesSuggestions, 'display-shoes-suggestions');
       navigateToSuggestTab(e, 5);
     })
   })

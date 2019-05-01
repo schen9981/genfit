@@ -30,7 +30,6 @@ public class ItemSuggestionRetriever implements Route {
   public String handle(Request req, Response res) {
 
     QueryParamsMap qm = req.queryMap();
-    List<String[]> suggestionsInfo = new ArrayList<>();
 
     // get user id
     String username = qm.value("username");
@@ -38,6 +37,7 @@ public class ItemSuggestionRetriever implements Route {
     try {
       userId = this.genFitApp.getDb().getUserBean(username).getId();
     } catch (Exception e) {
+      List<String[]> suggestionsInfo = new ArrayList<>();
       Map<String, Object> output = ImmutableMap.of("suggestions",
           suggestionsInfo);
       return Main.GSON.toJson(output);
@@ -73,17 +73,49 @@ public class ItemSuggestionRetriever implements Route {
 
     // generate item suggestions
     OutfitSuggester os = new OutfitSuggester();
-    List<ItemProxy> suggestions = os.suggestItems(incomplete,
+    Map<TypeEnum, List<ItemProxy>> suggestions = os.suggestItems(incomplete,
         this.genFitApp.getDb(), userId);
 
-    for (ItemProxy i : suggestions) {
-      Item itemSuggest = i.getItem();
-      String[] itemInfo = UserItemRetriever.getItemInfoArr(itemSuggest);
-      suggestionsInfo.add(itemInfo);
+    List<String[]> outerSuggestions = new ArrayList<>();
+    if (suggestions.get(TypeEnum.OUTER) != null) {
+      for (ItemProxy i : suggestions.get(TypeEnum.OUTER)) {
+        Item itemSuggest = i.getItem();
+        String[] itemInfo = UserItemRetriever.getItemInfoArr(itemSuggest);
+        outerSuggestions.add(itemInfo);
+      }
     }
 
-    Map<String, Object> output = ImmutableMap.of("suggestions",
-        suggestionsInfo);
+    List<String[]> topSuggestions = new ArrayList<>();
+    if (suggestions.get(TypeEnum.TOP) != null) {
+      for (ItemProxy i : suggestions.get(TypeEnum.TOP)) {
+        Item itemSuggest = i.getItem();
+        String[] itemInfo = UserItemRetriever.getItemInfoArr(itemSuggest);
+        topSuggestions.add(itemInfo);
+      }
+    }
+
+    List<String[]> bottomSuggestions = new ArrayList<>();
+    if (suggestions.get(TypeEnum.BOTTOM) != null) {
+      for (ItemProxy i : suggestions.get(TypeEnum.BOTTOM)) {
+        Item itemSuggest = i.getItem();
+        String[] itemInfo = UserItemRetriever.getItemInfoArr(itemSuggest);
+        bottomSuggestions.add(itemInfo);
+      }
+    }
+
+    List<String[]> shoesSuggestions = new ArrayList<>();
+    if (suggestions.get(TypeEnum.SHOES) != null) {
+      for (ItemProxy i : suggestions.get(TypeEnum.SHOES)) {
+        Item itemSuggest = i.getItem();
+        String[] itemInfo = UserItemRetriever.getItemInfoArr(itemSuggest);
+        shoesSuggestions.add(itemInfo);
+      }
+    }
+
+    Map<String, Object> output = ImmutableMap.of("topSuggestions",
+        topSuggestions, "outerSuggestions", outerSuggestions,
+        "bottomSuggestions", bottomSuggestions, "shoesSuggestions",
+        shoesSuggestions);
 
     return Main.GSON.toJson(output);
   }
