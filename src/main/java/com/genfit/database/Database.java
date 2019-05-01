@@ -1,19 +1,5 @@
 package com.genfit.database;
 
-import java.lang.reflect.Type;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import org.mindrot.jbcrypt.BCrypt;
-
 import com.genfit.attribute.Attribute;
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
@@ -48,66 +34,62 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Database {
-  private Connection conn;
-
   // Check statements
   private final String checkLoginSQL = "SELECT * FROM user WHERE email = ?;";
   private final String checkSignupSQL = "SELECT * FROM user WHERE email = ?;";
-  private PreparedStatement checkLoginPrep, checkSignupPrep;
-
   // Get Statements
   private final String getUserInfoSQL = "SELECT * FROM user WHERE email=?;";
   private final String getItemInfoSQL = "SELECT * FROM item WHERE id=?;";
   private final String getOutfitInfoSQL = "SELECT * FROM outfit WHERE id=?;";
+  private final String getOutfitsExcludeUserSQL = "SELECT outfit_id FROM "
+          + "user_outfit "
+          + "WHERE "
+          + "user_id!=?;";
   private final String getItemsByUserIDSQL = "SELECT * FROM user_item WHERE "
           + "user_id=?;";
   private final String getOutfitsByUserIDSQL = "SELECT * FROM user_outfit "
           + "WHERE user_id=?;";
-  private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
-  private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
-  private PreparedStatement getAllItemsByAttributesPrep;
-
   // Add Statements
   private final String addUserSQL = "INSERT INTO user (name, email, password)"
           + " values (?, ?, ?);";
-  private PreparedStatement addUserPrep;
-
   private final String addItemSQL = "INSERT IGNORE INTO item"
-      + " (name, type, formality, color, pattern, season, image)"
-      + " VALUES (?, ?, ?, ?, ?, ?, ?);";
+          + " (name, type, formality, color, pattern, season, image)"
+          + " VALUES (?, ?, ?, ?, ?, ?, ?);";
   private final String addItemToUserSQL = "INSERT INTO user_item "
           + "(user_id, item_id) VALUES (?, ?);";
-  private PreparedStatement addItemPrep, addItemToUserPrep;
-
   private final String addOutfitSQL = "INSERT IGNORE INTO outfit"
           + " (name, `outer`, top, bottom, feet) VALUES (?, ?, ?, ?, ?);";
   private final String addOutfitToUserSQL = "INSERT INTO user_outfit"
           + " (user_id, outfit_id) VALUES (?, ?);";
-  private PreparedStatement addOutfitPrep, addOutfitToUserPrep;
-
   // Delete Statements
   private final String deleteUserSQL = "DELETE FROM user WHERE id=?;";
   private final String deleteAllUserItemsSQL = "DELETE FROM user_item WHERE "
           + "user_id=?;";
   private final String deleteAllUserOutfitsSQL = "DELETE FROM user_outfit "
           + "WHERE user_id=?;";
-  private PreparedStatement deleteUserPrep, deleteAllUserItemsPrep,
-          deleteAllUserOutfitsPrep;
-
   private final String deleteItemSQL = "DELETE FROM item WHERE id=?;";
   private final String deleteUserItemSQL = "DELETE FROM user_item WHERE "
           + "user_id=? AND item_id=?;";
-  private PreparedStatement deleteItemPrep, deleteUserItemPrep;
-
   private final String deleteOutfitSQL = "DELETE FROM outfit WHERE id=?;";
   private final String deleteUserOutfitSQL = "DELETE FROM user_item WHERE "
           + "user_id=? AND outfit_id=?;";
-  private PreparedStatement deleteOutfitPrep, deleteUserOutfitPrep;
-
   // Misc Statements
   private final String lastInsertIDSQL = "SELECT LAST_INSERT_ID();";
   private final String changePasswordSQL = "UPDATE user SET password = ? "
           + "WHERE email = ?";
+  private Connection conn;
+  private PreparedStatement checkLoginPrep, checkSignupPrep;
+  private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
+  private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep,
+          getOutfitsExcludeUserPrep;
+  private PreparedStatement getAllItemsByAttributesPrep;
+  private PreparedStatement addUserPrep;
+  private PreparedStatement addItemPrep, addItemToUserPrep;
+  private PreparedStatement addOutfitPrep, addOutfitToUserPrep;
+  private PreparedStatement deleteUserPrep, deleteAllUserItemsPrep,
+          deleteAllUserOutfitsPrep;
+  private PreparedStatement deleteItemPrep, deleteUserItemPrep;
+  private PreparedStatement deleteOutfitPrep, deleteUserOutfitPrep;
   private PreparedStatement changePasswordPrep;
   private PreparedStatement lastInsertID;
   private LoadingCache<String, User> userCache;
@@ -116,6 +98,7 @@ public class Database {
 
 
   private Map<Integer, String> defaultImageMap = new HashMap<>();
+
   public Database(Connection conn) {
     try {
       this.conn = conn;
@@ -127,6 +110,8 @@ public class Database {
       this.getUserInfoPrep = conn.prepareStatement(this.getUserInfoSQL);
       this.getItemInfoPrep = conn.prepareStatement(this.getItemInfoSQL);
       this.getOutfitInfoPrep = conn.prepareStatement(this.getOutfitInfoSQL);
+      this.getOutfitsExcludeUserPrep =
+              conn.prepareStatement(this.getOutfitsExcludeUserSQL);
       this.getItemsByUserIDPrep = conn
               .prepareStatement(this.getItemsByUserIDSQL);
       this.getOutfitsByUserIDPrep = conn
@@ -150,10 +135,14 @@ public class Database {
               .prepareStatement(this.deleteUserOutfitSQL);
       this.lastInsertID = conn.prepareStatement(this.lastInsertIDSQL);
 
-      defaultImageMap.put(TypeEnum.OUTER.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/outer_jacket.png");
-      defaultImageMap.put(TypeEnum.TOP.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/tshirt.png");
-      defaultImageMap.put(TypeEnum.BOTTOM.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/pants.png");
-      defaultImageMap.put(TypeEnum.SHOES.ordinal(), "https://s3.amazonaws.com/cs32-term-project-s3-bucket/sneakers.png");
+      this.defaultImageMap.put(TypeEnum.OUTER.ordinal(), "https://s3.amazonaws"
+              + ".com/cs32-term-project-s3-bucket/outer_jacket.png");
+      this.defaultImageMap.put(TypeEnum.TOP.ordinal(), "https://s3.amazonaws"
+              + ".com/cs32-term-project-s3-bucket/tshirt.png");
+      this.defaultImageMap.put(TypeEnum.BOTTOM.ordinal(), "https://s3.amazonaws"
+              + ".com/cs32-term-project-s3-bucket/pants.png");
+      this.defaultImageMap.put(TypeEnum.SHOES.ordinal(), "https://s3.amazonaws"
+              + ".com/cs32-term-project-s3-bucket/sneakers.png");
     } catch (SQLException e) {
       System.out.println("ERROR: SQLExeception when prepare statement"
               + "in Database constructor");
@@ -327,7 +316,7 @@ public class Database {
       String image = rs.getString(8);
 
       toReturn = new Item(id, name, season, formality, pattern,
-          new ColorAttribute(colorList.get(0)), type, image);
+              new ColorAttribute(colorList.get(0)), type, image);
     }
     rs.close();
     return toReturn;
@@ -479,6 +468,25 @@ public class Database {
     return outfitProxyList;
   }
 
+  /**
+   * Gets all the outfits in database except those belonging to a certain user.
+   *
+   * @param id user ID to exclude
+   * @return List of OutfitProxy instances
+   * @throws SQLException
+   */
+  public List<OutfitProxy> getOutfitsExcludeUser(int id) throws SQLException {
+    List<OutfitProxy> outfitProxyList = new ArrayList<>();
+    this.getOutfitsExcludeUserPrep.setInt(1, id);
+    ResultSet rs = this.getOutfitsExcludeUserPrep.executeQuery();
+    while (rs.next()) {
+      int outfitID = rs.getInt(1);
+      outfitProxyList.add(new OutfitProxy(this, outfitID));
+    }
+    rs.close();
+    return outfitProxyList;
+  }
+
 
   /**
    * Adds a new user.
@@ -504,7 +512,8 @@ public class Database {
     this.addItemPrep.setString(4, color.getAttributeVal().toString());
     this.addItemPrep.setInt(5, pattern.getAttributeVal().ordinal());
     this.addItemPrep.setInt(6, season.getAttributeVal().ordinal());
-    this.addItemPrep.setString(7, defaultImageMap.get(type.getAttributeVal().ordinal()));
+    this.addItemPrep.setString(7,
+            this.defaultImageMap.get(type.getAttributeVal().ordinal()));
     this.addItemPrep.executeUpdate();
 
     ResultSet rs = this.lastInsertID.executeQuery();

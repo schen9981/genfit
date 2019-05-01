@@ -7,6 +7,9 @@ import com.genfit.attribute.PatternAttribute;
 import com.genfit.attribute.SeasonAttribute;
 import com.genfit.attribute.TypeAttribute;
 import com.genfit.attribute.attributevals.Color;
+import com.genfit.attribute.attributevals.FormalityEnum;
+import com.genfit.attribute.attributevals.PatternEnum;
+import com.genfit.attribute.attributevals.SeasonEnum;
 import com.genfit.clothing.Item;
 import com.genfit.database.Database;
 
