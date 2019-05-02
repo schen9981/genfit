@@ -37,7 +37,7 @@ public class OutfitSuggester {
    * @return minimum class
    */
   private static Class minAttrToQuery(
-      Map<Class, List<? extends Attribute>> attr) {
+          Map<Class, List<? extends Attribute>> attr) {
     Class minClass = null;
     int minSize = Integer.MAX_VALUE;
     for (Class c : attr.keySet()) {
@@ -47,7 +47,7 @@ public class OutfitSuggester {
         Attribute a = attrList.get(0);
         // don't allow color attribute to get matched
         if (!a.getAttributeName()
-            .equals(new ColorAttribute(null).getAttributeName())) {
+                .equals(new ColorAttribute(null).getAttributeName())) {
           size = attrList.size();
           if (size < minSize) {
             minSize = size;
@@ -68,11 +68,11 @@ public class OutfitSuggester {
    * @return list of items suggested based on incomplete outfit
    */
   public Map<TypeEnum, List<ItemProxy>> suggestItems(Outfit outfit, Database db,
-      int userID) {
+                                                     int userID) {
     List<ItemProxy> suggestions = new ArrayList<>();
 
     Map<Class, List<? extends Attribute>> outfitAttr = AttributeSuggester
-        .getMatchingOutfitAttributes(outfit);
+            .getMatchingOutfitAttributes(outfit);
 
     List<Integer> itemIDsToFilter = new LinkedList<>();
     for (ItemProxy item : outfit.getItems().values()) {
@@ -84,7 +84,7 @@ public class OutfitSuggester {
 
     // create set of all other classes to query on (exclude min)
     Map<Class, List<? extends Attribute>> otherClasses = new HashMap<>(
-        outfitAttr);
+            outfitAttr);
     otherClasses.remove(classToQuery);
     otherClasses.remove(ColorAttribute.class);
 
@@ -94,13 +94,14 @@ public class OutfitSuggester {
       // get list of items that have matching attributes of smallest query
       try {
         List<ItemProxy> eligible = db.getAllItemsByAttributes(attrVals.get(0),
-            attrVals, userID);
+                attrVals, userID);
 
         suggestions = this.filterByAttribute(eligible, otherClasses,
-            itemIDsToFilter);
+                itemIDsToFilter);
       } catch (SQLException e) {
         System.out.println(
-            "ERROR: SQL exception when querying for outfit " + "suggestions");
+                "ERROR: SQL exception when querying for outfit " +
+                        "suggestions");
       }
     }
 
@@ -108,17 +109,18 @@ public class OutfitSuggester {
   }
 
   private List<ItemProxy> filterByAttribute(List<ItemProxy> originals,
-      Map<Class, List<? extends Attribute>> otherClassVals,
-      List<Integer> itemIDsToFilter) {
+                                            Map<Class, List<?
+                                                    extends Attribute>> otherClassVals,
+                                            List<Integer> itemIDsToFilter) {
     List<ItemProxy> filtered = new ArrayList<>();
     for (int i = 0; i < originals.size(); i++) {
       ItemProxy itemProxy = originals.get(i);
       boolean shouldAdd = true;
       for (Class otherClass : otherClassVals.keySet()) {
         List<? extends Attribute> otherAttrVals = otherClassVals
-            .get(otherClass);
+                .get(otherClass);
         if (!otherAttrVals
-            .contains(itemProxy.getAttributeForItem(otherClass))) {
+                .contains(itemProxy.getAttributeForItem(otherClass))) {
           shouldAdd = false;
           break;
         }
@@ -142,13 +144,13 @@ public class OutfitSuggester {
 
       // sort user item by type of item
       Map<TypeEnum, List<ItemProxy>> userItemsSortedByType = this
-          .sortItemsIntoTypes(userItems);
+              .sortItemsIntoTypes(userItems);
 
       // iterate through all community outfits
       for (OutfitProxy communityOutfit : allOtherOutfits) {
         // get community items
         Map<TypeEnum, ItemProxy> itemsInCommunityOutfit = communityOutfit
-            .getItems();
+                .getItems();
 
         int numUserItemsMatched = 0;
         int numItemsInCommunityOutfit = 0;
@@ -157,21 +159,20 @@ public class OutfitSuggester {
         // iterate through types of clothing in each community outfit
         for (TypeEnum typeEnum : TypeEnum.values()) {
           ItemProxy communityItemOfType = itemsInCommunityOutfit
-              .getOrDefault(typeEnum, null);
+                  .getOrDefault(typeEnum, null);
 
           if (communityItemOfType != null) {
             numItemsInCommunityOutfit++;
             // user items matching this type
             List<ItemProxy> userItemsOfType = userItemsSortedByType
-                .getOrDefault(typeEnum, Collections.emptyList());
+                    .getOrDefault(typeEnum, Collections.emptyList());
             // shuffle order of user items presented
             Collections.shuffle(userItemsOfType, new Random());
 
             // loop through user items of that type to find distance
             for (ItemProxy userItemOfType : userItemsOfType) {
-              double similarity = ItemDistanceCalculator
-                  .getSimilarity(userItemOfType, communityItemOfType);
-              if (similarity <= ItemDistanceCalculator.SIMILARITY_THRESHOLD) {
+              if (ItemDistanceCalculator.areSimilar(userItemOfType,
+                      communityItemOfType)) {
                 suggestion.addSuggestedItem(userItemOfType);
                 numUserItemsMatched++;
                 // recommend the first user item of that type that was found
@@ -182,7 +183,7 @@ public class OutfitSuggester {
           }
         }
 
-        if ((numItemsInCommunityOutfit - numUserItemsMatched) < 1) {
+        if ((numItemsInCommunityOutfit - numUserItemsMatched) <= 1) {
           outfitSuggestions.add(suggestion);
         }
       }
@@ -194,17 +195,17 @@ public class OutfitSuggester {
   }
 
   private Map<TypeEnum, List<ItemProxy>> sortItemsIntoTypes(
-      List<ItemProxy> items) {
+          List<ItemProxy> items) {
     Map<TypeEnum, List<ItemProxy>> sortedItems = new HashMap<>();
     for (int i = 0; i < items.size(); i++) {
       ItemProxy itemProxy = items.get(i);
       List<ItemProxy> itemList = new ArrayList<>();
       itemList.add(itemProxy);
       sortedItems.merge(itemProxy.getTypeAttribute().getAttributeVal(),
-          itemList, (oldList, newList) -> {
-            oldList.addAll(newList);
-            return oldList;
-          });
+              itemList, (oldList, newList) -> {
+                oldList.addAll(newList);
+                return oldList;
+              });
     }
     return sortedItems;
   }
