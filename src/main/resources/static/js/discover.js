@@ -11,7 +11,7 @@ function displayOutfitSuggestions(username) {
 
         // console.log(likedOutfitIds);
 
-        // console.log(completeOutfits);
+        console.log(completeOutfits);
         // console.log(completeOutfits[0].communityOutfit);
         // console.log(incompleteOutfits);
         generateSuggestionCards(completeOutfits);
@@ -65,10 +65,10 @@ function generateSuggestionContent(suggestion) {
     // post request to get outfit components as array
     $.post("/outfitComponents", postParams, responseJSON => {
         let communityOutfitContent = '<div class="communityOutfit">';
-        communityOutfitContent += generateItemContent(JSON.parse(responseJSON).outer, suggestion.communityOutfit.outer, suggestion.communityOutfit.id);
-        communityOutfitContent += generateItemContent(JSON.parse(responseJSON).top, suggestion.communityOutfit.top, suggestion.communityOutfit.id);
-        communityOutfitContent += generateItemContent(JSON.parse(responseJSON).bottom, suggestion.communityOutfit.bottom, suggestion.communityOutfit.id);
-        communityOutfitContent += generateItemContent(JSON.parse(responseJSON).shoes, suggestion.communityOutfit.feet, suggestion.communityOutfit.id);
+        communityOutfitContent += generateItemContent(JSON.parse(responseJSON).outer, suggestion.communityOutfit.outer);
+        communityOutfitContent += generateItemContent(JSON.parse(responseJSON).top, suggestion.communityOutfit.top);
+        communityOutfitContent += generateItemContent(JSON.parse(responseJSON).bottom, suggestion.communityOutfit.bottom);
+        communityOutfitContent += generateItemContent(JSON.parse(responseJSON).shoes, suggestion.communityOutfit.feet);
         communityOutfitContent += '</div>';
 
         $('#modal-' + suggestion.communityOutfit.id + ' .modal-content').append(communityOutfitContent);
@@ -82,10 +82,10 @@ function generateSuggestionContent(suggestion) {
 
         $.post("/outfitComponents", postParams, responseJSON => {
             let potentialOutfitContent = '<div class="potentialUserOutfit">';
-            potentialOutfitContent += generateItemContent(JSON.parse(responseJSON).outer, suggestion.userItems.outer, suggestion.communityOutfit.id);
-            potentialOutfitContent += generateItemContent(JSON.parse(responseJSON).top, suggestion.userItems.top, suggestion.communityOutfit.id);
-            potentialOutfitContent += generateItemContent(JSON.parse(responseJSON).bottom, suggestion.userItems.bottom, suggestion.communityOutfit.id);
-            potentialOutfitContent += generateItemContent(JSON.parse(responseJSON).shoes, suggestion.userItems.feet, suggestion.communityOutfit.id);
+            potentialOutfitContent += generateItemContent(JSON.parse(responseJSON).outer, suggestion.userItems.outer);
+            potentialOutfitContent += generateItemContent(JSON.parse(responseJSON).top, suggestion.userItems.top);
+            potentialOutfitContent += generateItemContent(JSON.parse(responseJSON).bottom, suggestion.userItems.bottom);
+            potentialOutfitContent += generateItemContent(JSON.parse(responseJSON).shoes, suggestion.userItems.feet);
             potentialOutfitContent += '</div>';
 
             $('#modal-' + suggestion.communityOutfit.id + ' .modal-content').append(potentialOutfitContent);
@@ -94,11 +94,10 @@ function generateSuggestionContent(suggestion) {
     });
 }
 
-function generateItemContent(item, id, outfitId) {
+function generateItemContent(item, id) {
     let itemContent;
     if (item.length == 0) {
         itemContent = '<div class="item" id="item-empty">' + N / A + "</div>";
-        console.log("hii");
     } else {
         // itemContent = '<div tabindex="-1" class="item" id="item-' + id +
         // '">'; itemContent += '<h5>' + item[1] + '</h5><br>'; itemContent +=
@@ -107,20 +106,22 @@ function generateItemContent(item, id, outfitId) {
         // '</p><br>'; itemContent += '<p>Season:' + item[5] + '</p><br>';
         // itemContent += '<p>Formality:' + item[6] + '</p><br>'; itemContent
         // += '</div>';
-        itemContent = generateItemIcon(item, id, outfitId);
-
         let imageSource = item[7];
+        itemContent = generateItemIcon(item, id, imageSource);
+
+        // let imageSource = item[7];
         // console.log(imageSource);
         // console.log(item);
-        console.log("url(" + imageSource + ") no-repeat");
-        $('#item-' + id + "-" + outfitId).css("background", "url(\"" + imageSource + "\") no-repeat");
-        $('#item-' + id + "-" +outfitId).css("background-size", "100%");
+        // console.log("url(" + imageSource + ") no-repeat");
+        // $('#item-' + id + "-" + outfitId).css("background", "url(" + imageSource + ") no-repeat");
+        // $('#item-' + id + "-" +outfitId).css("background-size", "100%");
     }
     return itemContent;
 }
 
-function generateItemIcon(item, id, outfitId) {
-    return '<div tabindex="-1" class="item" id="item-' + id + "-" + outfitId + '">' + item[1] + '</div>';
+function generateItemIcon(item, id, imageSource) {
+    return '<div tabindex="-1" class="item" id="item-' + id +  '" ' +
+        'style="background-image: url(' + imageSource + '); background-size: 100%">' + item[1] + '</div>';
 }
 
 

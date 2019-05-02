@@ -49,18 +49,19 @@ function generateItemContent(item, id) {
         // '</p><br>'; itemContent += '<p>Season:' + item[5] + '</p><br>';
         // itemContent += '<p>Formality:' + item[6] + '</p><br>'; itemContent
         // += '</div>';
-        itemContent = generateItemIcon(item, id);
-
         let imageSource = item[7];
-        $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
-        $('#item-' + id).css("background-size", "100%");
+        itemContent = generateItemIcon(item, id, imageSource);
+
+        // $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
+        // $('#item-' + id).css("background-size", "100%");
     }
     return itemContent;
 }
 
 // generate item icons to display when users are adding to an outfit
-function generateItemIcon(item, id) {
-    return '<div tabindex="-1" class="item" id="item-' + id + '">' + item[1] + '</div>';
+function generateItemIcon(item, id, imageSource) {
+    return '<div tabindex="-1" class="item" id="item-' + id +  '" ' +
+        'style="background-image: url(' + imageSource + '); background-size: 100%">' + item[1] + '</div>';
 }
 
 // animate modal for popup functionality of outfit modal
