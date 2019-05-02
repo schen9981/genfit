@@ -1,0 +1,143 @@
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/*!* Style the form *!*/
+/*#regForm {*/
+/*    background-color: #ffffff;*/
+/*    margin: 100px auto;*/
+/*    padding: 40px;*/
+/*    width: 70%;*/
+/*    min-width: 300px;*/
+/*}*/
+
+/*!* Style the input fields *!*/
+/*input {*/
+/*    padding: 10px;*/
+/*    width: 100%;*/
+/*    font-size: 17px;*/
+/*    font-family: Raleway;*/
+/*    border: 1px solid #aaaaaa;*/
+/*}*/
+
+/*!* Hide all steps by default: *!*/
+/*.tab-add {*/
+/*    display: none;*/
+/*}*/
+
+/*.tab-suggest {*/
+/*    display: none;*/
+/*}*/
+
+/*#addOutfitModal .item {*/
+/*    display: table-cell;*/
+/*    width: 20%;*/
+/*    height: 200px;*/
+/*    transition: box-shadow .3s;*/
+/*    border-radius:10px;*/
+/*    border: 1px solid #ccc;*/
+/*}*/
+
+.description {
+    display: table-row;
+}
+
+.item:hover {
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
+
+.modal-content {
+    display: table;
+}
+
+.item {
+    display: table-cell;
+    width: 20%;
+    height: 200px;
+}
+
+.delete {
+    margin-bottom: 10px;
+}
+
+#complete-outfits, #incomplete-outfits {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.outfit {
+    border: 1px solid black;
+    /*width: 100px;*/
+    height: 100px;
+    /*max-width: 100%;*/
+    display: flex;
+    /*flex-direction: row;*/
+    /*box-sizing: border-box;*/
+    flex-flow: row;
+    /*flex-wrap: wrap;*/
+}
+
+.outfit-card {
+    display: flex;
+    /*width: 25%;*/
+    /*min-width: 50px;*/
+    flex-flow: column;
+    /*flex-wrap: wrap;*/
+    /*flex-grow: 1;*/
+    /*padding: 5px;*/
+    /*box-sizing: border-box;*/
+    min-width: 200px;
+    box-sizing: border-box;
+    /*flex-grow: 1;*/
+}
+
+.outfit-card p {
+    margin: 0;
+}
+
+.like-wrapper {
+    padding-bottom: 10px;
+    display: flex;
+}
+
+.like-button.not-liked{
+    background: white;
+}
+
+.like-button.liked{
+    background: blue;
+}

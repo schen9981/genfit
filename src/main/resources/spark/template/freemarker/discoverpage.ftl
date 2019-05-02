@@ -1,4 +1,6 @@
 <#assign content>
+    <link rel="stylesheet"
+          href="<#if cssPath?has_content>${cssPath}</#if>css/discover.css">
 
     <div id="top-container">
         <h2>You can try these</h2>
