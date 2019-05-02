@@ -66,7 +66,10 @@ function generateCards(listOfItems) {
     // generate modal html
 
     let id = item[0];
-    let buttonHTML = '<div class="item" style="display: inline-block"><button class="item-button" id="item-' + id + '"></button><div>' + item[1] + '</div></div>';
+    let imageWidth = $(window).width() * 0.1;
+    let imageHeight = imageWidth * 1.2;
+    let buttonHTML = '<div class="item"><button class="item-button" id="item-'
+        + id + '"></button><div style="text-align: center">' + item[1] + '</div></div>';
     let modalHTML = '<div class="modal" id="modal-' + id + '">';
     modalHTML += '<div class="modal-content">';
     modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
@@ -80,8 +83,6 @@ function generateCards(listOfItems) {
 
     // Set image
     let imageSource = item[7];
-    // $('#item-' + id).css("width", "100%");
-    // $('#item-' + id).css("height", "100%");
     $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
     $('#item-' + id).css("background-size", "contain");
 
@@ -91,10 +92,6 @@ function generateCards(listOfItems) {
     // add delete button functionality
     deleteUserItem(id);
   }
-  // set dimensions of cards
-  // $('.item').css("width", "10%");
-  // let itemWidth = $('.item').width();
-  // $('.item').height(itemWidth * 1.1);
 }
 
 // add button functionality to remove an item
