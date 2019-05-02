@@ -24,7 +24,15 @@ public class OutfitComponentsRetriever implements Route {
   public String handle(Request req, Response res) {
     QueryParamsMap qm = req.queryMap();
 
-    int outerId = Integer.parseInt(qm.value("outer"));
+    String outerIdStr = qm.value("outer");
+
+    Integer outerId;
+    if (outerIdStr != null) {
+      outerId = Integer.parseInt(outerIdStr);
+    } else {
+      outerId = null;
+    }
+
     int topId = Integer.parseInt(qm.value("top"));
     int bottomId = Integer.parseInt(qm.value("bottom"));
     int shoesId = Integer.parseInt(qm.value("shoes"));
@@ -60,7 +68,7 @@ public class OutfitComponentsRetriever implements Route {
     }
 
     Map<String, Object> variables = ImmutableMap.of("outer", outerInfoArr,
-        "top", topInfoArr, "bottom", bottomInfoArr, "shoes", shoesInfoArr);
+            "top", topInfoArr, "bottom", bottomInfoArr, "shoes", shoesInfoArr);
 
     return Main.GSON.toJson(variables);
   }
