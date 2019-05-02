@@ -32,15 +32,6 @@ public class RankerTest {
   private FormalityAttrRanker far;
   private AttributeRankerFactory arf;
 
-  @Before
-  public void setUp() {
-    this.car = new ColorAttrRanker();
-    this.sar = new SeasonAttrRanker();
-    this.par = new PatternAttrRanker();
-    this.far = new FormalityAttrRanker();
-    this.arf = new AttributeRankerFactory();
-  }
-
   private static void printList(List l) {
     Iterator i = l.iterator();
     while (i.hasNext()) {
@@ -48,6 +39,15 @@ public class RankerTest {
       System.out.print(", ");
     }
     System.out.println("");
+  }
+
+  @Before
+  public void setUp() {
+    this.car = new ColorAttrRanker();
+    this.sar = new SeasonAttrRanker();
+    this.par = new PatternAttrRanker();
+    this.far = new FormalityAttrRanker();
+    this.arf = new AttributeRankerFactory();
   }
 
   @Test
