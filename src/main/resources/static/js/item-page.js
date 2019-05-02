@@ -64,8 +64,9 @@ function generateCards(listOfItems) {
     let item = listOfItems[i];
 
     // generate modal html
+
     let id = item[0];
-    let buttonHTML = '<button class="item" id="item-' + id + '">' + item[1] + '</button>';
+    let buttonHTML = '<div class="item" style="display: inline-block"><button class="item-button" id="item-' + id + '"></button><div>' + item[1] + '</div></div>';
     let modalHTML = '<div class="modal" id="modal-' + id + '">';
     modalHTML += '<div class="modal-content">';
     modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
@@ -79,8 +80,10 @@ function generateCards(listOfItems) {
 
     // Set image
     let imageSource = item[7];
+    // $('#item-' + id).css("width", "100%");
+    // $('#item-' + id).css("height", "100%");
     $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
-    $('#item-' + id).css("background-size", "100%");
+    $('#item-' + id).css("background-size", "contain");
 
     // add popup functionality to given modal
     animateItemModal(id);
@@ -89,9 +92,9 @@ function generateCards(listOfItems) {
     deleteUserItem(id);
   }
   // set dimensions of cards
-  $('.item').css("width", "10%");
-  let itemWidth = $('.item').width();
-  $('.item').height(itemWidth * 1.2);
+  // $('.item').css("width", "10%");
+  // let itemWidth = $('.item').width();
+  // $('.item').height(itemWidth * 1.1);
 }
 
 // add button functionality to remove an item
@@ -244,6 +247,7 @@ function addItemPost(postParams) {
       generateCards(itemList);
       $('#addItemModal').css("display", "none");
       $('#image-input').val('');
+      $('#image-preview').get(0).src = '';
   });
 }
 
