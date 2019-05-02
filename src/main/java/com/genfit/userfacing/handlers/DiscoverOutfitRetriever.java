@@ -9,12 +9,14 @@ import com.genfit.userfacing.GenFitApp;
 import com.genfit.userfacing.Main;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +53,7 @@ public class DiscoverOutfitRetriever implements Route {
 
     List<JsonObject> completeOutfits = new LinkedList<>();
     List<JsonObject> incompleteOutfits = new LinkedList<>();
+
     for (OutfitSuggestion suggestion : completeOutfitsSuggestion) {
       OutfitProxy communityOutfit = suggestion.getCommunityOutfit();
       Map<TypeEnum, ItemProxy> communityOutfitComp =
@@ -74,7 +77,19 @@ public class DiscoverOutfitRetriever implements Route {
       suggestionJson.add("userItems", userItemsJson);
 
       if (suggestion.isComplete()) {
-        completeOutfits.add(suggestionJson);
+        boolean exists = false;
+        try {
+          exists = this.genFitApp.getDb().checkOutfitWithItems(id,
+              userItemsJson.get("outer").getAsInt(),
+              userItemsJson.get("top").getAsInt(),
+              userItemsJson.get("bottom").getAsInt(),
+              userItemsJson.get("feet").getAsInt());
+        } catch (SQLException e) {
+          System.out.println("ERROR: error with checkOutfitWithItems");
+        }
+        if (!exists) {
+          completeOutfits.add(suggestionJson);
+        }
       } else {
         List<ItemProxy> stillNeeded = suggestion.getItemsNeeded();
         JsonArray stillNeededJson = this.convertItemsToJsonArr(stillNeeded);

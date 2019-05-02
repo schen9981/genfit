@@ -40,6 +40,8 @@ public class Database {
   // Check statements
   private final String checkLoginSQL = "SELECT * FROM user WHERE email = ?;";
   private final String checkSignupSQL = "SELECT * FROM user WHERE email = ?;";
+  private final String checkOutfitWithItemsSQL = "SELECT * FROM outfit as a JOIN user_outfit as b WHERE a.id = b.outfit_id AND "
+     + "b.user_id = ? AND a.outer = ? AND a.top = ? AND a.bottom = ? AND a.feet = ?;";
   // Get Statements
   private final String getUserInfoSQL = "SELECT * FROM user WHERE email=?;";
   private final String getItemInfoSQL = "SELECT * FROM item WHERE id=?;";
@@ -108,7 +110,7 @@ public class Database {
   private LoadingCache<String, User> userCache;
   private LoadingCache<Integer, Item> itemCache;
   private LoadingCache<Integer, Outfit> outfitCache;
-  private PreparedStatement checkLoginPrep, checkSignupPrep;
+  private PreparedStatement checkLoginPrep, checkSignupPrep, checkOutfitWithItemsPrep;
   private PreparedStatement getOutfitsExcludeUserPrep;
 
   private Map<Integer, String> defaultImageMap = new HashMap<>();
@@ -121,6 +123,7 @@ public class Database {
       this.changePasswordPrep = conn.prepareStatement(this.changePasswordSQL);
       this.checkLoginPrep = conn.prepareStatement(this.checkLoginSQL);
       this.checkSignupPrep = conn.prepareStatement(this.checkSignupSQL);
+      this.checkOutfitWithItemsPrep = conn.prepareStatement(this.checkOutfitWithItemsSQL);
       this.getUserInfoPrep = conn.prepareStatement(this.getUserInfoSQL);
       this.getItemInfoPrep = conn.prepareStatement(this.getItemInfoSQL);
       this.getOutfitInfoPrep = conn.prepareStatement(this.getOutfitInfoSQL);
@@ -282,6 +285,23 @@ public class Database {
     }
 
     return BCrypt.checkpw(clientHashPwd, storedHash);
+  }
+
+  public synchronized boolean checkOutfitWithItems(int id, int outerId,
+                     int topId, int bottomId, int feetId) throws SQLException {
+    
+    this.checkOutfitWithItemsPrep.setInt(1, id);
+    this.checkOutfitWithItemsPrep.setInt(2, outerId);
+    this.checkOutfitWithItemsPrep.setInt(3, topId);
+    this.checkOutfitWithItemsPrep.setInt(4, bottomId);
+    this.checkOutfitWithItemsPrep.setInt(5, feetId);
+    ResultSet rs = this.checkOutfitWithItemsPrep.executeQuery();
+    boolean exist = false;
+    if (rs.next()) {
+      exist = true;
+    }
+    rs.close();
+    return exist;
   }
 
   public synchronized boolean checkSignup(String username) throws Exception {

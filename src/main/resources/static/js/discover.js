@@ -12,8 +12,7 @@ function displayOutfitSuggestions(username) {
         // console.log(likedOutfitIds);
 
         console.log(completeOutfits);
-        // console.log(completeOutfits[0].communityOutfit);
-        // console.log(incompleteOutfits);
+        console.log(incompleteOutfits);
         generateSuggestionCards(completeOutfits);
     })
 }
@@ -71,6 +70,7 @@ function generateSuggestionContent(suggestion) {
         communityOutfitContent += generateItemContent(JSON.parse(responseJSON).shoes, suggestion.communityOutfit.feet);
         communityOutfitContent += '</div>';
 
+        $('#modal-' + suggestion.communityOutfit.id + ' .modal-content').append("<h1>Someone's Outfit:</h1>");
         $('#modal-' + suggestion.communityOutfit.id + ' .modal-content').append(communityOutfitContent);
 
         let postParams = {
@@ -88,6 +88,7 @@ function generateSuggestionContent(suggestion) {
             potentialOutfitContent += generateItemContent(JSON.parse(responseJSON).shoes, suggestion.userItems.feet);
             potentialOutfitContent += '</div>';
 
+            $('#modal-' + suggestion.communityOutfit.id + ' .modal-content').append("<hr></h4><h1>Can Be Yours With:</h1>");
             $('#modal-' + suggestion.communityOutfit.id + ' .modal-content').append(potentialOutfitContent);
         })
 

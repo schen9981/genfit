@@ -47,6 +47,7 @@ public class ItemDistanceCalculator {
               otherItem.getFormalityAttribute().getAttributeVal();
       Color otherColor =
               otherItem.getColorAttribute().getAttributeVal();
+      // TODO: add subtype distance calculation
 
       SeasonEnum thisSeason =
               thisItem.getWeatherAttribute().getAttributeVal();
@@ -68,6 +69,15 @@ public class ItemDistanceCalculator {
               Math.abs(thisPattern.ordinal() - otherPattern.ordinal());
       double formalityDist =
               Math.abs(thisFormality.ordinal() - otherFormality.ordinal());
+      // larger difference between casual and business casual
+      if (thisFormality.ordinal() < FormalityEnum.BUSINESS_CASUAL.ordinal() &&
+              otherFormality.ordinal() >= FormalityEnum.BUSINESS_CASUAL.ordinal()) {
+        formalityDist *= 2;
+      } else if (otherFormality.ordinal() < FormalityEnum.BUSINESS_CASUAL.ordinal() &&
+              thisFormality.ordinal() >= FormalityEnum.BUSINESS_CASUAL.ordinal()) {
+        formalityDist *= 2;
+      }
+
       double colorDist = thisColor.getLABDistance(otherColor);
 
       return ((seasonWeight * seasonDist <= SEASON_SIMILARITY_THRESHOLD)
