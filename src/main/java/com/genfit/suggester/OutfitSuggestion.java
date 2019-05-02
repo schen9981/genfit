@@ -35,7 +35,7 @@ public class OutfitSuggestion {
    * @return boolean flag indicating whether above is true
    */
   public boolean isComplete() {
-    for (TypeEnum typeEnum : this.suggestedOutfitMap.keySet()) {
+    for (TypeEnum typeEnum : TypeEnum.values()) {
       if (this.suggestedOutfitMap.getOrDefault(typeEnum, null) == null) {
         return false;
       }
