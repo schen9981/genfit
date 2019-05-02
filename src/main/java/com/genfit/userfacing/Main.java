@@ -82,13 +82,13 @@ public final class Main {
     OptionSet options = parser.parse(this.args);
     this.mainApp = new GenFitApp();
     this.repl = new MainREPL(this.mainApp);
-
     if (options.has("gui")) {
       this.runSparkServer((int) options.valueOf("port"));
     }
 
     this.repl.runREPL();
     // if reached here, IREPL has exited
+    this.mainApp.getDb().closeConnection();
     Spark.stop();
   }
 
