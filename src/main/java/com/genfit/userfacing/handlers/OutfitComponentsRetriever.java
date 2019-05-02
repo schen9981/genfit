@@ -43,7 +43,7 @@ public class OutfitComponentsRetriever implements Route {
     String[] shoesInfoArr = new String[0];
 
     try {
-      if (outerId != -1) {
+      if (outerId != null) {
         Item outer = this.genFitApp.getDb().getItemBean(outerId);
         outerInfoArr = UserItemRetriever.getItemInfoArr(outer);
       }
