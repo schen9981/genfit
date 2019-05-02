@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import com.genfit.attribute.SubtypeAttribute;
+import com.genfit.attribute.attributevals.SubtypeEnum;
 import org.mindrot.jbcrypt.BCrypt;
 
 import com.genfit.attribute.Attribute;
@@ -59,8 +61,8 @@ public class Database {
   private final String addUserSQL = "INSERT INTO user (name, email, password)"
           + " values (?, ?, ?);";
   private final String addItemSQL = "INSERT IGNORE INTO item"
-          + " (name, type, formality, color, pattern, season, image)"
-          + " VALUES (?, ?, ?, ?, ?, ?, ?);";
+          + " (name, type, formality, color, pattern, season, image, subtype)"
+          + " VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
   private final String addItemToUserSQL = "INSERT INTO user_item "
           + "(user_id, item_id) VALUES (?, ?);";
   private final String addOutfitSQL = "INSERT IGNORE INTO outfit"
@@ -97,7 +99,7 @@ public class Database {
   private PreparedStatement getOutfitLikesPrep, getLikedOutfitIdsPrep;
   private PreparedStatement deleteUserPrep, deleteAllUserItemsPrep,
           deleteAllUserOutfitsPrep, incrementLikesPrep, decrementLikesPrep;
-  private Connection conn;
+  private Connection conn = null;
   private PreparedStatement addUserPrep;
   private PreparedStatement addItemPrep, addItemToUserPrep;
   private PreparedStatement addOutfitPrep, addOutfitToUserPrep;
@@ -361,9 +363,12 @@ public class Database {
               SeasonEnum.values()[rs.getInt(7)]);
 
       String image = rs.getString(8);
+      SubtypeAttribute subtype = new SubtypeAttribute(
+              SubtypeEnum.values()[rs.getInt(9)]);
 
       toReturn = new Item(id, name, season, formality, pattern,
-              new ColorAttribute(colorList.get(0)), type, image);
+              new ColorAttribute(colorList.get(0)), type, subtype,
+              image);
     }
     rs.close();
     return toReturn;
@@ -573,7 +578,8 @@ public class Database {
                                   ColorAttribute color,
                                   PatternAttribute pattern,
                                   SeasonAttribute season,
-                                  String imageKey) throws SQLException {
+                                  String imageKey,
+                                  SubtypeAttribute subtype) throws SQLException {
     this.addItemPrep.setString(1, name);
     this.addItemPrep.setInt(2, type.getAttributeVal().ordinal());
     this.addItemPrep.setInt(3, formality.getAttributeVal().ordinal());
@@ -587,6 +593,7 @@ public class Database {
       this.addItemPrep.setString(7,
               S3Connection.getUrlPrefix() + imageKey);
     }
+    this.addItemPrep.setInt(8, subtype.getAttributeVal().ordinal());
     this.addItemPrep.executeUpdate();
 
     ResultSet rs = this.lastInsertID.executeQuery();
@@ -699,6 +706,16 @@ public class Database {
     this.deleteUserOutfitPrep.setInt(1, userId);
     this.deleteUserOutfitPrep.setInt(2, outfitId);
     this.deleteUserOutfitPrep.executeUpdate();
+  }
+
+  public void closeConnection() {
+    if (conn != null) {
+      try {
+        conn.close();
+      } catch (SQLException e) {
+        System.out.println(e.getMessage());
+      }
+    }
   }
 
 }

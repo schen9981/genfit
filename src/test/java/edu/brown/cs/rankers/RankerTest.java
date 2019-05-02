@@ -32,15 +32,6 @@ public class RankerTest {
   private FormalityAttrRanker far;
   private AttributeRankerFactory arf;
 
-  @Before
-  public void setUp() {
-    this.car = new ColorAttrRanker();
-    this.sar = new SeasonAttrRanker();
-    this.par = new PatternAttrRanker();
-    this.far = new FormalityAttrRanker();
-    this.arf = new AttributeRankerFactory();
-  }
-
   private static void printList(List l) {
     Iterator i = l.iterator();
     while (i.hasNext()) {
@@ -50,35 +41,44 @@ public class RankerTest {
     System.out.println("");
   }
 
+  @Before
+  public void setUp() {
+    this.car = new ColorAttrRanker();
+    this.sar = new SeasonAttrRanker();
+    this.par = new PatternAttrRanker();
+    this.far = new FormalityAttrRanker();
+    this.arf = new AttributeRankerFactory();
+  }
+
   @Test
   public void testBasic() {
     assertEquals(this.arf.rankAttributes(this.sar).size(), 0);
     assertEquals(this.arf.rankAttributes(this.par).size(), 0);
     assertEquals(this.arf.rankAttributes(this.far).size(), 0);
 
-    Item i1 = new Item(1, "dummy1",
-            new SeasonAttribute(SeasonEnum.FALL),
-            new FormalityAttribute(FormalityEnum.BUSINESS_CASUAL),
-            new PatternAttribute(PatternEnum.SOLID),
-            new ColorAttribute(new Color(Color.convertToHexVal(62, 131, 242))),
-            new TypeAttribute(TypeEnum.BOTTOM),
-            "https://s3.amazonaws.com/cs32-term-project-s3-bucket/pants.png");
+//    Item i1 = new Item(1, "dummy1",
+//            new SeasonAttribute(SeasonEnum.FALL),
+//            new FormalityAttribute(FormalityEnum.BUSINESS_CASUAL),
+//            new PatternAttribute(PatternEnum.SOLID),
+//            new ColorAttribute(new Color(Color.convertToHexVal(62, 131, 242))),
+//            new TypeAttribute(TypeEnum.BOTTOM),
+//            "https://s3.amazonaws.com/cs32-term-project-s3-bucket/pants.png");
 
-    this.arf.addItem(new ItemProxyDummy(i1));
+//    this.arf.addItem(new ItemProxyDummy(i1));
 
     //printList(this.arf.rankAttributes(this.sar));
     //printList(this.arf.rankAttributes(this.par));
     //printList(this.arf.rankAttributes(this.far));
 
-    Item i2 = new Item(2, "dummy2",
-            new SeasonAttribute(SeasonEnum.SPRING),
-            new FormalityAttribute(FormalityEnum.ULTRA_CASUAL),
-            new PatternAttribute(PatternEnum.STRIPED),
-            new ColorAttribute(new Color(4567)),
-            new TypeAttribute(TypeEnum.TOP),
-            "https://s3.amazonaws.com/cs32-term-project-s3-bucket/shirt.png");
-
-    this.arf.addItem(new ItemProxyDummy(i2));
+//    Item i2 = new Item(2, "dummy2",
+//            new SeasonAttribute(SeasonEnum.SPRING),
+//            new FormalityAttribute(FormalityEnum.ULTRA_CASUAL),
+//            new PatternAttribute(PatternEnum.STRIPED),
+//            new ColorAttribute(new Color(4567)),
+//            new TypeAttribute(TypeEnum.TOP),
+//            "https://s3.amazonaws.com/cs32-term-project-s3-bucket/shirt.png");
+//
+//    this.arf.addItem(new ItemProxyDummy(i2));
 
     //printList(this.arf.rankAttributes(this.car));
     //printList(this.arf.rankAttributes(this.sar));
