@@ -13,6 +13,8 @@ import com.genfit.database.Database;
 import com.genfit.proxy.ItemProxy;
 import com.genfit.suggester.OutfitSuggester;
 
+import static org.junit.Assert.assertEquals;
+
 public class ItemSuggestorTest {
   @Test
   public void testSingleItemOutfit() {
@@ -25,7 +27,7 @@ public class ItemSuggestorTest {
 
       Outfit o = new Outfit(0, "dummy0", itemMap);
 
-//      Map<TypeEnum, List<ItemProxy>> items = os.suggestItems(o, db, 104);
+      Map<TypeEnum, List<ItemProxy>> items = os.suggestItems(o, db, 104);
 
 //      assertEquals(11, items.size());
 
@@ -54,7 +56,7 @@ public class ItemSuggestorTest {
       Outfit o = new Outfit(0, "dummy0", itemMap);
 
       Map<TypeEnum, List<ItemProxy>> items = os.suggestItems(o, db, 104);
-      // assertEquals(7, items.size());
+//      assertEquals(7, items.size());
     } catch (Exception e) {
       e.printStackTrace();
     }

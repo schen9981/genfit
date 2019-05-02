@@ -7,12 +7,15 @@ import com.genfit.attribute.attributevals.SeasonEnum;
 import com.genfit.proxy.ItemProxy;
 
 public class ItemDistanceCalculator {
-  // 1.1 for season
-  // 1.2 for pattern
-  // 1.2 for formality
+  public static final double SEASON_SIMILARITY_THRESHOLD = 1.1;
+  public static final double PATTERN_SIMILARITY_THRESHOLD = 1.2;
+  public static final double FORMALITY_SIMILARITY_THRESHOLD = 1.2;
   // 0.5 for color because 49 is the edge of perceptibility and the color is
   // weighted by 1/100
-  public static final double SIMILARITY_THRESHOLD = 1.1 + 1.2 + 1.2 + 0.5;
+  public static final double COLOR_SIMILARITY_THRESHOLD = 0.5;
+  public static final double TOTAL_SIMILARITY_THRESHOLD =
+          SEASON_SIMILARITY_THRESHOLD + PATTERN_SIMILARITY_THRESHOLD
+                  + FORMALITY_SIMILARITY_THRESHOLD + COLOR_SIMILARITY_THRESHOLD;
   private static final double seasonWeight = 1.0;
   private static final double patternWeight = 1.0;
   private static final double formalityWeight = 1.0;
@@ -25,15 +28,16 @@ public class ItemDistanceCalculator {
   }
 
   /**
-   * Calculates similarity "distance" to another item, lower scores mean more
-   * similar.
+   * Calculates whether two items are similar.
    *
-   * @return int indicating similarity score
+   * @param thisItem
+   * @param otherItem
+   * @return boolean indicating whether about is true
    */
-  public static double getSimilarity(ItemProxy thisItem, ItemProxy otherItem) {
+  public static boolean areSimilar(ItemProxy thisItem, ItemProxy otherItem) {
     // different type will return largest possible distance
     if (!otherItem.getTypeAttribute().equals(thisItem.getTypeAttribute())) {
-      return Integer.MAX_VALUE;
+      return false;
     } else {
       SeasonEnum otherSeason =
               otherItem.getWeatherAttribute().getAttributeVal();
@@ -66,12 +70,10 @@ public class ItemDistanceCalculator {
               Math.abs(thisFormality.ordinal() - otherFormality.ordinal());
       double colorDist = thisColor.getLABDistance(otherColor);
 
-      double finalDist = (seasonWeight * seasonDist)
-              + (patternWeight * patternDist)
-              + (formalityWeight * formalityDist)
-              + (colorWeight * colorDist);
-
-      return finalDist;
+      return ((seasonWeight * seasonDist <= SEASON_SIMILARITY_THRESHOLD)
+              && (patternWeight * patternDist <= PATTERN_SIMILARITY_THRESHOLD)
+              && (formalityWeight * formalityDist <= FORMALITY_SIMILARITY_THRESHOLD)
+              && (colorWeight * colorDist <= COLOR_SIMILARITY_THRESHOLD));
     }
   }
 }

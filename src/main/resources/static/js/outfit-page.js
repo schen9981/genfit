@@ -22,6 +22,7 @@ function generateOutfitContent(outfit, id) {
         bottom: outfit[4],
         shoes: outfit[5]
     }
+
     // post request to get outfit components as array
     $.post("/outfitComponents", postParams, responseJSON => {
         let outfitContent = '<div class="fullOutfit">';
@@ -48,18 +49,19 @@ function generateItemContent(item, id) {
         // '</p><br>'; itemContent += '<p>Season:' + item[5] + '</p><br>';
         // itemContent += '<p>Formality:' + item[6] + '</p><br>'; itemContent
         // += '</div>';
-        itemContent = generateItemIcon(item, id);
-
         let imageSource = item[7];
-        $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
-        $('#item-' + id).css("background-size", "100%");
+        itemContent = generateItemIcon(item, id, imageSource);
+
+        // $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
+        // $('#item-' + id).css("background-size", "100%");
     }
     return itemContent;
 }
 
 // generate item icons to display when users are adding to an outfit
-function generateItemIcon(item, id) {
-    return '<div tabindex="-1" class="item" id="item-' + id + '">' + item[1] + '</div>';
+function generateItemIcon(item, id, imageSource) {
+    return '<div tabindex="-1" class="item" id="item-' + id +  '" ' +
+        'style="background-image: url(' + imageSource + '); background-size: 100%">' + item[1] + '</div>';
 }
 
 // animate modal for popup functionality of outfit modal
@@ -267,7 +269,7 @@ function getIntId(str) {
 // function that adds a fully constructed outfit to the database
 function addOutfit() {
     $('#addOutfit').on("click", function (e) {
-        e.preventDefault();
+        // e.preventDefault();
         // get all items in the div
         let outer = document.getElementById("outer-item").getElementsByClassName("item")[0];
         let top = document.getElementById("top-item").getElementsByClassName("item")[0];
@@ -281,7 +283,7 @@ function addOutfit() {
             top: getIntId(top.id),
             bottom: getIntId(bottom.id),
             shoes: getIntId(shoes.id)
-        }
+        };
 
         // post request to addItems
         $.post("/addOutfit", postParams, responseJSON => {

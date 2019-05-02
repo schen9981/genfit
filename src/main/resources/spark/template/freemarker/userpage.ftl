@@ -12,7 +12,7 @@
         </div>
     </div>
     <div id="outfit-overview">
-        <h2>Outfits</h2>
+<#--        <h2>Outfits</h2>-->
 
     </div>
 
