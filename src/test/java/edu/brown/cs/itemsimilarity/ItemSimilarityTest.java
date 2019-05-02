@@ -4,6 +4,7 @@ import com.genfit.clothing.ItemDistanceCalculator;
 import com.genfit.database.AWSConnection;
 import com.genfit.database.Database;
 import com.genfit.proxy.ItemProxy;
+import com.google.gson.JsonObject;
 import org.junit.Test;
 
 public class ItemSimilarityTest {
@@ -12,8 +13,6 @@ public class ItemSimilarityTest {
     Database db = null;
     try {
       db = new Database(AWSConnection.getDBConnectionUsingIam());
-      //System.out.println(new Color(128, 130, 104).getLABDistance(
-      //        new Color(183, 193, 58)));
 
       System.out.println("boat shoes and converses");
       System.out.println(ItemDistanceCalculator.getSimilarity(
