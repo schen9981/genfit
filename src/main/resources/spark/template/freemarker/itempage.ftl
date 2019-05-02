@@ -15,7 +15,7 @@
               <div style="display: table-cell; width: 30%">
                   <form id="addItemForm">
                       Item Description:<br>
-                      <input type="text" id="item-name" name="item-name"><br>
+                      <input type="text" id="item-name" name="item-name" required><br>
 
                       Color(s):<br>
                       <div id="item-colors">

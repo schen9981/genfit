@@ -18,7 +18,7 @@
                     <div class="tab-add" id="outfit-info">
                         Outfit Name:<br>
                         <input type="text" id="outfit-name"
-                               name="outfit-name"><br>
+                               name="outfit-name" required><br>
                         <div class="add" id="outer-item">
                             <button id="add-outer-item"
                                     onclick="navigateToTab(event, 1)">Add Outer
