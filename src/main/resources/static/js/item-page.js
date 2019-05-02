@@ -220,6 +220,7 @@ function addItemFormSubmit() {
       itemName: $('#item-name').val(),
       itemColor: $('#item-color').val(),
       itemType1: $('#type-1').val(),
+      itemType2: $('#type-2').val(),
       itemPattern: $('#item-pattern').val(),
       itemSeason: $('#item-season').val(),
       itemFormality: $('#item-formality').val(),
