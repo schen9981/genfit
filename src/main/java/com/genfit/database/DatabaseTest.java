@@ -10,12 +10,15 @@ import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
 import com.genfit.attribute.SeasonAttribute;
+import com.genfit.attribute.SubtypeAttribute;
 import com.genfit.attribute.TypeAttribute;
 import com.genfit.attribute.attributevals.Color;
 import com.genfit.attribute.attributevals.FormalityEnum;
 import com.genfit.attribute.attributevals.PatternEnum;
 import com.genfit.attribute.attributevals.SeasonEnum;
+import com.genfit.attribute.attributevals.SubtypeEnum;
 import com.genfit.attribute.attributevals.TypeEnum;
+import com.genfit.clothing.Item;
 import com.genfit.proxy.ItemProxy;
 import com.genfit.proxy.OutfitProxy;
 import com.genfit.proxy.UserProxy;
@@ -45,16 +48,20 @@ public class DatabaseTest {
   public static void main(String[] args) throws Exception {
       Connection connection = AWSConnection.getDBConnectionUsingIam();
       Database db = new Database(connection);
-//      db.addItem(1, "someshirt",
+//      db.addItem(103, "someshirt",
 //              new TypeAttribute(TypeEnum.TOP),
 //              new FormalityAttribute(FormalityEnum.CASUAL),
 //              new ColorAttribute(new Color(0xffffff)),
 //              new PatternAttribute(PatternEnum.SOLID),
 //              new SeasonAttribute(SeasonEnum.SPRING),
-//              "default");16
-    UserProxy user = new UserProxy(db, "wenhuang_zeng@brown.edu");
-    OutfitProxy outfitProxy = new OutfitProxy(db, 16);
-    db.deleteOutfit(0, 2);
+//              "default",
+//              new SubtypeAttribute(SubtypeEnum.T_SHIRT));
+      Item item = db.getItemBean(173);
+      System.out.println(item.getType());
+      System.out.println(item.getSubtype());
+//    UserProxy user = new UserProxy(db, "wenhuang_zeng@brown.edu");
+//    OutfitProxy outfitProxy = new OutfitProxy(db, 16);
+//    db.deleteOutfit(0, 2);
     connection.close();
   }
 

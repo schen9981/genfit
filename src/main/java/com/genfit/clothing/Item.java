@@ -4,6 +4,7 @@ import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
 import com.genfit.attribute.SeasonAttribute;
+import com.genfit.attribute.SubtypeAttribute;
 import com.genfit.attribute.TypeAttribute;
 
 public class Item extends ClosetComponent {
@@ -16,10 +17,12 @@ public class Item extends ClosetComponent {
   private ColorAttribute color;
   private TypeAttribute type;
   private String image;
+  private SubtypeAttribute subtype;
 
   public Item(int id, String name, SeasonAttribute season,
       FormalityAttribute formality, PatternAttribute pattern,
-      ColorAttribute color, TypeAttribute type, String image) {
+      ColorAttribute color, TypeAttribute type, SubtypeAttribute subtype,
+      String image) {
     super(season, formality, pattern, color, type);
     this.id = id;
     this.name = name;
@@ -28,6 +31,7 @@ public class Item extends ClosetComponent {
     this.pattern = pattern;
     this.color = color;
     this.type = type;
+    this.subtype = subtype;
     this.image = image;
   }
 
@@ -57,6 +61,10 @@ public class Item extends ClosetComponent {
 
   public TypeAttribute getType() {
     return type;
+  }
+
+  public SubtypeAttribute getSubtype() {
+    return subtype;
   }
 
   public String getImage() {

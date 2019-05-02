@@ -5,11 +5,13 @@ import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
 import com.genfit.attribute.SeasonAttribute;
+import com.genfit.attribute.SubtypeAttribute;
 import com.genfit.attribute.TypeAttribute;
 import com.genfit.attribute.attributevals.Color;
 import com.genfit.attribute.attributevals.FormalityEnum;
 import com.genfit.attribute.attributevals.PatternEnum;
 import com.genfit.attribute.attributevals.SeasonEnum;
+import com.genfit.attribute.attributevals.SubtypeEnum;
 import com.genfit.attribute.attributevals.TypeEnum;
 import com.genfit.database.S3Connection;
 import com.genfit.userfacing.GenFitApp;
@@ -71,11 +73,16 @@ public class AddItemHandler implements Route {
 
     String imageKey = qm.value("imageKey");
 
+    String subtypeStr = qm.value("itemSubtype");
+    toReturn[8] = subtypeStr;
+    SubtypeAttribute subtype = new SubtypeAttribute(
+            Enum.valueOf(SubtypeEnum.class, subtypeStr));
+
     // get id of current user
     int id = this.genFitApp.getDb().getUserBean(qm.value("username")).getId();
     // add item
     int itemId = this.genFitApp.getDb().addItem(id, name, type1, formality,
-        color, pattern, season, imageKey);
+        color, pattern, season, imageKey, subtype);
 
     toReturn[0] = Integer.toString(itemId);
     toReturn[7] = this.genFitApp.getDb().getItemBean(itemId).getImage();
