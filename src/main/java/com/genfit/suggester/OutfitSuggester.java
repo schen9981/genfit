@@ -183,7 +183,7 @@ public class OutfitSuggester {
           }
         }
 
-        if ((numItemsInCommunityOutfit - numUserItemsMatched) <= 1) {
+        if ((numUserItemsMatched - numItemsInCommunityOutfit) <= 1) {
           outfitSuggestions.add(suggestion);
         }
       }
