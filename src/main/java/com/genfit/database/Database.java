@@ -56,6 +56,8 @@ public class Database {
   private final String getOutfitLikesSQL = "SELECT * FROM outfit WHERE id=?;";
   private final String getLikedOutfitIdsSQL = "SELECT * FROM user_liked WHERE"
           + " user_id=?";
+  private final String getOutfitsWithItemIdSQL = "SELECT * FROM outfit WHERE 'outer' = ? "
+      + "OR top = ? OR bottom = ? OR feet = ?;";
 
   // Add Statements
   private final String addUserSQL = "INSERT INTO user (name, email, password)"
@@ -95,7 +97,7 @@ public class Database {
           + "WHERE email = ?";
   private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
   private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
-  private PreparedStatement getAllItemsByAttributesPrep;
+  private PreparedStatement getAllItemsByAttributesPrep, getOutfitsWithItemIdPrep;
   private PreparedStatement getOutfitLikesPrep, getLikedOutfitIdsPrep;
   private PreparedStatement deleteUserPrep, deleteAllUserItemsPrep,
           deleteAllUserOutfitsPrep, incrementLikesPrep, decrementLikesPrep;
@@ -136,6 +138,7 @@ public class Database {
       this.getOutfitLikesPrep = conn.prepareStatement(this.getOutfitLikesSQL);
       this.getLikedOutfitIdsPrep = conn
               .prepareStatement(this.getLikedOutfitIdsSQL);
+      this.getOutfitsWithItemIdPrep = conn.prepareStatement(this.getOutfitsWithItemIdSQL);
 
       this.addUserPrep = conn.prepareStatement(this.addUserSQL);
       this.addItemPrep = conn.prepareStatement(this.addItemSQL);
@@ -709,19 +712,17 @@ public class Database {
   }
 
   public synchronized List<Integer> getOutfitsWithItemId(int itemId) throws SQLException {
-    String sql = "SELECT * FROM outfit WHERE 'outer' = ? "
-      + "OR top = ? OR bottom = ? OR feet = ?;";
-    PreparedStatement prep = this.conn.prepareStatement(sql);
-    prep.setInt(1, itemId);
-    prep.setInt(2, itemId);
-    prep.setInt(3, itemId);
-    prep.setInt(4, itemId);
+
+    this.getOutfitsWithItemIdPrep.setInt(1, itemId);
+    this.getOutfitsWithItemIdPrep.setInt(2, itemId);
+    this.getOutfitsWithItemIdPrep.setInt(3, itemId);
+    this.getOutfitsWithItemIdPrep.setInt(4, itemId);
     List<Integer> outfitIds = new ArrayList<>();
-    ResultSet rs = prep.executeQuery();
+    ResultSet rs = this.getOutfitsWithItemIdPrep.executeQuery();
     while (rs.next()) {
       outfitIds.add(rs.getInt(1));
     }
-
+    rs.close();
     return outfitIds;
   }
 
