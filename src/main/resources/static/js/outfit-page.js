@@ -1,14 +1,8 @@
 // username of current user
 let username;
 
-// save the current tab index (generic outfit page)
-let currentTab = 0;
-
 // save selected item that user wants to add to an oufit
 let $selected;
-
-// save empty form html
-let emptyForm;
 
 // ordering of component types (for indices of tab)
 let compInd = ["ALL", "OUTER", "TOP", "BOTTOM", "SHOES"];
@@ -49,18 +43,18 @@ function generateItemContent(item, id) {
         // '</p><br>'; itemContent += '<p>Season:' + item[5] + '</p><br>';
         // itemContent += '<p>Formality:' + item[6] + '</p><br>'; itemContent
         // += '</div>';
-        let imageSource = item[7];
+        let imageSource = item[8];
         itemContent = generateItemIcon(item, id, imageSource);
 
-        // $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
-        // $('#item-' + id).css("background-size", "100%");
+        // $('#item-' + id).css("background", "url(" + imageSource + ")
+        // no-repeat"); $('#item-' + id).css("background-size", "100%");
     }
     return itemContent;
 }
 
 // generate item icons to display when users are adding to an outfit
 function generateItemIcon(item, id, imageSource) {
-    return '<div tabindex="-1" class="item" id="item-' + id +  '" ' +
+    return '<div tabindex="-1" class="item" id="item-' + id + '" ' +
         'style="background-image: url(' + imageSource + '); background-size: 100%">' + item[1] + '</div>';
 }
 
@@ -110,7 +104,6 @@ function generateOutfitCards(listOfOutfits) {
 
         displayLikes(username, id, 0, outfitCard);
 
-
         generateOutfitContent(outfit, id);
 
         // add popup functionality to given modal
@@ -122,41 +115,6 @@ function generateOutfitCards(listOfOutfits) {
     // set dimensions of cards
     $('.outfit').css("width", "100%");
 }
-
-// add the items to each specific tab (when adding top, bottom, etc.)
-function generateItemCards(listOfItems, tabId) {
-    for (i = 0; i < listOfItems.length; i++) {
-        // get current item json
-        let item = listOfItems[i];
-
-        // generate modal html
-        let id = item[0];
-
-        // check if item already exists on page
-        if ($('.tab-add #item-' + id).html() == null) {
-            // set item html
-            let divHTML = generateItemIcon(item, id);
-            $('#' + tabId).append(divHTML);
-
-            // add image for icon
-            let imageSource = item[7];
-            $('.tab-add #item-' + id).css("background", "url(" + imageSource + ") no-repeat");
-            $('.tab-add #item-' + id).css("background-size", "100%");
-
-            // add event listener for focus (ie user selection)
-
-            $('.tab-add #item-' + id).focus(function () {
-                console.log(id);
-                $selected = this;
-            })
-        }
-        // set dimensions of cards
-        $('.item').css("width", "20%");
-        let itemWidth = $('.item').width();
-        $('.item').height('200px');
-    }
-}
-
 
 // function to retrieve and display a user's outfits
 function displayUserOutfits(username) {
@@ -189,116 +147,9 @@ function deleteUserOutfit(outfitId) {
     });
 }
 
-// function that animates the add outfit modal
-function outfitModalAnimation() {
-    let modal = $('#addOutfitModal');
-    let btn = $('#constructOutfit');
-    let span = $('#addSpan');
-
-    // open modal when button clicked
-    btn.click(function () {
-        modal.css("display", "block");
-    });
-
-    // close modal when user clicks 'x'
-    span.click(function () {
-        modal.css("display", "none");
-    });
-}
-
-// function that populates the tab with items of that type when adding items
-function populateTabItems(compId, currTabId) {
-    // generate html components for each item in the tab
-    let postParams = {
-        username: username,
-        component: compInd[compId]
-    }
-    $.post("/outfitByAttribute", postParams, responseJSON => {
-        let itemList = JSON.parse(responseJSON).items;
-        generateItemCards(itemList, currTabId);
-    })
-}
-
-// function that replaces button with selected item, navigate back to home
-function addItemToOutfit(event) {
-    let compDiv = document.getElementsByClassName("add")[currentTab - 1];
-    compDiv.innerHTML = $selected.outerHTML;
-    navigateToTab(event, 0);
-}
-
-// displays tab corresponding to the component (outer: 1, top: 2, bottom: 3,
-// shoes: 4)
-function showTab(compId) {
-    // get all the tabs on the page, display the selected component
-    let tabs = document.getElementsByClassName("tab-add");
-    if (compId == 0) {
-        // want the generic outfit page
-        tabs[0].style.display = "block";
-        // hide and show appropriate buttons
-        document.getElementById("addItem").style.display = "none";
-        document.getElementById("back").style.display = "none";
-        document.getElementById("addOutfit").style.display = "inline";
-        document.getElementById("suggestOutfit").style.display = "inline";
-    } else {
-        populateTabItems(compId, tabs[compId].id);
-        tabs[compId].style.display = "table";
-        document.getElementById("addItem").style.display = "inline";
-        document.getElementById("back").style.display = "inline";
-        document.getElementById("addOutfit").style.display = "none";
-        document.getElementById("suggestOutfit").style.display = "none";
-    }
-}
-
-// navigate to appropriate tab upon click of button
-function navigateToTab(event, tabInd) {
-    event.preventDefault();
-    let tabs = document.getElementsByClassName("tab-add");
-    // hide the current tab
-    tabs[currentTab].style.display = "none";
-    // set current tab index to new tab index
-    currentTab = tabInd;
-    // show the correct tab
-    showTab(tabInd);
-}
-
 // function that returns the id of an item div
 function getIntId(str) {
     return str.split('-')[1];
-}
-
-// function that adds a fully constructed outfit to the database
-function addOutfit() {
-    $('#addOutfit').on("click", function (e) {
-        // e.preventDefault();
-        // get all items in the div
-        let outer = document.getElementById("outer-item").getElementsByClassName("item")[0];
-        let top = document.getElementById("top-item").getElementsByClassName("item")[0];
-        let bottom = document.getElementById("bottom-item").getElementsByClassName("item")[0];
-        let shoes = document.getElementById("shoes-item").getElementsByClassName("item")[0];
-
-        let postParams = {
-            username: username,
-            name: $('#outfit-name').val(),
-            outer: getIntId(outer.id),
-            top: getIntId(top.id),
-            bottom: getIntId(bottom.id),
-            shoes: getIntId(shoes.id)
-        };
-
-        // post request to addItems
-        $.post("/addOutfit", postParams, responseJSON => {
-            let outfit = JSON.parse(responseJSON);
-            let outfitList = [outfit];
-            generateOutfitCards(outfitList);
-            $("#addOutfitModal").css("display", "none");
-            resetForm(e);
-        });
-    });
-}
-
-function resetForm(event) {
-    $('#addOutfitForm').html(emptyForm);
-    navigateToTab(event, 0);
 }
 
 function displayLikes(username, outfitId, change, outfitCard) {
@@ -323,7 +174,7 @@ function displayLikes(username, outfitId, change, outfitCard) {
             } else {
                 likeClass = "not-liked";
             }
-            console.log(likes + " " + likeClass);
+            // console.log(likes + " " + likeClass);
             outfitCard.insertAdjacentHTML("afterend", "<div class='like-wrapper'>" +
                 "<button onclick='like(" + outfitId + ")' class='like-button " + likeClass + "' id='like-button-" + outfitId + "'>Like</button>" +
                 "<p id='like-num-" + outfitId + "'>" + likes + " Likes</p>" +
@@ -376,10 +227,8 @@ function like(outfitId) {
 
 $(document).ready(() => {
     username = localStorage.username;
-    emptyForm = $('#addOutfitForm').html();
     displayUserOutfits(username);
-    showTab(0);
-    outfitModalAnimation();
-    addOutfit();
+    // showTab(0);
+    // addOutfit();
     $(".name").html(localStorage.getItem('name'));
 });

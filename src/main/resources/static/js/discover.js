@@ -8,6 +8,7 @@ function displayOutfitSuggestions(username) {
         let completeOutfits = response.complete;
         let incompleteOutfits = response.incomplete;
         let likedOutfitIds = response.likedOutfitIds;
+        let suggestedOutfits = response.suggestion;
 
         // console.log(likedOutfitIds);
 
@@ -24,10 +25,6 @@ function generateSuggestionCards(listOfSuggestions) {
         let communityOutfitId = outfitSuggestion.communityOutfit.id;
         // console.log(communityOutfitId);
         let communityOutfitName = outfitSuggestion.communityOutfit.name;
-        let communityOutfitOuter = outfitSuggestion.communityOutfit.outer;
-        let communityOutfitTop = outfitSuggestion.communityOutfit.top;
-        let communityOutfitBottom = outfitSuggestion.communityOutfit.bottom;
-        let communityOutfitFeet = outfitSuggestion.communityOutfit.feet;
 
         let buttonHTML = '<div class="outfit-card"><button class="outfit" id="outfit-' + communityOutfitId + '">' + communityOutfitName + '</button></div>';
         let modalHTML = '<div class="modal" id="modal-' + communityOutfitId + '">';
@@ -90,9 +87,33 @@ function generateSuggestionContent(suggestion) {
 
             $('#modal-' + suggestion.communityOutfit.id + ' .modal-content').append("<hr></h4><h1>Can Be Yours With:</h1>");
             $('#modal-' + suggestion.communityOutfit.id + ' .modal-content').append(potentialOutfitContent);
+            $('#modal-' + suggestion.communityOutfit.id + ' .modal-content').append(
+            "<button class='save-button' id='save-button-" + suggestion.communityOutfit.id + "'>Save Outfit</button>");
+            document.getElementById("save-button-" + suggestion.communityOutfit.id).onclick = function() {
+                saveSuggestion(username, suggestion.communityOutfit.name, suggestion.userItems.outer, suggestion.userItems.top, suggestion.userItems.bottom, suggestion.userItems.feet);
+                alert("Oufit added to your closet!");
+                window.location.replace("/discover");
+            }
         })
 
     });
+}
+
+function saveSuggestion(username, outfitName, outerId, topId, bottomId, feetId) {
+    let postParams = {
+        username: username,
+        name: outfitName,
+        outer: outerId,
+        top: topId,
+        bottom: bottomId,
+        shoes: feetId
+    };
+
+    $.post("/addOutfit", postParams, responseJSON => {
+        let outfit = JSON.parse(responseJSON);
+        let outfitList = [outfit];
+        console.log(outfit)
+    })
 }
 
 function generateItemContent(item, id) {
@@ -182,12 +203,6 @@ function animateOutfitModal(outfitId) {
     });
 }
 
-//
-// let nolike = 0;
-// let like = 1;
-// let unlike = -1;
-
-
 function like(outfitId) {
     // console.log(outfitId);
     let classes = document.getElementById('like-button-' + outfitId);
@@ -228,19 +243,6 @@ function like(outfitId) {
     }
 
 }
-
-// function changeLikes(username, outfitId, change) {
-//     const postParams = {
-//         mode : change,
-//         username : username,
-//         outfitId : outfitId
-//     };
-//     console.log(postParams);
-//     $.post("/like", postParams, responseJSON => {
-//         console.log(JSON.parse(responseJSON).success);
-//         likes = JSON.parse(responseJSON.likes);
-//     });
-// }
 
 
 

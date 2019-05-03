@@ -23,15 +23,52 @@ $(".name").html(localStorage.getItem('name'));
 
 // generate html content (ie. item information) for card
 function generateCardContent(item) {
-  // item represented as array [id, name, color, type, pattern, season, formality, image src]
-  let itemContent = '<img src="' + item[7] +'">';
-  itemContent += '<h5>' + item[1] + '</h5><br>';
-  itemContent += '<p>Color:' + item[2] + '</p></br>';
-  itemContent += '<p>Type:' + item[3] + '</p></br>';
-  itemContent += '<p>Pattern:' + item[4] + '</p></br>';
-  itemContent += '<p>Season:' + item[5] + '</p></br>';
-  itemContent += '<p>Formality:' + item[6] + '</p></br>';
+  // item represented as array [id, name, color, type, subtype, pattern, season, formality, image src]
+  let itemContent = '<div class="item-content">';
+  itemContent += '<h1>' +  item[1]  + '</h1><hr>';
+  itemContent += '<div class="item-content-1">';
+  itemContent += '<div class="content-elem">';
+  itemContent += '<img src="' + item[8] + '"></div>';
+  itemContent += '<div class="content-elem">';
+  itemContent += '<div class="color-type-div">';
+  itemContent += '<h3>Color</h3><hr>';
+  itemContent += '<div class="rect-color" style="background-color:#' + parseHex(item[2]) + ';"></div>'
+  itemContent += '<span>#' + parseHex(item[2]) + '</span>';
+  itemContent += '<h3>Type</h3><hr>';
+  itemContent += '<p>' + parseItemText(item[3]) + ' - ' + parseItemText(item[4]) + '</p>';
+  itemContent += '</div></div></div>';
+  itemContent += '<div class="item-content-2">';
+  itemContent += '<div class="pattern-div">';
+  itemContent += '<h3>Pattern</h3><hr>';
+  itemContent += '<p>' + parseItemText(item[5]) + '</p></div>';
+  itemContent += '<div class="season-div">';
+  itemContent += '<h3>Season</h3><hr>';
+  itemContent += '<p>' + parseItemText(item[6]) + '</p></div>';
+  itemContent += '<div class="formality-div">';
+  itemContent += '<h3>Formality</h3><hr>';
+  itemContent += '<p>' + parseItemText(item[7]) + '</p></div></div></div>';
+
   return itemContent;
+}
+
+// parse the item attribute enum into text to be displayed
+function parseItemText(attr) {
+  // remove all underscores and lowercase
+  let text = attr.replace(/_/g, " ").toLowerCase();
+  // convert first character into uppercase
+  let toReturn = text.charAt(0).toUpperCase() + text.slice(1);
+
+  return toReturn;
+}
+
+// parse the color string into a hex
+function parseHex(colorStr) {
+  let numMissing = 6 - colorStr.length;
+  let hexStr = colorStr;
+  for (i = 0; i < numMissing; i++) {
+    hexStr = '0' + hexStr;
+  }
+  return hexStr;
 }
 
 // animate modal for popup functionality
@@ -74,6 +111,7 @@ function generateCards(listOfItems) {
     modalHTML += '<div class="modal-content">';
     modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
     modalHTML += generateCardContent(item);
+    modalHTML += '<button id="edit-item-' + id + '">Edit Item</button>';
     modalHTML += '<button id="delete-item-' + id + '">Delete Item</button>';
     modalHTML += '</div></div>';
 
@@ -82,7 +120,7 @@ function generateCards(listOfItems) {
     $('#items').append(modalHTML);
 
     // Set image
-    let imageSource = item[7];
+    let imageSource = item[8];
     $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
     $('#item-' + id).css("background-size", "contain");
 
@@ -98,28 +136,62 @@ function generateCards(listOfItems) {
 function deleteUserItem(itemId) {
   // event handler for removing item
   $('#delete-item-' + itemId).on('click', function(e) {
-    let postParams = {
-      username: username,
-      itemId: itemId
-    };
 
-    // post request to remove item
-    $.post("/deleteItem", postParams, responseJSON => {
-      $('#item-' + itemId).remove();
-      $('#modal-' + itemId).remove();
-      let imageKey = JSON.parse(responseJSON)[0];
-      if (imageKey !== "default") {
-          s3.deleteObject({Key: imageKey}, function(err, data) {
-              if (err) {
-                  alert('There was an error deleting your photo: ', err.message);
+      // let postParams = {}
+      let postParams = {
+          id: itemId
+      };
+
+      $.post("/getOutfitWithItem", postParams, responseJSON => {
+
+          let outfitIds = JSON.parse(responseJSON).outfitIds;
+          console.log(outfitIds);
+
+          if (outfitIds.length !== 0) {
+              let confrimation = confirm("Do you have " + outfitIds.length + " outfits with this item. " +
+                  "Are you sure you want to delete it?");
+              if (confrimation === true) {
+                  console.log("delete");
+
+
+                  outfitIds.forEach(function(outfitId) {
+                      let postParams = {
+                          username : username,
+                          outfitId : outfitId
+                      };
+                      console.log("deleting outfit#" + outfitId);
+                      $.post("/deleteOutfit", postParams, responseJSON => {
+                          console.log(JSON.parse(responseJSON));
+                      })
+                  });
+
+                  let postParams = {
+                      username: username,
+                      itemId: itemId
+                  };
+                    console.log("delete item");
+                  // post request to remove item
+                  $.post("/deleteItem", postParams, responseJSON => {
+                      $('#item-' + itemId).remove();
+                      $('#modal-' + itemId).remove();
+                      let imageKey = JSON.parse(responseJSON)[0];
+                      if (imageKey !== "default") {
+                          s3.deleteObject({Key: imageKey}, function(err, data) {
+                              if (err) {
+                                  alert('There was an error deleting your photo: ', err.message);
+                              } else {
+                                  console.log('Successfully deleted photo.');
+                              }
+                          });
+                      }
+                  });
+                  // window.location.reload();
               } else {
-                  console.log('Successfully deleted photo.');
+                  console.log("dont delete");
               }
-          });
-      }
-    });
+          }
+      });
 
-    window.location.reload();
   });
 }
 
@@ -142,23 +214,23 @@ function dynamicTypeDropdown() {
   $('#type-1').on('change', function(){
     $('#type-2').html('');
     if ($('#type-1').val() == "OUTER") {
-        $('#type-2').append('<option value="outer-coat">Outer Coat</option>');
-        $('#type-2').append('<option value="suit">Suit</option>');
+        $('#type-2').append('<option value="OUTER_COAT">Outer Coat</option>');
+        $('#type-2').append('<option value="SUIT">Suit</option>');
     } else if ($('#type-1').val() == "TOP") {
-      $('#type-2').append('<option value="shirt-blouse">Shirt/Blouse</option>');
-      $('#type-2').append('<option value="tshirt">T-Shirt</option>');
-      $('#type-2').append('<option value="sweater">Sweater</option>');
-      $('#type-2').append('<option value="jacket">Jacket</option>');
+      $('#type-2').append('<option value="SHIRT_BLOUSE">Shirt/Blouse</option>');
+      $('#type-2').append('<option value="T_SHIRT">T-Shirt</option>');
+      $('#type-2').append('<option value="SWEATER">Sweater</option>');
+      $('#type-2').append('<option value="JACKET">Jacket</option>');
     } else if ($('#type-1').val() == "BOTTOM") {
-      $('#type-2').append('<option value="pants">Pants</option>');
-      $('#type-2').append('<option value="skirt">Skirt</option>');
-      $('#type-2').append('<option value="dress">Dress</option>');
-      $('#type-2').append('<option value="shorts">Shorts</option>');
+      $('#type-2').append('<option value="PANTS">Pants</option>');
+      $('#type-2').append('<option value="SKIRT">Skirt</option>');
+      $('#type-2').append('<option value="DRESS">Dress</option>');
+      $('#type-2').append('<option value="SHORTS">Shorts</option>');
     } else {
-      $('#type-2').append('<option value="sneakers">Sneakers</option>');
-      $('#type-2').append('<option value="boots">Boots</option>');
-      $('#type-2').append('<option value="sandals">Sandals</option>');
-      $('#type-2').append('<option value="dress-shoes">Dress Shoes</option>');
+      $('#type-2').append('<option value="SNEAKERS">Sneakers</option>');
+      $('#type-2').append('<option value="BOOTS">Boots</option>');
+      $('#type-2').append('<option value="SANDALS">Sandals</option>');
+      $('#type-2').append('<option value="DRESS_SHOES">Dress Shoes</option>');
     }
   });
 }
@@ -220,6 +292,7 @@ function addItemFormSubmit() {
       itemName: $('#item-name').val(),
       itemColor: $('#item-color').val(),
       itemType1: $('#type-1').val(),
+      itemType2: $('#type-2').val(),
       itemPattern: $('#item-pattern').val(),
       itemSeason: $('#item-season').val(),
       itemFormality: $('#item-formality').val(),

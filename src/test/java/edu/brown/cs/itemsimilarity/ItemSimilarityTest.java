@@ -4,7 +4,6 @@ import com.genfit.clothing.ItemDistanceCalculator;
 import com.genfit.database.AWSConnection;
 import com.genfit.database.Database;
 import com.genfit.proxy.ItemProxy;
-import com.google.gson.JsonObject;
 import org.junit.Test;
 
 public class ItemSimilarityTest {
@@ -48,6 +47,19 @@ public class ItemSimilarityTest {
       System.out.println(ItemDistanceCalculator.areSimilar(
               new ItemProxy(db, 122),
               new ItemProxy(db, 58)));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void testSpecific() {
+    Database db = null;
+    try {
+      db = new Database(AWSConnection.getDBConnectionUsingIam());
+      System.out.println(ItemDistanceCalculator.areSimilar(
+              new ItemProxy(db, 184),
+              new ItemProxy(db, 196)));
     } catch (Exception e) {
       e.printStackTrace();
     }
