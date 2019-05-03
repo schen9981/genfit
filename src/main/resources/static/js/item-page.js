@@ -68,7 +68,10 @@ function generateCards(listOfItems) {
     // generate modal html
 
     let id = item[0];
-    let buttonHTML = '<div class="item" style="display: inline-block"><button class="item-button" id="item-' + id + '"></button><div>' + item[1] + '</div></div>';
+    let imageWidth = $(window).width() * 0.1;
+    let imageHeight = imageWidth * 1.2;
+    let buttonHTML = '<div class="item"><button class="item-button" id="item-'
+        + id + '"></button><div style="text-align: center">' + item[1] + '</div></div>';
     let modalHTML = '<div class="modal" id="modal-' + id + '">';
     modalHTML += '<div class="modal-content">';
     modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
@@ -82,8 +85,6 @@ function generateCards(listOfItems) {
 
     // Set image
     let imageSource = item[7];
-    // $('#item-' + id).css("width", "100%");
-    // $('#item-' + id).css("height", "100%");
     $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
     $('#item-' + id).css("background-size", "contain");
 
@@ -93,38 +94,68 @@ function generateCards(listOfItems) {
     // add delete button functionality
     deleteUserItem(id);
   }
-  // set dimensions of cards
-  // $('.item').css("width", "10%");
-  // let itemWidth = $('.item').width();
-  // $('.item').height(itemWidth * 1.1);
 }
 
 // add button functionality to remove an item
 function deleteUserItem(itemId) {
   // event handler for removing item
   $('#delete-item-' + itemId).on('click', function(e) {
-    let postParams = {
-      username: username,
-      itemId: itemId
-    };
 
-    // post request to remove item
-    $.post("/deleteItem", postParams, responseJSON => {
-      $('#item-' + itemId).remove();
-      $('#modal-' + itemId).remove();
-      let imageKey = JSON.parse(responseJSON)[0];
-      if (imageKey !== "default") {
-          s3.deleteObject({Key: imageKey}, function(err, data) {
-              if (err) {
-                  alert('There was an error deleting your photo: ', err.message);
+      // let postParams = {}
+      let postParams = {
+          id: itemId
+      };
+
+      $.post("/getOutfitWithItem", postParams, responseJSON => {
+
+          let outfitIds = JSON.parse(responseJSON).outfitIds;
+          console.log(outfitIds);
+
+          if (outfitIds.length !== 0) {
+              let confrimation = confirm("Do you have " + outfitIds.length + " outfits with this item. " +
+                  "Are you sure you want to delete it?");
+              if (confrimation === true) {
+                  console.log("delete");
+
+
+                  outfitIds.forEach(function(outfitId) {
+                      let postParams = {
+                          username : username,
+                          outfitId : outfitId
+                      };
+                      console.log("deleting outfit#" + outfitId);
+                      $.post("/deleteOutfit", postParams, responseJSON => {
+                          console.log(JSON.parse(responseJSON));
+                      })
+                  });
+
+                  let postParams = {
+                      username: username,
+                      itemId: itemId
+                  };
+                    console.log("delete item");
+                  // post request to remove item
+                  $.post("/deleteItem", postParams, responseJSON => {
+                      $('#item-' + itemId).remove();
+                      $('#modal-' + itemId).remove();
+                      let imageKey = JSON.parse(responseJSON)[0];
+                      if (imageKey !== "default") {
+                          s3.deleteObject({Key: imageKey}, function(err, data) {
+                              if (err) {
+                                  alert('There was an error deleting your photo: ', err.message);
+                              } else {
+                                  console.log('Successfully deleted photo.');
+                              }
+                          });
+                      }
+                  });
+                  // window.location.reload();
               } else {
-                  console.log('Successfully deleted photo.');
+                  console.log("dont delete");
               }
-          });
-      }
-    });
+          }
+      });
 
-    window.location.reload();
   });
 }
 

@@ -41,7 +41,7 @@ public class FormalityAttrRanker implements AttributeRanker<FormalityAttribute> 
         case CASUAL:
           break;
         case BUSINESS_CASUAL:
-          toRet.add(new FormalityAttribute(FormalityEnum.BUSINESS_CASUAL));
+          toRet.add(new FormalityAttribute(FormalityEnum.FORMAL));
           break;
         case FORMAL:
       }

@@ -15,6 +15,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class DiscoverOutfitRetriever implements Route {
     QueryParamsMap qm = req.queryMap();
     String username = qm.value("username");
     int id;
-    List<Integer> likedOutfitIds = new ArrayList<>();
+    List<Integer> likedOutfitIds;
 
     try {
       id = this.genFitApp.getDb().getUserBean(username).getId();
@@ -51,6 +52,8 @@ public class DiscoverOutfitRetriever implements Route {
 
     List<JsonObject> completeOutfits = new LinkedList<>();
     List<JsonObject> incompleteOutfits = new LinkedList<>();
+    List<JsonObject> suggestedOutfits = new LinkedList<>();
+
     for (OutfitSuggestion suggestion : completeOutfitsSuggestion) {
       OutfitProxy communityOutfit = suggestion.getCommunityOutfit();
       Map<TypeEnum, ItemProxy> communityOutfitComp =
@@ -74,16 +77,33 @@ public class DiscoverOutfitRetriever implements Route {
       suggestionJson.add("userItems", userItemsJson);
 
       if (suggestion.isComplete()) {
-        completeOutfits.add(suggestionJson);
+        boolean exists = false;
+        try {
+          exists = this.genFitApp.getDb().checkOutfitWithItems(id,
+              userItemsJson.get("outer").getAsInt(),
+              userItemsJson.get("top").getAsInt(),
+              userItemsJson.get("bottom").getAsInt(),
+              userItemsJson.get("feet").getAsInt());
+        } catch (SQLException e) {
+          System.out.println("ERROR: error with checkOutfitWithItems");
+        }
+        if (!exists) {
+          completeOutfits.add(suggestionJson);
+          suggestionJson.addProperty("completeness", true);
+          suggestedOutfits.add(suggestionJson);
+        }
       } else {
         List<ItemProxy> stillNeeded = suggestion.getItemsNeeded();
         JsonArray stillNeededJson = this.convertItemsToJsonArr(stillNeeded);
         suggestionJson.add("stillNeeded", stillNeededJson);
+        suggestionJson.addProperty("completeness", false);
+        suggestedOutfits.add(suggestionJson);
       }
     }
 
     Map<String, Object> output =
-            ImmutableMap.of("complete", completeOutfits,
+            ImmutableMap.of("suggestion", suggestedOutfits,
+                    "complete", completeOutfits,
                     "incomplete", incompleteOutfits,
                     "likedOutfitIds", likedOutfitIds);
 

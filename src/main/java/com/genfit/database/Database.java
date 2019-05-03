@@ -40,6 +40,8 @@ public class Database {
   // Check statements
   private final String checkLoginSQL = "SELECT * FROM user WHERE email = ?;";
   private final String checkSignupSQL = "SELECT * FROM user WHERE email = ?;";
+  private final String checkOutfitWithItemsSQL = "SELECT * FROM outfit as a JOIN user_outfit as b WHERE a.id = b.outfit_id AND "
+     + "b.user_id = ? AND a.outer = ? AND a.top = ? AND a.bottom = ? AND a.feet = ?;";
   // Get Statements
   private final String getUserInfoSQL = "SELECT * FROM user WHERE email=?;";
   private final String getItemInfoSQL = "SELECT * FROM item WHERE id=?;";
@@ -54,6 +56,8 @@ public class Database {
   private final String getOutfitLikesSQL = "SELECT * FROM outfit WHERE id=?;";
   private final String getLikedOutfitIdsSQL = "SELECT * FROM user_liked WHERE"
           + " user_id=?";
+  private final String getOutfitsWithItemIdSQL = "SELECT * FROM outfit WHERE 'outer' = ? "
+      + "OR top = ? OR bottom = ? OR feet = ?;";
 
   // Add Statements
   private final String addUserSQL = "INSERT INTO user (name, email, password)"
@@ -93,7 +97,7 @@ public class Database {
           + "WHERE email = ?";
   private PreparedStatement getUserInfoPrep, getItemInfoPrep, getOutfitInfoPrep;
   private PreparedStatement getItemsByUserIDPrep, getOutfitsByUserIDPrep;
-  private PreparedStatement getAllItemsByAttributesPrep;
+  private PreparedStatement getAllItemsByAttributesPrep, getOutfitsWithItemIdPrep;
   private PreparedStatement getOutfitLikesPrep, getLikedOutfitIdsPrep;
   private PreparedStatement deleteUserPrep, deleteAllUserItemsPrep,
           deleteAllUserOutfitsPrep, incrementLikesPrep, decrementLikesPrep;
@@ -108,7 +112,7 @@ public class Database {
   private LoadingCache<String, User> userCache;
   private LoadingCache<Integer, Item> itemCache;
   private LoadingCache<Integer, Outfit> outfitCache;
-  private PreparedStatement checkLoginPrep, checkSignupPrep;
+  private PreparedStatement checkLoginPrep, checkSignupPrep, checkOutfitWithItemsPrep;
   private PreparedStatement getOutfitsExcludeUserPrep;
 
   private Map<Integer, String> defaultImageMap = new HashMap<>();
@@ -121,6 +125,7 @@ public class Database {
       this.changePasswordPrep = conn.prepareStatement(this.changePasswordSQL);
       this.checkLoginPrep = conn.prepareStatement(this.checkLoginSQL);
       this.checkSignupPrep = conn.prepareStatement(this.checkSignupSQL);
+      this.checkOutfitWithItemsPrep = conn.prepareStatement(this.checkOutfitWithItemsSQL);
       this.getUserInfoPrep = conn.prepareStatement(this.getUserInfoSQL);
       this.getItemInfoPrep = conn.prepareStatement(this.getItemInfoSQL);
       this.getOutfitInfoPrep = conn.prepareStatement(this.getOutfitInfoSQL);
@@ -133,6 +138,7 @@ public class Database {
       this.getOutfitLikesPrep = conn.prepareStatement(this.getOutfitLikesSQL);
       this.getLikedOutfitIdsPrep = conn
               .prepareStatement(this.getLikedOutfitIdsSQL);
+      this.getOutfitsWithItemIdPrep = conn.prepareStatement(this.getOutfitsWithItemIdSQL);
 
       this.addUserPrep = conn.prepareStatement(this.addUserSQL);
       this.addItemPrep = conn.prepareStatement(this.addItemSQL);
@@ -282,6 +288,23 @@ public class Database {
     }
 
     return BCrypt.checkpw(clientHashPwd, storedHash);
+  }
+
+  public synchronized boolean checkOutfitWithItems(int id, int outerId,
+                     int topId, int bottomId, int feetId) throws SQLException {
+    
+    this.checkOutfitWithItemsPrep.setInt(1, id);
+    this.checkOutfitWithItemsPrep.setInt(2, outerId);
+    this.checkOutfitWithItemsPrep.setInt(3, topId);
+    this.checkOutfitWithItemsPrep.setInt(4, bottomId);
+    this.checkOutfitWithItemsPrep.setInt(5, feetId);
+    ResultSet rs = this.checkOutfitWithItemsPrep.executeQuery();
+    boolean exist = false;
+    if (rs.next()) {
+      exist = true;
+    }
+    rs.close();
+    return exist;
   }
 
   public synchronized boolean checkSignup(String username) throws Exception {
@@ -686,6 +709,21 @@ public class Database {
     this.deleteUserOutfitPrep.setInt(1, userId);
     this.deleteUserOutfitPrep.setInt(2, outfitId);
     this.deleteUserOutfitPrep.executeUpdate();
+  }
+
+  public synchronized List<Integer> getOutfitsWithItemId(int itemId) throws SQLException {
+
+    this.getOutfitsWithItemIdPrep.setInt(1, itemId);
+    this.getOutfitsWithItemIdPrep.setInt(2, itemId);
+    this.getOutfitsWithItemIdPrep.setInt(3, itemId);
+    this.getOutfitsWithItemIdPrep.setInt(4, itemId);
+    List<Integer> outfitIds = new ArrayList<>();
+    ResultSet rs = this.getOutfitsWithItemIdPrep.executeQuery();
+    while (rs.next()) {
+      outfitIds.add(rs.getInt(1));
+    }
+    rs.close();
+    return outfitIds;
   }
 
   public void closeConnection() {
