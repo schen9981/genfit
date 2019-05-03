@@ -6,9 +6,8 @@
 
     <div id="add">
         <div>
-            <button id="suggestOutfit">Let us suggest one!</button>
+            <button id="suggestOutfit">Build your outfit!</button>
         </div>
-
         <div id="suggestOutfitModal" class="modal">
             <div class="modal-content">
                 <span id="suggestSpan" class="close">&times;</span>
@@ -20,6 +19,7 @@
                                 Outer
                             </button>
                         </div>
+
                         <div class="add-suggest" id="top-item">
                             <button id="suggest-top-item"
                                     onclick="navigateToSuggestTab(event, 2)">Add

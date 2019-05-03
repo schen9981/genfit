@@ -5,6 +5,7 @@ import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
 import com.genfit.attribute.SeasonAttribute;
+import com.genfit.attribute.SubtypeAttribute;
 import com.genfit.attribute.TypeAttribute;
 import com.genfit.attribute.attributevals.Color;
 import com.genfit.attribute.attributevals.FormalityEnum;
@@ -37,6 +38,15 @@ public class ItemProxy {
     this.id = id;
     this.item = null;
     this.db = db;
+  }
+
+  public SubtypeAttribute getSubTypeAttribute() {
+    Item i = this.getItem();
+    if (i == null) {
+      return null;
+    } else {
+      return i.getSubtype();
+    }
   }
 
   public Item getItem() {
