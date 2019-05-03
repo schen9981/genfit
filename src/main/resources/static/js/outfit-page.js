@@ -43,7 +43,7 @@ function generateItemContent(item, id) {
         // '</p><br>'; itemContent += '<p>Season:' + item[5] + '</p><br>';
         // itemContent += '<p>Formality:' + item[6] + '</p><br>'; itemContent
         // += '</div>';
-        let imageSource = item[7];
+        let imageSource = item[8];
         itemContent = generateItemIcon(item, id, imageSource);
 
         // $('#item-' + id).css("background", "url(" + imageSource + ")
