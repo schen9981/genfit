@@ -50,7 +50,7 @@ function generateSuggestionsCards(listOfItems, tabId) {
 
 
             // add image for icon
-            let imageSource = item[7];
+            let imageSource = item[8];
             $('.tab-suggest #item-' + id).css("background", "url(" + imageSource + ") no-repeat");
             $('.tab-suggest #item-' + id).css("background-size", "100%");
 

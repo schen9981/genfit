@@ -111,6 +111,7 @@ function generateCards(listOfItems) {
     modalHTML += '<div class="modal-content">';
     modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
     modalHTML += generateCardContent(item);
+    modalHTML += '<button id="edit-item-' + id + '">Edit Item</button>';
     modalHTML += '<button id="delete-item-' + id + '">Delete Item</button>';
     modalHTML += '</div></div>';
 
