@@ -25,15 +25,50 @@ $(".name").html(localStorage.getItem('name'));
 function generateCardContent(item) {
   // item represented as array [id, name, color, type, subtype, pattern, season, formality, image src]
   let itemContent = '<div class="item-content">';
-  itemContent += '<h1>' + item[1] + '</h1><br>';
-  itemContent += '<img src="' + item[7] +'">';
-  itemContent += '<p>Color:' + item[2] + '</p></br>';
-  itemContent += '<p>Type:' + item[3] + '</p></br>';
-  itemContent += '<p>Subtype:' + item[4] + '</p></br>'
-  itemContent += '<p>Pattern:' + item[5] + '</p></br>';
-  itemContent += '<p>Season:' + item[6] + '</p></br>';
-  itemContent += '<p>Formality:' + item[7] + '</p></br></div>';
+  itemContent += '<h1>' +  item[1]  + '</h1><hr>';
+  itemContent += '<div class="item-content-1">';
+  itemContent += '<div class="content-elem">';
+  itemContent += '<img src="' + item[8] + '"></div>';
+  itemContent += '<div class="content-elem">';
+  itemContent += '<div class="color-type-div">';
+  itemContent += '<h3>Color</h3><hr>';
+  itemContent += '<div class="rect-color" style="background-color:#' + parseHex(item[2]) + ';"></div>'
+  itemContent += '<span>#' + parseHex(item[2]) + '</span>';
+  itemContent += '<h3>Type</h3><hr>';
+  itemContent += '<p>' + parseItemText(item[3]) + ' - ' + parseItemText(item[4]) + '</p>';
+  itemContent += '</div></div></div>';
+  itemContent += '<div class="item-content-2">';
+  itemContent += '<div class="pattern-div">';
+  itemContent += '<h3>Pattern</h3><hr>';
+  itemContent += '<p>' + parseItemText(item[5]) + '</p></div>';
+  itemContent += '<div class="season-div">';
+  itemContent += '<h3>Season</h3><hr>';
+  itemContent += '<p>' + parseItemText(item[6]) + '</p></div>';
+  itemContent += '<div class="formality-div">';
+  itemContent += '<h3>Formality</h3><hr>';
+  itemContent += '<p>' + parseItemText(item[7]) + '</p></div></div></div>';
+
   return itemContent;
+}
+
+// parse the item attribute enum into text to be displayed
+function parseItemText(attr) {
+  // remove all underscores and lowercase
+  let text = attr.replace(/_/g, " ").toLowerCase();
+  // convert first character into uppercase
+  let toReturn = text.charAt(0).toUpperCase() + text.slice(1);
+
+  return toReturn;
+}
+
+// parse the color string into a hex
+function parseHex(colorStr) {
+  let numMissing = 6 - colorStr.length;
+  let hexStr = colorStr;
+  for (i = 0; i < numMissing; i++) {
+    hexStr = '0' + hexStr;
+  }
+  return hexStr;
 }
 
 // animate modal for popup functionality
@@ -84,7 +119,7 @@ function generateCards(listOfItems) {
     $('#items').append(modalHTML);
 
     // Set image
-    let imageSource = item[7];
+    let imageSource = item[8];
     $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
     $('#item-' + id).css("background-size", "contain");
 
