@@ -23,14 +23,16 @@ $(".name").html(localStorage.getItem('name'));
 
 // generate html content (ie. item information) for card
 function generateCardContent(item) {
-  // item represented as array [id, name, color, type, pattern, season, formality, image src]
-  let itemContent = '<img src="' + item[7] +'">';
-  itemContent += '<h5>' + item[1] + '</h5><br>';
+  // item represented as array [id, name, color, type, subtype, pattern, season, formality, image src]
+  let itemContent = '<div class="item-content">';
+  itemContent += '<h1>' + item[1] + '</h1><br>';
+  itemContent += '<img src="' + item[7] +'">';
   itemContent += '<p>Color:' + item[2] + '</p></br>';
   itemContent += '<p>Type:' + item[3] + '</p></br>';
-  itemContent += '<p>Pattern:' + item[4] + '</p></br>';
-  itemContent += '<p>Season:' + item[5] + '</p></br>';
-  itemContent += '<p>Formality:' + item[6] + '</p></br>';
+  itemContent += '<p>Subtype:' + item[4] + '</p></br>'
+  itemContent += '<p>Pattern:' + item[5] + '</p></br>';
+  itemContent += '<p>Season:' + item[6] + '</p></br>';
+  itemContent += '<p>Formality:' + item[7] + '</p></br></div>';
   return itemContent;
 }
 
@@ -145,23 +147,23 @@ function dynamicTypeDropdown() {
   $('#type-1').on('change', function(){
     $('#type-2').html('');
     if ($('#type-1').val() == "OUTER") {
-        $('#type-2').append('<option value="outer-coat">Outer Coat</option>');
-        $('#type-2').append('<option value="suit">Suit</option>');
+        $('#type-2').append('<option value="OUTER_COAT">Outer Coat</option>');
+        $('#type-2').append('<option value="SUIT">Suit</option>');
     } else if ($('#type-1').val() == "TOP") {
-      $('#type-2').append('<option value="shirt-blouse">Shirt/Blouse</option>');
-      $('#type-2').append('<option value="tshirt">T-Shirt</option>');
-      $('#type-2').append('<option value="sweater">Sweater</option>');
-      $('#type-2').append('<option value="jacket">Jacket</option>');
+      $('#type-2').append('<option value="SHIRT_BLOUSE">Shirt/Blouse</option>');
+      $('#type-2').append('<option value="T_SHIRT">T-Shirt</option>');
+      $('#type-2').append('<option value="SWEATER">Sweater</option>');
+      $('#type-2').append('<option value="JACKET">Jacket</option>');
     } else if ($('#type-1').val() == "BOTTOM") {
-      $('#type-2').append('<option value="pants">Pants</option>');
-      $('#type-2').append('<option value="skirt">Skirt</option>');
-      $('#type-2').append('<option value="dress">Dress</option>');
-      $('#type-2').append('<option value="shorts">Shorts</option>');
+      $('#type-2').append('<option value="PANTS">Pants</option>');
+      $('#type-2').append('<option value="SKIRT">Skirt</option>');
+      $('#type-2').append('<option value="DRESS">Dress</option>');
+      $('#type-2').append('<option value="SHORTS">Shorts</option>');
     } else {
-      $('#type-2').append('<option value="sneakers">Sneakers</option>');
-      $('#type-2').append('<option value="boots">Boots</option>');
-      $('#type-2').append('<option value="sandals">Sandals</option>');
-      $('#type-2').append('<option value="dress-shoes">Dress Shoes</option>');
+      $('#type-2').append('<option value="SNEAKERS">Sneakers</option>');
+      $('#type-2').append('<option value="BOOTS">Boots</option>');
+      $('#type-2').append('<option value="SANDALS">Sandals</option>');
+      $('#type-2').append('<option value="DRESS_SHOES">Dress Shoes</option>');
     }
   });
 }

@@ -47,36 +47,36 @@ public class AddItemHandler implements Route {
     TypeAttribute type1 = new TypeAttribute(
         Enum.valueOf(TypeEnum.class, typeStr));
 
+    String subTypeStr = qm.value("itemType2");
+    toReturn[4] = subTypeStr;
+    SubtypeAttribute type2 = new SubtypeAttribute(
+        Enum.valueOf(SubtypeEnum.class, subTypeStr));
+
     String patternStr = qm.value("itemPattern");
-    toReturn[4] = patternStr;
+    toReturn[5] = patternStr;
     PatternAttribute pattern = new PatternAttribute(
         Enum.valueOf(PatternEnum.class, patternStr));
 
     String seasonStr = qm.value("itemSeason");
-    toReturn[5] = seasonStr;
+    toReturn[6] = seasonStr;
     SeasonAttribute season = new SeasonAttribute(
         Enum.valueOf(SeasonEnum.class, seasonStr));
 
     String formalityStr = qm.value("itemFormality");
-    toReturn[6] = formalityStr;
+    toReturn[7] = formalityStr;
     FormalityAttribute formality = new FormalityAttribute(
         Enum.valueOf(FormalityEnum.class, formalityStr));
 
     String imageKey = qm.value("imageKey");
 
-    String subtypeStr = qm.value("itemSubtype");
-    toReturn[8] = subtypeStr;
-    SubtypeAttribute subtype = new SubtypeAttribute(
-            Enum.valueOf(SubtypeEnum.class, subtypeStr));
-
     // get id of current user
     int id = this.genFitApp.getDb().getUserBean(qm.value("username")).getId();
     // add item
     int itemId = this.genFitApp.getDb().addItem(id, name, type1, formality,
-        color, pattern, season, imageKey, subtype);
+        color, pattern, season, imageKey, type2);
 
     toReturn[0] = Integer.toString(itemId);
-    toReturn[7] = this.genFitApp.getDb().getItemBean(itemId).getImage();
+    toReturn[8] = this.genFitApp.getDb().getItemBean(itemId).getImage();
 
     // return an item to add to html page
     return Main.GSON.toJson(toReturn);

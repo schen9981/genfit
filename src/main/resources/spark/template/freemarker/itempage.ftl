@@ -31,8 +31,8 @@
                           <option value="SHOES">Shoes</option>
                       </select>
                       <select id="type-2" name="item-type-2">
-                          <option value="outer-coat">Outer Coat</option>
-                          <option value="suit">Suit</option>
+                          <option value="OUTER_COAT">Outer Coat</option>
+                          <option value="SUIT">Suit</option>
                       </select><br>
 
                       Pattern:<br>
