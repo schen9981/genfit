@@ -98,28 +98,62 @@ function generateCards(listOfItems) {
 function deleteUserItem(itemId) {
   // event handler for removing item
   $('#delete-item-' + itemId).on('click', function(e) {
-    let postParams = {
-      username: username,
-      itemId: itemId
-    };
 
-    // post request to remove item
-    $.post("/deleteItem", postParams, responseJSON => {
-      $('#item-' + itemId).remove();
-      $('#modal-' + itemId).remove();
-      let imageKey = JSON.parse(responseJSON)[0];
-      if (imageKey !== "default") {
-          s3.deleteObject({Key: imageKey}, function(err, data) {
-              if (err) {
-                  alert('There was an error deleting your photo: ', err.message);
+      // let postParams = {}
+      let postParams = {
+          id: itemId
+      };
+
+      $.post("/getOutfitWithItem", postParams, responseJSON => {
+
+          let outfitIds = JSON.parse(responseJSON).outfitIds;
+          console.log(outfitIds);
+
+          if (outfitIds.length !== 0) {
+              let confrimation = confirm("Do you have " + outfitIds.length + " outfits with this item. " +
+                  "Are you sure you want to delete it?");
+              if (confrimation === true) {
+                  console.log("delete");
+
+
+                  outfitIds.forEach(function(outfitId) {
+                      let postParams = {
+                          username : username,
+                          outfitId : outfitId
+                      };
+                      console.log("deleting outfit#" + outfitId);
+                      $.post("/deleteOutfit", postParams, responseJSON => {
+                          console.log(JSON.parse(responseJSON));
+                      })
+                  });
+
+                  let postParams = {
+                      username: username,
+                      itemId: itemId
+                  };
+                    console.log("delete item");
+                  // post request to remove item
+                  $.post("/deleteItem", postParams, responseJSON => {
+                      $('#item-' + itemId).remove();
+                      $('#modal-' + itemId).remove();
+                      let imageKey = JSON.parse(responseJSON)[0];
+                      if (imageKey !== "default") {
+                          s3.deleteObject({Key: imageKey}, function(err, data) {
+                              if (err) {
+                                  alert('There was an error deleting your photo: ', err.message);
+                              } else {
+                                  console.log('Successfully deleted photo.');
+                              }
+                          });
+                      }
+                  });
+                  // window.location.reload();
               } else {
-                  console.log('Successfully deleted photo.');
+                  console.log("dont delete");
               }
-          });
-      }
-    });
+          }
+      });
 
-    window.location.reload();
   });
 }
 

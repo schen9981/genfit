@@ -9,7 +9,6 @@ import com.genfit.userfacing.GenFitApp;
 import com.genfit.userfacing.Main;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import spark.QueryParamsMap;
 import spark.Request;
@@ -34,7 +33,7 @@ public class DiscoverOutfitRetriever implements Route {
     QueryParamsMap qm = req.queryMap();
     String username = qm.value("username");
     int id;
-    List<Integer> likedOutfitIds = new ArrayList<>();
+    List<Integer> likedOutfitIds;
 
     try {
       id = this.genFitApp.getDb().getUserBean(username).getId();
@@ -53,6 +52,7 @@ public class DiscoverOutfitRetriever implements Route {
 
     List<JsonObject> completeOutfits = new LinkedList<>();
     List<JsonObject> incompleteOutfits = new LinkedList<>();
+    List<JsonObject> suggestedOutfits = new LinkedList<>();
 
     for (OutfitSuggestion suggestion : completeOutfitsSuggestion) {
       OutfitProxy communityOutfit = suggestion.getCommunityOutfit();
@@ -89,16 +89,21 @@ public class DiscoverOutfitRetriever implements Route {
         }
         if (!exists) {
           completeOutfits.add(suggestionJson);
+          suggestionJson.addProperty("completeness", true);
+          suggestedOutfits.add(suggestionJson);
         }
       } else {
         List<ItemProxy> stillNeeded = suggestion.getItemsNeeded();
         JsonArray stillNeededJson = this.convertItemsToJsonArr(stillNeeded);
         suggestionJson.add("stillNeeded", stillNeededJson);
+        suggestionJson.addProperty("completeness", false);
+        suggestedOutfits.add(suggestionJson);
       }
     }
 
     Map<String, Object> output =
-            ImmutableMap.of("complete", completeOutfits,
+            ImmutableMap.of("suggestion", suggestedOutfits,
+                    "complete", completeOutfits,
                     "incomplete", incompleteOutfits,
                     "likedOutfitIds", likedOutfitIds);
 

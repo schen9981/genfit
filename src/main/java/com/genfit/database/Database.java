@@ -708,6 +708,23 @@ public class Database {
     this.deleteUserOutfitPrep.executeUpdate();
   }
 
+  public synchronized List<Integer> getOutfitsWithItemId(int itemId) throws SQLException {
+    String sql = "SELECT * FROM outfit WHERE 'outer' = ? "
+      + "OR top = ? OR bottom = ? OR feet = ?;";
+    PreparedStatement prep = this.conn.prepareStatement(sql);
+    prep.setInt(1, itemId);
+    prep.setInt(2, itemId);
+    prep.setInt(3, itemId);
+    prep.setInt(4, itemId);
+    List<Integer> outfitIds = new ArrayList<>();
+    ResultSet rs = prep.executeQuery();
+    while (rs.next()) {
+      outfitIds.add(rs.getInt(1));
+    }
+
+    return outfitIds;
+  }
+
   public void closeConnection() {
     if (conn != null) {
       try {

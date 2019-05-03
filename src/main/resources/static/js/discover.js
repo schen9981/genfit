@@ -8,6 +8,7 @@ function displayOutfitSuggestions(username) {
         let completeOutfits = response.complete;
         let incompleteOutfits = response.incomplete;
         let likedOutfitIds = response.likedOutfitIds;
+        let suggestedOutfits = response.suggestion;
 
         // console.log(likedOutfitIds);
 
@@ -24,10 +25,6 @@ function generateSuggestionCards(listOfSuggestions) {
         let communityOutfitId = outfitSuggestion.communityOutfit.id;
         // console.log(communityOutfitId);
         let communityOutfitName = outfitSuggestion.communityOutfit.name;
-        let communityOutfitOuter = outfitSuggestion.communityOutfit.outer;
-        let communityOutfitTop = outfitSuggestion.communityOutfit.top;
-        let communityOutfitBottom = outfitSuggestion.communityOutfit.bottom;
-        let communityOutfitFeet = outfitSuggestion.communityOutfit.feet;
 
         let buttonHTML = '<div class="outfit-card"><button class="outfit" id="outfit-' + communityOutfitId + '">' + communityOutfitName + '</button></div>';
         let modalHTML = '<div class="modal" id="modal-' + communityOutfitId + '">';
@@ -206,12 +203,6 @@ function animateOutfitModal(outfitId) {
     });
 }
 
-//
-// let nolike = 0;
-// let like = 1;
-// let unlike = -1;
-
-
 function like(outfitId) {
     // console.log(outfitId);
     let classes = document.getElementById('like-button-' + outfitId);
@@ -252,19 +243,6 @@ function like(outfitId) {
     }
 
 }
-
-// function changeLikes(username, outfitId, change) {
-//     const postParams = {
-//         mode : change,
-//         username : username,
-//         outfitId : outfitId
-//     };
-//     console.log(postParams);
-//     $.post("/like", postParams, responseJSON => {
-//         console.log(JSON.parse(responseJSON).success);
-//         likes = JSON.parse(responseJSON.likes);
-//     });
-// }
 
 
 

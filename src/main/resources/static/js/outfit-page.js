@@ -174,7 +174,7 @@ function displayLikes(username, outfitId, change, outfitCard) {
             } else {
                 likeClass = "not-liked";
             }
-            console.log(likes + " " + likeClass);
+            // console.log(likes + " " + likeClass);
             outfitCard.insertAdjacentHTML("afterend", "<div class='like-wrapper'>" +
                 "<button onclick='like(" + outfitId + ")' class='like-button " + likeClass + "' id='like-button-" + outfitId + "'>Like</button>" +
                 "<p id='like-num-" + outfitId + "'>" + likes + " Likes</p>" +
