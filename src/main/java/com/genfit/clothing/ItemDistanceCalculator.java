@@ -1,12 +1,10 @@
 package com.genfit.clothing;
 
-import com.genfit.attribute.SubtypeAttribute;
 import com.genfit.attribute.attributevals.Color;
 import com.genfit.attribute.attributevals.FormalityEnum;
 import com.genfit.attribute.attributevals.PatternEnum;
 import com.genfit.attribute.attributevals.SeasonEnum;
 import com.genfit.attribute.attributevals.SubtypeEnum;
-import com.genfit.attribute.attributevals.TypeEnum;
 import com.genfit.proxy.ItemProxy;
 
 import java.util.Random;
@@ -116,16 +114,16 @@ public class ItemDistanceCalculator {
       }
 
       //TODO: remove
-      System.out.println("SEASON");
-      System.out.println(seasonWeight * seasonDist);
-      System.out.println("PATTERN");
-      System.out.println(patternWeight * patternDist);
-      System.out.println("FORMALITY");
-      System.out.println(formalityWeight * formalityDist);
-      System.out.println("COLOR");
-      System.out.println(colorWeight * colorDist);
-      System.out.println("SUBTYPE");
-      System.out.println(subtypeWeight * subTypeDistance);
+      //System.out.println("SEASON");
+      //System.out.println(seasonWeight * seasonDist);
+      //System.out.println("PATTERN");
+      //System.out.println(patternWeight * patternDist);
+      //System.out.println("FORMALITY");
+      //System.out.println(formalityWeight * formalityDist);
+      //System.out.println("COLOR");
+      //System.out.println(colorWeight * colorDist);
+      //System.out.println("SUBTYPE");
+      //System.out.println(subtypeWeight * subTypeDistance);
 
       boolean criticalCategories =
               ((seasonWeight * seasonDist <= SEASON_SIMILARITY_THRESHOLD)
