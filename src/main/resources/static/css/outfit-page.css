@@ -228,9 +228,12 @@ button {
     height: 90%;
     width: 100%;
     border-radius: 10px 10px 0 0;
+    /*background-color: rgba(221,221,221, 0.5);*/
+    border: 1px solid rgba(221,221,221);
 }
 
 .outfit-btn:hover {
+    cursor: pointer;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -272,7 +275,7 @@ button {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    border: black solid 1px;
+    border: rgb(221,221,221) solid 1px;
 }
 
 .like-button {
@@ -453,4 +456,8 @@ div.suggestionsDisplayDiv {
 div.suggestionsDisplayDiv .item {
     width: 25%;
     height: 25vh;
+}
+
+div.outfit-btn em   {
+    /*padding: 5px;*/
 }

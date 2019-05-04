@@ -21,6 +21,17 @@ function generateOutfitContent(outfit, id) {
     $.post("/outfitComponents", postParams, responseJSON => {
         let $outfitContent = $('#modal-' + id + ' .modal-content' +
             ' div.fullOutfit');
+        let outerImg = JSON.parse(responseJSON).outer[8];
+        let topImg = JSON.parse(responseJSON).top[8];
+        let bottommImg = JSON.parse(responseJSON).bottom[8];
+        let shoesImg = JSON.parse(responseJSON).shoes[8];
+        document.getElementById("outfit-" + id).style.backgroundImage = "url("+outerImg+"), url("+topImg+"), url("+bottommImg+"), url("+shoesImg+")";
+        document.getElementById("outfit-"+id).style.backgroundPosition = "center center, right center, left center, center bottom";
+        document.getElementById("outfit-"+id).style.backgroundRepeat = "no-repeat";
+        document.getElementById("outfit-"+id).style.backgroundSize = "25%";
+
+
+
         $outfitContent.append(generateItemContent(JSON.parse(responseJSON).outer, outfit[2]));
         $outfitContent.append(generateItemContent(JSON.parse(responseJSON).top, outfit[3]));
         $outfitContent.append(generateItemContent(JSON.parse(responseJSON).bottom, outfit[4]));
@@ -103,8 +114,8 @@ function generateOutfitCards(listOfOutfits) {
         }
 
         let buttonHTML = '<div class="outfit-card">' +
-            '<button class="outfit-btn" id="outfit-' + id + '">' + outfitName
-            + '</button></div>';
+            '<div class="outfit-btn" id="outfit-' + id + '">' + outfitName
+            + '</div></div>';
         let modalHTML = '<div class="modal" id="modal-' + id + '">';
         modalHTML += '<div class="modal-content">';
         modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
