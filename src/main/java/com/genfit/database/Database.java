@@ -71,6 +71,8 @@ public class Database {
           + " (name, `outer`, top, bottom, feet) VALUES (?, ?, ?, ?, ?);";
   private final String addOutfitToUserSQL = "INSERT INTO user_outfit"
           + " (user_id, outfit_id) VALUES (?, ?);";
+  //edit Statements
+  private final String editItemSQL = "UPDATE item SET type=?, subtype=?, formality=?, color=?, pattern=?,season=? WHERE id=?;";
   // Delete Statements
   private final String deleteUserSQL = "DELETE FROM user WHERE id=?;";
   private final String deleteAllUserItemsSQL = "DELETE FROM user_item WHERE "
@@ -105,6 +107,7 @@ public class Database {
   private PreparedStatement addUserPrep;
   private PreparedStatement addItemPrep, addItemToUserPrep;
   private PreparedStatement addOutfitPrep, addOutfitToUserPrep;
+  private PreparedStatement editItemPrep;
   private PreparedStatement deleteItemPrep, deleteUserItemPrep;
   private PreparedStatement deleteOutfitPrep, deleteUserOutfitPrep;
   private PreparedStatement changePasswordPrep;
@@ -147,6 +150,8 @@ public class Database {
       this.addOutfitToUserPrep = conn.prepareStatement(this.addOutfitToUserSQL);
       this.incrementLikesPrep = conn.prepareStatement(this.incrementLikesSQL);
       this.decrementLikesPrep = conn.prepareStatement(this.decrementLikesSQL);
+
+      this.editItemPrep = conn.prepareStatement(this.editItemSQL);
 
       this.deleteAllUserItemsPrep = conn
               .prepareStatement(this.deleteAllUserItemsSQL);
@@ -659,6 +664,23 @@ public class Database {
       rs.close();
       throw new SQLException();
     }
+  }
+
+  public synchronized void editItem(int userId, int itemId,
+                                    TypeAttribute type1,
+                                    SubtypeAttribute type2,
+                                    FormalityAttribute formality,
+                                    ColorAttribute color,
+                                    PatternAttribute pattern,
+                                    SeasonAttribute season) throws SQLException{
+    this.editItemPrep.setInt(1, type1.getAttributeVal().ordinal());
+    this.editItemPrep.setInt(2, type2.getAttributeVal().ordinal());
+    this.editItemPrep.setInt(3, formality.getAttributeVal().ordinal());
+    this.editItemPrep.setString(4, color.getAttributeVal().toString());
+    this.editItemPrep.setInt(5, pattern.getAttributeVal().ordinal());
+    this.editItemPrep.setInt(6, season.getAttributeVal().ordinal());
+    this.editItemPrep.setInt(7, itemId);
+    this.editItemPrep.executeUpdate();
   }
 
   /**
