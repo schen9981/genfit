@@ -1,7 +1,7 @@
 <#assign content>
     <h1>Outfits in <span class="name"></span>'s Closet</h1>
 
-    <div id="outfits">
+    <div id="outfits-div">
     </div>
 
     <div id="add">
@@ -13,6 +13,15 @@
                 <div id="suggestSpan" class="close">&times;</div>
                 <div id="suggestDiv">
                     <form id="suggestOutfitForm">
+                        <div id="outfit-name-div">
+                            <label id="outfit-name-label"
+                                   for="outfit-name">Name
+                                your
+                                outfit!</label>
+                            <input type="text" id="outfit-name"
+                                   name="outfit-name" required>
+                        </div>
+
                         <div class="tab-suggest" id="outfit-info">
                             <div class="add-suggest" id="outer-item">
                                 <button id="suggest-outer-item"

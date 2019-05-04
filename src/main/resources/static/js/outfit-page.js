@@ -107,9 +107,12 @@ function generateOutfitCards(listOfOutfits) {
         modalHTML += '<button class="delete" id="delete-outfit-' + id + '">Delete Outfit</button>';
         modalHTML += '</div></div>';
 
+
+        $outfitsDiv = $('#outfits-div');
+
         // add modal to div id='outfits'
-        $('#outfits').append(buttonHTML);
-        $('#outfits').append(modalHTML);
+        $outfitsDiv.append(buttonHTML);
+        $outfitsDiv.append(modalHTML);
 
         let outfitCard = document.getElementById("outfit-" + id);
 
@@ -122,8 +125,6 @@ function generateOutfitCards(listOfOutfits) {
         // add delete button functionality
         deleteUserOutfit(id);
     }
-    // set dimensions of cards
-    $('.outfit').css("width", "100%");
 }
 
 // function to retrieve and display a user's outfits
@@ -137,7 +138,7 @@ function displayUserOutfits(username) {
         if (typeof userOutfits !== "undefined" && userOutfits.length > 0) {
             generateOutfitCards(userOutfits);
         } else {
-            $("div#outfits").append("<h3>No outfits yet :)</h3>")
+            $("div#outfits-div").append("<h3>No outfits yet :)</h3>")
         }
     });
 }
