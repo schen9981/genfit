@@ -211,9 +211,18 @@ function displayLikes(username, outfitId, change, outfitCard) {
                 likeClass = "not-liked";
             }
             // console.log(likes + " " + likeClass);
+
+            let word = null;
+
+            if (likes != 1) {
+                word = "Likes";
+            } else {
+                word = "Like"
+            }
+
             outfitCard.insertAdjacentHTML("afterend", "<div class='like-wrapper'>" +
                 "<button onclick='like(" + outfitId + ")' class='like-button " + likeClass + "' id='like-button-" + outfitId + "'><i class=\"fas fa-thumbs-up\"></i></button>" +
-                "<p id='like-num-" + outfitId + "'>" + likes + " Likes</p>" +
+                "<p id='like-num-" + outfitId + "'>" + likes + " " + word + " </p>" +
                 "</div>");
         });
     });
@@ -235,7 +244,14 @@ function like(outfitId) {
 
         $.post("/like", postParams, responseJSON => {
             let likes = JSON.parse(responseJSON).likes;
-            document.getElementById('like-num-' + outfitId).innerHTML = likes + " Likes";
+            let word = null;
+
+            if (likes != 1) {
+                word = "Likes";
+            } else {
+                word = "Like"
+            }
+            document.getElementById('like-num-' + outfitId).innerHTML = likes + " " + word;
             // console.log(document.getElementById('like-num-' +
             // outfitId).innerHTML)
         })
@@ -252,7 +268,14 @@ function like(outfitId) {
 
         $.post("/like", postParams, responseJSON => {
             let likes = JSON.parse(responseJSON).likes;
-            document.getElementById('like-num-' + outfitId).innerHTML = likes + " Likes";
+            let word = null;
+
+            if (likes != 1) {
+                word = "Likes";
+            } else {
+                word = "Like"
+            }
+            document.getElementById('like-num-' + outfitId).innerHTML = likes + " " + word;
         })
     }
 

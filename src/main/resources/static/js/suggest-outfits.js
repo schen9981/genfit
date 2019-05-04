@@ -91,19 +91,21 @@ function addItemToOutfitSuggest(event) {
 }
 
 function getCompId(idName) {
-    if (idName == 'display-outer-suggestions') {
+    if (idName === 'display-outer-suggestions') {
         return 0;
-    } else if (idName == 'display-top-suggestions') {
+    } else if (idName === 'display-top-suggestions') {
         return 1;
-    } else if (idName == 'display-bottom-suggestions') {
+    } else if (idName === 'display-bottom-suggestions') {
         return 2;
-    } else {
+    } else if (idName === 'display-shoes-suggestions') {
         return 3;
+    } else {
+        return null;
     }
 }
 
 function addItemFromSuggestions(event) {
-    let compId = getCompId($selected.parent().attr('id'));
+    let compId = getCompId($selected.parent().parent().attr('id'));
     let compDiv = document.getElementsByClassName("add-suggest")[compId];
     compDiv.innerHTML = $selected.context.outerHTML;
     $selected = null;
