@@ -27,11 +27,6 @@ function generateSuggestItemCards(listOfItems, tabId) {
             });
         }
     }
-    // TODO: remove
-    // set dimensions of cards
-    // $('.item').css("width", "20%");
-    // let itemWidth = $('.item').width();
-    // $('.item').height('200px');
 }
 
 function generateSuggestionsCards(listOfItems, tabId) {
@@ -60,11 +55,6 @@ function generateSuggestionsCards(listOfItems, tabId) {
             })
         }
     }
-    // TODO: remove
-    // set dimensions of cards
-    // $('.item').css("width", "20%");
-    // let itemWidth = $('.item').width();
-    // $('.item').height('200px');
 }
 
 // function that populates the tab with items of that type when adding items
@@ -111,9 +101,8 @@ function addItemFromSuggestions(event) {
 function showSuggestTab(compId) {
     // get all the tabs on the page, display the selected component
     let tabs = document.getElementsByClassName("tab-suggest");
-    if (compId == 0) {
-        // want the generic outfit page
-        tabs[0].style.display = "block";
+    if (compId == 0) { // home tab
+        tabs[0].style.display = "flex";
         // hide and show appropriate buttons
         document.getElementById("addItemSuggest").style.display = "none";
         document.getElementById("backSuggest").style.display = "none";
@@ -121,7 +110,7 @@ function showSuggestTab(compId) {
         document.getElementById("suggest").style.display = "inline";
         document.getElementById("addOutfitSuggest").style.display = "inline";
         document.getElementById("suggestOutfit").style.display = "inline";
-    } else if (compId == 5) {
+    } else if (compId == 5) { // suggestions tab
         populateSuggestTabItems(compId, tabs[compId].id);
         tabs[compId].style.display = "table";
         document.getElementById("addItemSuggest").style.display = "none";
@@ -130,7 +119,7 @@ function showSuggestTab(compId) {
         // document.getElementById("suggestOutfit").style.display = "none";
         document.getElementById("addFromSuggest").style.display = "inline";
         document.getElementById("addOutfitSuggest").style.display = "none";
-    } else {
+    } else { // specific outfit page
         populateSuggestTabItems(compId, tabs[compId].id);
         tabs[compId].style.display = "table";
         document.getElementById("addItemSuggest").style.display = "inline";
@@ -167,6 +156,7 @@ function outfitSuggestModal() {
     // close modal when user clicks 'x'
     span.click(function () {
         modal.css("display", "none");
+        resetForm();
     });
 }
 
@@ -221,6 +211,18 @@ function getSuggestions() {
     })
 }
 
+// repopulates the from with the initial buttons
+function resetForm() {
+    $("#outer-item").html('<button id="suggest-outer-item"' +
+        'onclick="navigateToSuggestTab(event, 1)">Add Outer</button>');
+    $("#top-item").html('<button id="suggest-top-item"' +
+        'onclick="navigateToSuggestTab(event, 2)">Add Top</button>');
+    $("#bottom-item").html('<button id="suggest-bottom-item"' +
+        'onclick="navigateToSuggestTab(event, 3)">Add Bottom</button>');
+    $("#shoes-item").html('<button id="suggest-shoes-item"' +
+        'onclick="navigateToSuggestTab(event, 4)">Add Shoes</button>');
+}
+
 // function that adds a fully constructed outfit to the database
 function addOutfit() {
     $('#addOutfitSuggest').on("click", function (e) {
@@ -240,21 +242,20 @@ function addOutfit() {
             shoes: shoes.id.split('-')[1]
         }
 
-        // console.log(postParams);
-
         // post request to addItems
         $.post("/addOutfit", postParams, responseJSON => {
             let outfit = JSON.parse(responseJSON);
             let outfitList = [outfit];
             generateOutfitCards(outfitList);
             $("#suggestOutfitModal").css("display", "none");
-            resetForm(e);
+            resetForm();
         });
     });
 }
 
 $(document).ready(() => {
     outfitSuggestModal();
+    addOutfit();
     showSuggestTab(0);
     getSuggestions();
 });

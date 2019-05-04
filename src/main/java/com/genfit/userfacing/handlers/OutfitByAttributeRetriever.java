@@ -28,6 +28,7 @@ public class OutfitByAttributeRetriever implements Route {
 
   @Override
   public String handle(Request req, Response res) {
+
     QueryParamsMap qm = req.queryMap();
 
     String username = qm.value("username");
