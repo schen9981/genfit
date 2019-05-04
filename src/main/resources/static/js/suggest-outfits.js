@@ -38,6 +38,7 @@ function generateSuggestItemCards(listOfItems, tabId) {
 }
 
 function generateSuggestionsCards(listOfItems, tabId) {
+    $('#' + tabId + " div.suggestionsDisplayDiv").empty();
     for (i = 0; i < listOfItems.length; i++) {
         // get current item json
         let item = listOfItems[i];
@@ -48,7 +49,6 @@ function generateSuggestionsCards(listOfItems, tabId) {
         // set item html
         let divHTML = generateItemIcon(item, id);
         // remove already existing items from previous suggestion queries
-        $('#' + tabId + " div.suggestionsDisplayDiv").empty();
         $('#' + tabId + " div.suggestionsDisplayDiv").append(divHTML);
 
         // add image for icon
