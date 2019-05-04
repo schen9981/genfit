@@ -2,6 +2,7 @@
 <head>
     <meta charset="utf-8">
     <#if title?has_content><title>${title}</title></#if>
+    <link rel="icon" href="/img/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- In real-world webapps, css is usually minified and
          concatenated. Here, separate normalize from our code, and

@@ -163,6 +163,7 @@ input {
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
+    border-radius: 5px;
 }
 
 .item-display .item {
@@ -223,12 +224,20 @@ button {
     border-radius: 10px 10px 0 0;
 }
 
+.outfit-btn:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
 #add {
     width: 23%;
     margin: 1%;
     box-sizing: border-box;
+    border-radius: 10px;
 }
 
+#add:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 
 .outfit-card {
     height: 12em;
@@ -251,6 +260,7 @@ button {
 }
 
 .like-wrapper {
+    background-color: white;
     padding-bottom: 0;
     display: flex;
     align-items: center;
@@ -260,7 +270,7 @@ button {
 
 .like-button {
     border: none;
-    width: 50%;
+    width: 48%;
     outline:none;
 }
 
@@ -269,11 +279,32 @@ button {
     background: white;
 }
 
+.like-button:hover {
+  background: none;
+  color: #2196F3;
+}
+
+.like-button.liked:hover {
+  background: none;
+  color: gray;
+}
+
+.like-button.not-liked:hover {
+  background: none;
+  color: #2196F3;
+}
+
+.like-button:hover {
+  background: none;
+  color: #2196F3;
+}
+
 .like-button.liked{
     /*background: #2196F3;*/
     background: none;
     color: #2196F3;
 }
+
 
 #outfit-info {
     display: flex;
