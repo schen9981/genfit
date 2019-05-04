@@ -80,6 +80,11 @@ input {
     height: 10vw;
 }
 
+.add-suggest .item {
+    width: 100%;
+    height: 100%;
+}
+
 #addOutfitModal .item {
     display: table-cell;
     /*width: 20%;*/
@@ -158,7 +163,7 @@ input {
 .item {
     border: 0;
     width: 100%;
-    height: 100px;
+    /*height: 100px;*/
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -168,7 +173,7 @@ input {
 
 .item-display .item {
     width: 25%;
-    height: 200px;
+    height: 15vw;
 }
 
 .item span {
@@ -240,7 +245,7 @@ button {
 }
 
 .outfit-card {
-    height: 12em;
+    height: 30vh;
     display: flex;
     flex-flow: column;
     justify-content: center;
@@ -364,8 +369,6 @@ div#outfits-div {
     justify-content: center;
     font-size: 8em;
     vertical-align: center;
-    width: 100%;
-    height: 100%;
     font-weight: lighter;
     opacity: .6;
 }
@@ -403,4 +406,15 @@ em {
 
 #addOutfitSuggest {
     font-size: 1.2em;
+}
+
+
+div.suggestionsDisplayDiv {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div.suggestionsDisplayDiv .item {
+    width: 25%;
+    height: 25vh;
 }
