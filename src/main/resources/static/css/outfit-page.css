@@ -211,6 +211,7 @@ input {
 input#outfit-name {
     width: 80%;
     font-family: 'Rubik', sans-serif;
+    border: 2px solid black;
 }
 
 button {

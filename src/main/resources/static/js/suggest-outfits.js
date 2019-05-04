@@ -47,6 +47,8 @@ function generateSuggestionsCards(listOfItems, tabId) {
 
         // set item html
         let divHTML = generateItemIcon(item, id);
+        // remove already existing items from previous suggestion queries
+        $('#' + tabId + " div.suggestionsDisplayDiv").empty();
         $('#' + tabId + " div.suggestionsDisplayDiv").append(divHTML);
 
         // add image for icon
