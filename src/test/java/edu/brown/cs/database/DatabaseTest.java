@@ -26,13 +26,13 @@ public class DatabaseTest {
   public void dBMethods() throws Exception{
     Connection connection = AWSConnection.getDBConnectionUsingIam();
     Database db = new Database(connection);
-    db.editItem(103, 95,
-            new TypeAttribute(TypeEnum.values()[1]),
-            new SubtypeAttribute(SubtypeEnum.values()[1]),
-            new FormalityAttribute(FormalityEnum.values()[1]),
-            new ColorAttribute(new Color(0x111111)),
-            new PatternAttribute(PatternEnum.values()[1]),
-            new SeasonAttribute(SeasonEnum.values()[1]));
+//    db.editItem(103, 95,
+//            new TypeAttribute(TypeEnum.values()[1]),
+//            new SubtypeAttribute(SubtypeEnum.values()[1]),
+//            new FormalityAttribute(FormalityEnum.values()[1]),
+//            new ColorAttribute(new Color(0x111111)),
+//            new PatternAttribute(PatternEnum.values()[1]),
+//            new SeasonAttribute(SeasonEnum.values()[1]));
 
 //      db.addItem(103, "someshirt",
 //              new TypeAttribute(TypeEnum.TOP),
