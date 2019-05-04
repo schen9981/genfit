@@ -301,4 +301,5 @@ $(document).ready(() => {
     $('#discover-tab-button').css("color", "white");
     username = localStorage.username;
     displayOutfitSuggestions(username);
+    $(".name").html(localStorage.getItem('name'));
 });

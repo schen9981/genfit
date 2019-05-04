@@ -349,16 +349,16 @@ function editItem(itemId, item) {
         $('.formality-div').html(formalityEdit);
 
         // event listeners for change input
-        let newColor = $('#item-color').val();
-        let newType1 = $('#type-1').val();
-        let newType2 = $('#type-2').val();
-        console.log(newType2);
-        let newPattern = $('#item-pattern').val();
-        let newSeason = $('#item-season').val();
-        let newFormality = $('#item-formality').val();
+        let newColor = parseHex(item[2]);
+        let newType1 = item[3];
+        let newType2 = item[4];
+        let newPattern = item[5];
+        let newSeason = item[6];
+        let newFormality = item[7];
+
 
         $('.color-div #item-colors #item-color').on('change', function (e) {
-            newColor = e.target.value;
+            newColor = e.target.value.slice(1);
         });
 
         $('.type-div #type-1').on('change', function (e) {
@@ -628,7 +628,7 @@ function addItemPost(postParams) {
       $('#addItemModal').css("display", "none");
       $('#image-input').val('');
       $('#image-preview').get(0).src = '';
-      $("addItemForm").reset();
+      document.getElementById('addItemForm').reset();
   });
 }
 

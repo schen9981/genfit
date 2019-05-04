@@ -45,3 +45,46 @@
     -moz-box-shadow: 0 4px 4px -4px black;
     -webkit-box-shadow: 0 4px 4px -4px black;
 }
+
+.stats {
+  text-align: center;
+}
+
+#outfit-count {
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: yellow;
+  vertical-align: middle;
+  border: 1px solid black;
+  height: 100%;
+  width: 10%;
+}
+
+.count {
+  text-align: center;
+  font-size: 3em;
+}
+
+.count h2 {
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.label {
+  text-align: center;
+  font-size: 1em;
+}
+
+#item-count {
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: yellow;
+  min-width: 1em;
+  vertical-align: middle;
+  border: 1px solid black;
+  width: 10%;
+}

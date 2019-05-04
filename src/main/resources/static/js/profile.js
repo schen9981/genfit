@@ -13,14 +13,31 @@ function closeForm() {
     document.getElementById("newpwd").value = document.getElementById("newpwd").defaultValue;
 }
 
+function createStatCircle(count, label) {
+  let contents = '<div class="count"><h2>' + count + '</h2></div>';
+  contents += '<div class="label"><h2>' + label + '</h2></div>';
+
+  return contents;
+}
+
 function displayOutfitsInfo(username) {
     let postParams = {
         username: username
     };
     $.post("/userOutfits", postParams, responseJSON => {
         let userOutfits = JSON.parse(responseJSON).outfits;
-        document.getElementById('outfit-overview').innerHTML = "<hr></hr><h2><u>You have " + userOutfits.length + " outfits!</u></h2>";
+        document.getElementById('outfit-count').innerHTML = createStatCircle(userOutfits.length, 'outfits');
     });
+}
+
+function displayItemCount(username) {
+  let postParams = {
+    username: username
+  };
+  $.post("/userItems", postParams, responseJSON => {
+    let userItems = JSON.parse(responseJSON).items;
+    document.getElementById('item-count').innerHTML = createStatCircle(userItems.length, 'items');
+  } )
 }
 
 function displayItemsInfo(username) {
@@ -323,4 +340,5 @@ $(document).ready(() => {
     $('#user-tab-button').css("color", "white");
     displayItemsInfo(localStorage.getItem('username'));
     displayOutfitsInfo(localStorage.getItem('username'));
+    displayItemCount(localStorage.getItem('username'));
 });
