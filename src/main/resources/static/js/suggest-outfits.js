@@ -83,9 +83,13 @@ function populateSuggestTabItems(compId, currTabId) {
 
 // function that replaces button with selected item, navigate back to home
 function addItemToOutfitSuggest(event) {
-    let compDiv = document.getElementsByClassName("add-suggest")[currentSuggestTab - 1];
-    compDiv.innerHTML = $selected.outerHTML;
-    navigateToSuggestTab(event, 0);
+    if ($selected !== null) {
+        let compDiv = document.getElementsByClassName("add-suggest")[currentSuggestTab - 1];
+        // TODO: change this to allow replacements
+        compDiv.innerHTML = $selected.outerHTML;
+        $selected = null;
+        navigateToSuggestTab(event, 0);
+    }
 }
 
 function getCompId(idName) {
@@ -104,6 +108,7 @@ function addItemFromSuggestions(event) {
     let compId = getCompId($selected.parent().attr('id'));
     let compDiv = document.getElementsByClassName("add-suggest")[compId];
     compDiv.innerHTML = $selected.context.outerHTML;
+    $selected = null;
     navigateToSuggestTab(event, 0);
 }
 
@@ -114,6 +119,7 @@ function showSuggestTab(compId) {
     let tabs = document.getElementsByClassName("tab-suggest");
     if (compId == 0) { // home tab
         tabs[0].style.display = "flex";
+        $selected = null;
         // hide and show appropriate buttons
         document.getElementById("addItemSuggest").style.display = "none";
         document.getElementById("backSuggest").style.display = "none";
@@ -176,7 +182,7 @@ function outfitSuggestModal() {
     span.click(function () {
         navigateToSuggestTab(null, 0);
         modal.css("display", "none");
-        // resetForm();
+        resetForm();
     });
 }
 
@@ -223,8 +229,6 @@ function getSuggestions() {
             postParams.shoes = shoes.id.split('-')[1]
         }
 
-        console.log(postParams);
-
         $.post("/itemSuggestions", postParams, responseJSON => {
             let outerSuggestions = JSON.parse(responseJSON).outerSuggestions;
             let topSuggestions = JSON.parse(responseJSON).topSuggestions;
@@ -242,18 +246,20 @@ function getSuggestions() {
 
 // repopulates the from with the initial buttons
 function resetForm() {
-    $("#outer-item").html('<button id="suggest-outer-item"' +
-        'onclick="navigateToSuggestTab(event, 1) ' +
-        'class="addButton">Add Outer</button>');
-    $("#top-item").html('<button id="suggest-top-item"' +
-        'onclick="navigateToSuggestTab(event, 2) ' +
-        'class="addButton">Add Top</button>');
+    $("#outer-item").html('<button id="suggest-outer-item" ' +
+        'class="addButton" '
+        + 'onclick="navigateToSuggestTab(event, 1)" '
+        + '>Add Outer</button>');
+    $("#top-item").html('<button id="suggest-top-item" ' +
+        'class="addButton" '
+        + 'onclick="navigateToSuggestTab(event, 2)">Add Top</button>');
     $("#bottom-item").html('<button id="suggest-bottom-item" ' +
         'class="addButton" ' +
         'onclick="navigateToSuggestTab(event, 3)">Add Bottom</button>');
     $("#shoes-item").html('<button id="suggest-shoes-item" ' +
         'class="addButton" ' +
         'onclick="navigateToSuggestTab(event, 4)">Add Shoes</button>');
+    console.log($selected);
 }
 
 // function that adds a fully constructed outfit to the database
@@ -261,13 +267,27 @@ function addOutfit() {
     $('#addOutfitSuggest').on("click", function (e) {
         e.preventDefault();
 
-        $("#id-name").innerHTML
+        let outfitName = $("#outfit-name").val();
+
+        if (typeof outfitName === "undefined") {
+            alert("Please enter an outfit name.")
+            return;
+        }
+
 
         // get all items in the div
         let outer = document.getElementsByClassName("add-suggest")[0].getElementsByClassName("item")[0];
         let top = document.getElementsByClassName("add-suggest")[1].getElementsByClassName("item")[0];
         let bottom = document.getElementsByClassName("add-suggest")[2].getElementsByClassName("item")[0];
         let shoes = document.getElementsByClassName("add-suggest")[3].getElementsByClassName("item")[0];
+
+        // need at least these three categories of items to add outfit
+        if (typeof top === "undefined"
+            || typeof bottom === "undefined"
+            || typeof shoes === "undefined") {
+            alert("You must input at least a top, bottom, and shoes.");
+            return;
+        }
 
         let postParams = {
             username: username,

@@ -225,7 +225,7 @@ button {
 }
 
 .outfit-btn:hover {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
 #add {
@@ -236,7 +236,7 @@ button {
 }
 
 #add:hover {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .outfit-card {
@@ -250,6 +250,7 @@ button {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+    font-size: 1.5em;
 }
 
 .outfit-card p {
@@ -271,35 +272,36 @@ button {
 .like-button {
     border: none;
     width: 48%;
-    outline:none;
+    outline: none;
 }
 
-.like-button.not-liked{
+.like-button.not-liked {
     color: gray;
     background: white;
 }
 
-.like-button:hover {
-  background: none;
-  color: #2196F3;
-}
+/* TODO: talk about this */
+/*.like-button:hover {*/
+/*    background: none;*/
+/*    color: #2196F3;*/
+/*}*/
 
-.like-button.liked:hover {
-  background: none;
-  color: gray;
-}
+/*.like-button.liked:hover {*/
+/*  background: none;*/
+/*  color: gray;*/
+/*}*/
 
-.like-button.not-liked:hover {
-  background: none;
-  color: #2196F3;
-}
+/*.like-button.not-liked:hover {*/
+/*  background: none;*/
+/*  color: #2196F3;*/
+/*}*/
 
-.like-button:hover {
-  background: none;
-  color: #2196F3;
-}
+/*.like-button:hover {*/
+/*    background: none;*/
+/*    color: #2196F3;*/
+/*}*/
 
-.like-button.liked{
+.like-button.liked {
     /*background: #2196F3;*/
     background: none;
     color: #2196F3;
