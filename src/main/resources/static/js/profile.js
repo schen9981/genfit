@@ -152,7 +152,7 @@ function visualizeItemSeason(seasonsList) {
             datasets: [{
                 label: "one",
                 labels: Object.keys(outerTypeNumMap),
-                backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
+                backgroundColor: ['#fff', '#FFE082', '#EF9A9A', '#90CAF9'],
                 data: Object.values(outerTypeNumMap)
             },
                 {
