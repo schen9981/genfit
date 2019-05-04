@@ -21,10 +21,7 @@ function generateSuggestItemCards(listOfItems, tabId) {
 
             // add image for icon
             let imageSource = item[8];
-            if (item[0] == 206) {
-                console.log(imageSource);
-                console.log(item);
-            }
+
             // reselect item
             $itemSelector = $('.tab-suggest #item-' + id);
             $itemSelector.css("background",
@@ -41,6 +38,7 @@ function generateSuggestItemCards(listOfItems, tabId) {
 }
 
 function generateSuggestionsCards(listOfItems, tabId) {
+    $('#' + tabId + " div.suggestionsDisplayDiv").empty();
     for (i = 0; i < listOfItems.length; i++) {
         // get current item json
         let item = listOfItems[i];
@@ -48,23 +46,20 @@ function generateSuggestionsCards(listOfItems, tabId) {
         // generate modal html
         let id = item[0];
 
-        // check if item already exists on page
-        if ($('.tab-suggest #' + tabId + '#item-' + id).html() == null) {
-            // set item html
-            let divHTML = generateItemIcon(item, id);
-            $('#' + tabId).append(divHTML);
+        // set item html
+        let divHTML = generateItemIcon(item, id);
+        // remove already existing items from previous suggestion queries
+        $('#' + tabId + " div.suggestionsDisplayDiv").append(divHTML);
 
+        // add image for icon
+        let imageSource = item[8];
+        $('.tab-suggest #item-' + id).css("background", "url(\"" + imageSource + "\") no-repeat");
+        $('.tab-suggest #item-' + id).css("background-size", "100%");
 
-            // add image for icon
-            let imageSource = item[8];
-            $('.tab-suggest #item-' + id).css("background", "url(\"" + imageSource + "\") no-repeat");
-            $('.tab-suggest #item-' + id).css("background-size", "100%");
-
-            // add event listener for focus (ie user selection)
-            $('.tab-suggest #item-' + id).focus(function () {
-                $selected = $(this);
-            })
-        }
+        // add event listener for focus (ie user selection)
+        $('.tab-suggest #item-' + id).focus(function () {
+            $selected = $(this);
+        })
     }
 }
 
@@ -74,7 +69,10 @@ function populateSuggestTabItems(compId, currTabId) {
     let postParams = {
         username: username,
         component: compInd[compId]
-    }
+    };
+    // TODO: remove
+    // console.log("75");
+    // console.log(postParams);
     $.post("/outfitByAttribute", postParams, responseJSON => {
         let itemList = JSON.parse(responseJSON).items;
         generateSuggestItemCards(itemList, currTabId);
@@ -93,19 +91,21 @@ function addItemToOutfitSuggest(event) {
 }
 
 function getCompId(idName) {
-    if (idName == 'display-outer-suggestions') {
+    if (idName === 'display-outer-suggestions') {
         return 0;
-    } else if (idName == 'display-top-suggestions') {
+    } else if (idName === 'display-top-suggestions') {
         return 1;
-    } else if (idName == 'display-bottom-suggestions') {
+    } else if (idName === 'display-bottom-suggestions') {
         return 2;
-    } else {
+    } else if (idName === 'display-shoes-suggestions') {
         return 3;
+    } else {
+        return null;
     }
 }
 
 function addItemFromSuggestions(event) {
-    let compId = getCompId($selected.parent().attr('id'));
+    let compId = getCompId($selected.parent().parent().attr('id'));
     let compDiv = document.getElementsByClassName("add-suggest")[compId];
     compDiv.innerHTML = $selected.context.outerHTML;
     $selected = null;
@@ -140,7 +140,7 @@ function showSuggestTab(compId) {
         document.getElementById("addOutfitSuggest").style.display = "none";
         document.getElementById("outfit-name-label").style.display = "none";
         document.getElementById("outfit-name").style.display = "none";
-    } else { // specific outfit page
+    } else if (compId > 0 && compId < 5) { // specific outfit page
         populateSuggestTabItems(compId, tabs[compId].id);
         tabs[compId].style.display = "table";
         document.getElementById("addItemSuggest").style.display = "inline";
@@ -211,7 +211,7 @@ function getSuggestions() {
             top: null,
             bottom: null,
             shoes: null
-        }
+        };
 
         if (typeof outer !== 'undefined') {
             postParams.outer = outer.id.split('-')[1];
@@ -234,6 +234,8 @@ function getSuggestions() {
             let topSuggestions = JSON.parse(responseJSON).topSuggestions;
             let bottomSuggestions = JSON.parse(responseJSON).bottomSuggestions;
             let shoesSuggestions = JSON.parse(responseJSON).shoesSuggestions;
+
+            console.log("here");
 
             generateSuggestionsCards(outerSuggestions, 'display-outer-suggestions');
             generateSuggestionsCards(topSuggestions, 'display-top-suggestions');
@@ -259,7 +261,6 @@ function resetForm() {
     $("#shoes-item").html('<button id="suggest-shoes-item" ' +
         'class="addButton" ' +
         'onclick="navigateToSuggestTab(event, 4)">Add Shoes</button>');
-    console.log($selected);
 }
 
 // function that adds a fully constructed outfit to the database
@@ -269,7 +270,8 @@ function addOutfit() {
 
         let outfitName = $("#outfit-name").val();
 
-        if (typeof outfitName === "undefined") {
+        if (typeof outfitName === "undefined"
+            || outfitName === "") {
             alert("Please enter an outfit name.")
             return;
         }
@@ -281,11 +283,14 @@ function addOutfit() {
         let bottom = document.getElementsByClassName("add-suggest")[2].getElementsByClassName("item")[0];
         let shoes = document.getElementsByClassName("add-suggest")[3].getElementsByClassName("item")[0];
 
+        // TODO: make this accept fewer than four items
         // need at least these three categories of items to add outfit
-        if (typeof top === "undefined"
+        if (typeof outer === "undefined"
+            || typeof top === "undefined"
             || typeof bottom === "undefined"
             || typeof shoes === "undefined") {
-            alert("You must input at least a top, bottom, and shoes.");
+            // alert("You must input at least a top, bottom, and shoes.");
+            alert("You must input all components of the outfit");
             return;
         }
 

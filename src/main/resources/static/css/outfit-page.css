@@ -80,6 +80,11 @@ input {
     height: 10vw;
 }
 
+.add-suggest .item {
+    width: 100%;
+    height: 100%;
+}
+
 #addOutfitModal .item {
     display: table-cell;
     /*width: 20%;*/
@@ -158,7 +163,7 @@ input {
 .item {
     border: 0;
     width: 100%;
-    height: 100px;
+    /*height: 100px;*/
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -168,7 +173,7 @@ input {
 
 .item-display .item {
     width: 25%;
-    height: 200px;
+    height: 15vw;
 }
 
 .item span {
@@ -206,6 +211,7 @@ input {
 input#outfit-name {
     width: 80%;
     font-family: 'Rubik', sans-serif;
+    border: 2px solid black;
 }
 
 button {
@@ -240,7 +246,7 @@ button {
 }
 
 .outfit-card {
-    height: 12em;
+    height: 30vh;
     display: flex;
     flex-flow: column;
     justify-content: center;
@@ -291,10 +297,10 @@ button {
 /*  color: gray;*/
 /*}*/
 
-/*.like-button.not-liked:hover {*/
-/*  background: none;*/
-/*  color: #2196F3;*/
-/*}*/
+.like-button.not-liked:hover {
+    background: none;
+    color: #2196F3;
+}
 
 /*.like-button:hover {*/
 /*    background: none;*/
@@ -364,8 +370,6 @@ div#outfits-div {
     justify-content: center;
     font-size: 8em;
     vertical-align: center;
-    width: 100%;
-    height: 100%;
     font-weight: lighter;
     opacity: .6;
 }
@@ -403,4 +407,50 @@ em {
 
 #addOutfitSuggest {
     font-size: 1.2em;
+}
+
+.delete, button#suggest, button#addOutfitSuggest {
+    background-color: white;
+    border: 2px black solid;
+    border-radius: 5px;
+}
+
+.addButton {
+    background-color: white;
+    border: 2px black dashed;
+    border-radius: 5px;
+}
+
+#addFromSuggest, #addItemSuggest, #backSuggest {
+    background-color: white;
+    border: 2px black solid;
+    border-radius: 5px;
+}
+
+button#suggest:hover, button#addOutfitSuggest:hover,
+#addFromSuggest:hover, #addItemSuggest:hover, #backSuggest:hover {
+    background: rgba(102, 204, 204, 0.6);
+    transition: background-color 100ms linear;
+}
+
+.addButton:hover {
+    background: #ECEFF1;
+    transition: background-color 100ms linear;
+}
+
+.delete:hover {
+    /*cursor: pointer;*/
+    background: #EF9A9A;
+    transition: background-color 100ms linear;
+}
+
+
+div.suggestionsDisplayDiv {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div.suggestionsDisplayDiv .item {
+    width: 25%;
+    height: 25vh;
 }

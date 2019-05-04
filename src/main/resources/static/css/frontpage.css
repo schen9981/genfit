@@ -1,7 +1,8 @@
 html, body, .viewport {
-    width: 100%; !important
-    height: 100%; !important
-    margin: 0; !important
+    width: 100%;
+!important height: 100 %;
+!important margin: 0;
+!important
 }
 
 .main {
@@ -37,7 +38,7 @@ html, body, .viewport {
 }
 
 #left-wrapper {
-    background-image: linear-gradient(to bottom, rgba(202,235,242,0.7), rgba(202,235,242,0.7)), url("../img/login-cover.jpg");
+    background-image: linear-gradient(to bottom, rgba(202, 235, 242, 0.7), rgba(202, 235, 242, 0.7)), url("../img/login-cover.jpg");
     background-size: cover;
     background-position: top;
     background-repeat: no-repeat;
@@ -63,6 +64,7 @@ form input {
     justify-content: center;
     /* align-items: center; */
 }
+
 /* Add a green text color and a checkmark when the requirements are right */
 .valid {
     color: green;
@@ -102,4 +104,12 @@ form input {
 
 #message {
     /* margin-left: % */
+}
+
+h1 {
+    font-size: 3em;
+}
+
+h3 {
+    font-size: 1.5em;
 }

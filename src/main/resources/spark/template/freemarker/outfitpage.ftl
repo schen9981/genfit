@@ -94,15 +94,19 @@
                             <div class="tab-suggest" id="display-suggestions">
                                 <div id="display-outer-suggestions">
                                     <h3>Outer Suggestions:</h3>
+                                    <div class="suggestionsDisplayDiv"></div>
                                 </div>
                                 <div id="display-top-suggestions">
                                     <h3>Top Suggestions:</h3>
+                                    <div class="suggestionsDisplayDiv"></div>
                                 </div>
                                 <div id="display-bottom-suggestions">
                                     <h3>Bottom Suggestions:</h3>
+                                    <div class="suggestionsDisplayDiv"></div>
                                 </div>
                                 <div id="display-shoes-suggestions">
                                     <h3>Shoes Suggestions:</h3>
+                                    <div class="suggestionsDisplayDiv"></div>
                                 </div>
                             </div>
 
