@@ -33,7 +33,7 @@ function generateOutfitContent(outfit, id) {
 function generateItemContent(item, id) {
     let itemContent;
     if (item.length == 0) {
-        itemContent = '<div class="item" id="item-empty">' + N / A + "</div>";
+        itemContent = '<div class="item" id="item-empty"> N/A </div>';
     } else {
         // itemContent = '<div tabindex="-1" class="item" id="item-' + id +
         // '">'; itemContent += '<h5>' + item[1] + '</h5><br>'; itemContent +=
@@ -54,7 +54,7 @@ function generateItemContent(item, id) {
 // generate item icons to display when users are adding to an outfit
 function generateItemIcon(item, id, imageSource) {
     return '<div tabindex="-1" class="item" id="item-' + id + '" ' +
-        'style="background-image: url(' + imageSource + '); ' +
+        'style="background-image: url(\'' + imageSource + '\'); ' +
         'background-size: 100%"><span>' + item[1] + '</span></div>';
 }
 
@@ -83,6 +83,11 @@ function animateOutfitModal(outfitId) {
 
 // generates the modal/cards for each outfit from a list
 function generateOutfitCards(listOfOutfits) {
+    let $noOutfitsCard = $("#no-outfits-card");
+    // hide no outfits card if there are actual items to display
+    if (listOfOutfits.length > 0 && typeof $noOutfitsCard.html() !== "undefined") {
+        $noOutfitsCard.css("display", "none");
+    }
     for (i = 0; i < listOfOutfits.length; i++) {
         // get current item json
         let outfit = listOfOutfits[i];
@@ -135,14 +140,23 @@ function displayUserOutfits(username) {
 
     $.post("/userOutfits", postParams, responseJSON => {
         let userOutfits = JSON.parse(responseJSON).outfits;
+        let $noOutfitsCard = $("#no-outfits-card");
+        // has outfits
         if (typeof userOutfits !== "undefined" && userOutfits.length > 0) {
+            if (typeof $noOutfitsCard.html() !== "undefined") {
+                $noOutfitsCard.css("display", "none");
+            }
             generateOutfitCards(userOutfits);
         } else {
-            $outfitsDiv = $("div#outfits-div");
-            $outfitsDiv.append('<div class="outfit-card"' +
-                ' id="no-outfits-card">' +
-                'No outfits yet :)</div>')
-            $noOutfitsCard = $("#no-outfits-card");
+            let $outfitsDiv = $("div#outfits-div");
+            if (typeof $noOutfitsCard.html() !== "undefined") {
+                $noOutfitsCard.css("display", "flex");
+            } else {
+                $outfitsDiv.append('<div class="outfit-card"' +
+                    ' id="no-outfits-card">' +
+                    'No outfits yet 🙃</div>')
+                $noOutfitsCard = $("#no-outfits-card");
+            }
 
             $noOutfitsCard.css("text-align", "center");
             $noOutfitsCard.css("border", "1px solid grey");
@@ -197,9 +211,18 @@ function displayLikes(username, outfitId, change, outfitCard) {
                 likeClass = "not-liked";
             }
             // console.log(likes + " " + likeClass);
+
+            let word = null;
+
+            if (likes != 1) {
+                word = "Likes";
+            } else {
+                word = "Like"
+            }
+
             outfitCard.insertAdjacentHTML("afterend", "<div class='like-wrapper'>" +
-                "<button onclick='like(" + outfitId + ")' class='like-button " + likeClass + "' id='like-button-" + outfitId + "'>Like</button>" +
-                "<p id='like-num-" + outfitId + "'>" + likes + " Likes</p>" +
+                "<button onclick='like(" + outfitId + ")' class='like-button " + likeClass + "' id='like-button-" + outfitId + "'><i class=\"fas fa-thumbs-up\"></i></button>" +
+                "<p id='like-num-" + outfitId + "'>" + likes + " " + word + " </p>" +
                 "</div>");
         });
     });
@@ -221,7 +244,14 @@ function like(outfitId) {
 
         $.post("/like", postParams, responseJSON => {
             let likes = JSON.parse(responseJSON).likes;
-            document.getElementById('like-num-' + outfitId).innerHTML = likes + " Likes";
+            let word = null;
+
+            if (likes != 1) {
+                word = "Likes";
+            } else {
+                word = "Like"
+            }
+            document.getElementById('like-num-' + outfitId).innerHTML = likes + " " + word;
             // console.log(document.getElementById('like-num-' +
             // outfitId).innerHTML)
         })
@@ -238,7 +268,14 @@ function like(outfitId) {
 
         $.post("/like", postParams, responseJSON => {
             let likes = JSON.parse(responseJSON).likes;
-            document.getElementById('like-num-' + outfitId).innerHTML = likes + " Likes";
+            let word = null;
+
+            if (likes != 1) {
+                word = "Likes";
+            } else {
+                word = "Like"
+            }
+            document.getElementById('like-num-' + outfitId).innerHTML = likes + " " + word;
         })
     }
 

@@ -34,7 +34,8 @@ div.fullOutfit {
 .close {
     color: #aaa;
     margin-left: auto;
-    font-size: 28px;
+    margin-right: 1em;
+    font-size: 3em;
     font-weight: bold;
 }
 
@@ -71,6 +72,17 @@ input {
 .tab-suggest {
     display: none;
     width: 100%;
+    margin-bottom: 1em;
+}
+
+.add-suggest {
+    width: 10vw;
+    height: 10vw;
+}
+
+.add-suggest .item {
+    width: 100%;
+    height: 100%;
 }
 
 #addOutfitModal .item {
@@ -118,7 +130,7 @@ input {
 }
 
 
-.tab-suggest.item-display {
+.item-display {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -151,7 +163,29 @@ input {
 .item {
     border: 0;
     width: 100%;
-    height: 100px;
+    /*height: 100px;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    border-radius: 5px;
+}
+
+.item-display .item {
+    width: 25%;
+    height: 15vw;
+}
+
+.item span {
+    background-color: white;
+    border: 2px black solid;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 1em;
+    padding: 0.3em;
 }
 
 .item-label {
@@ -176,10 +210,16 @@ input {
 
 input#outfit-name {
     width: 80%;
+    font-family: 'Rubik', sans-serif;
+    border: 2px solid black;
+}
+
+button {
+    font-family: 'Rubik', sans-serif;
 }
 
 .outfit-btn {
-    border: 1px solid black;
+    /*border: 1px solid black;*/
     display: flex;
     justify-content: center;
     flex-flow: row;
@@ -187,17 +227,26 @@ input#outfit-name {
     font-weight: bold;
     height: 90%;
     width: 100%;
+    border-radius: 10px 10px 0 0;
+}
+
+.outfit-btn:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
 #add {
     width: 23%;
     margin: 1%;
     box-sizing: border-box;
+    border-radius: 10px;
 }
 
+#add:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 
 .outfit-card {
-    height: 12em;
+    height: 30vh;
     display: flex;
     flex-flow: column;
     justify-content: center;
@@ -207,33 +256,63 @@ input#outfit-name {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+    font-size: 1.5em;
 }
 
 .outfit-card p {
     width: 50%;
-    border: black solid 1px;
+    /*border: black solid 1px;*/
     margin: 0;
     text-align: center;
 }
 
 .like-wrapper {
+    background-color: white;
     padding-bottom: 0;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    border: black solid 1px;
 }
 
 .like-button {
-    width: 50%;
+    border: none;
+    width: 48%;
+    outline: none;
 }
 
 .like-button.not-liked {
+    color: gray;
     background: white;
 }
 
-.like-button.liked {
-    background: blue;
+/* TODO: talk about this */
+/*.like-button:hover {*/
+/*    background: none;*/
+/*    color: #2196F3;*/
+/*}*/
+
+/*.like-button.liked:hover {*/
+/*  background: none;*/
+/*  color: gray;*/
+/*}*/
+
+.like-button.not-liked:hover {
+    background: none;
+    color: #2196F3;
 }
+
+/*.like-button:hover {*/
+/*    background: none;*/
+/*    color: #2196F3;*/
+/*}*/
+
+.like-button.liked {
+    /*background: #2196F3;*/
+    background: none;
+    color: #2196F3;
+}
+
 
 #outfit-info {
     display: flex;
@@ -251,9 +330,6 @@ input#outfit-name {
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
-    -webkit-box-shadow: 10px 10px 5px -6px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 10px 10px 5px -6px rgba(0, 0, 0, 0.75);
-    box-shadow: 10px 10px 5px -6px rgba(0, 0, 0, 0.75);
 }
 
 #suggestOutfitBtn:active {
@@ -278,8 +354,9 @@ div#outfit-name-div {
 label#outfit-name-label {
     margin-right: auto;
     margin-left: 7%;
+    /*margin-bottom: 0.5em;*/
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 1.8em;
 }
 
 div#outfits-div {
@@ -293,8 +370,87 @@ div#outfits-div {
     justify-content: center;
     font-size: 8em;
     vertical-align: center;
-    width: 100%;
-    height: 100%;
     font-weight: lighter;
     opacity: .6;
+}
+
+em {
+    font-weight: lighter;
+}
+
+#suggestSubmitDiv {
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 1.2em;
+}
+
+.addButton {
+    width: 100%;
+    height: 100%;
+    font-size: 1.3em;
+}
+
+#rowDiv {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#rowDiv label {
+    vertical-align: bottom;
+}
+
+#suggest {
+    font-size: 1.2em;
+}
+
+#addOutfitSuggest {
+    font-size: 1.2em;
+}
+
+.delete, button#suggest, button#addOutfitSuggest {
+    background-color: white;
+    border: 2px black solid;
+    border-radius: 5px;
+}
+
+.addButton {
+    background-color: white;
+    border: 2px black dashed;
+    border-radius: 5px;
+}
+
+#addFromSuggest, #addItemSuggest, #backSuggest {
+    background-color: white;
+    border: 2px black solid;
+    border-radius: 5px;
+}
+
+button#suggest:hover, button#addOutfitSuggest:hover,
+#addFromSuggest:hover, #addItemSuggest:hover, #backSuggest:hover {
+    background: rgba(102, 204, 204, 0.6);
+    transition: background-color 100ms linear;
+}
+
+.addButton:hover {
+    background: #ECEFF1;
+    transition: background-color 100ms linear;
+}
+
+.delete:hover {
+    /*cursor: pointer;*/
+    background: #EF9A9A;
+    transition: background-color 100ms linear;
+}
+
+
+div.suggestionsDisplayDiv {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div.suggestionsDisplayDiv .item {
+    width: 25%;
+    height: 25vh;
 }

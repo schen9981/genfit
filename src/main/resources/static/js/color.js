@@ -158,11 +158,11 @@ function sortColors(colors) {
         }
     }
     distances.sort((a, b) => a[2] - b[2]);
-
+    // console.log(distances);
     // Put each color into separate cluster initially
     const colorToCluster = {};
     for (let i = 0; i < colors.length; i++) { colorToCluster[colors[i]] = [colors[i]]; }
-
+    // console.log(colorToCluster);
     // Merge clusters, starting with lowest distances
     let lastCluster;
     for (let i = 0; i < distances.length; i++) {
@@ -187,5 +187,6 @@ function sortColors(colors) {
     }
 
     // By now all colors should be in one cluster
+    // console.log(lastCluster.length);
     return lastCluster;
 }

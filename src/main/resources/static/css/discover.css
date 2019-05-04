@@ -8,8 +8,8 @@
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
@@ -77,7 +77,7 @@
 }
 
 .item:hover {
-    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    box-shadow: 0 0 11px rgba(33, 33, 33, .2);
 }
 
 .modal-content {
@@ -88,6 +88,8 @@
     display: table-cell;
     width: 20%;
     height: 200px;
+    border-radius: 5px;
+    /*background-image: ;*/
 }
 
 .item span {
@@ -153,44 +155,94 @@
 }
 
 .outfit {
-    border: 1px solid black;
+    border: 1px solid #d1d1d1;
     /*width: 100px;*/
-    height: 100px;
+    height: 100%;
     /*max-width: 100%;*/
     display: flex;
     /*flex-direction: row;*/
     /*box-sizing: border-box;*/
     flex-flow: row;
     /*flex-wrap: wrap;*/
+    justify-content: center;
+    font-weight: bold;
+    border-radius: 10px 10px 0 0;
+}
+
+.outfit:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .outfit-card {
-    display: flex;
-    /*width: 25%;*/
-    /*min-width: 50px;*/
-    flex-flow: column;
-    /*flex-wrap: wrap;*/
-    /*flex-grow: 1;*/
-    /*padding: 5px;*/
+    /*display: flex;*/
+    /*flex-flow: column;*/
+    /*min-width: 200px;*/
     /*box-sizing: border-box;*/
-    min-width: 200px;
+    height: 12em;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
     box-sizing: border-box;
-    /*flex-grow: 1;*/
+    width: 23%;
+    margin: 1%;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    text-align: center;
 }
 
 .outfit-card p {
+    width: 50%;
+    /*border: black solid 1px;*/
     margin: 0;
+    text-align: center;
 }
+
+/*.like-wrapper {*/
+/*    padding-bottom: 10px;*/
+/*    display: flex;*/
+/*}*/
 
 .like-wrapper {
-    padding-bottom: 10px;
+    background-color: white;
+    padding-bottom: 0;
     display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border: black solid 1px;
 }
 
-.like-button.not-liked{
+.like-button {
+    border: none;
+    width: 48%;
+    outline: none;
+}
+
+.like-button.not-liked:hover {
+    background: none;
+    color: #2196F3;
+}
+
+.like-button.not-liked {
+    color: gray;
     background: white;
 }
 
-.like-button.liked{
-    background: blue;
+/*.like-button.liked:hover {*/
+/*    color: gray;*/
+/*    background: white;*/
+/*}*/
+
+.like-button.liked {
+    /*background: #2196F3;*/
+    background: none;
+    color: #2196F3;
+}
+
+.save-button {
+    display: block;
+    margin: 0 auto;
+    width: 30%;
+    margin-top: 20px;
+    padding: 5px;
 }

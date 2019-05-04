@@ -2,6 +2,7 @@
 <head>
     <meta charset="utf-8">
     <#if title?has_content><title>${title}</title></#if>
+    <link rel="icon" href="/img/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- In real-world webapps, css is usually minified and
          concatenated. Here, separate normalize from our code, and
@@ -13,6 +14,7 @@
     <link rel="stylesheet"
           href="<#if cssPath?has_content>${cssPath}</#if>css/main.css">
     <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
     <#if additionalCSS?has_content>
         ${additionalCSS}

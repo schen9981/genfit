@@ -1,17 +1,5 @@
 package edu.brown.cs.database;
 
-import com.genfit.attribute.ColorAttribute;
-import com.genfit.attribute.FormalityAttribute;
-import com.genfit.attribute.PatternAttribute;
-import com.genfit.attribute.SeasonAttribute;
-import com.genfit.attribute.SubtypeAttribute;
-import com.genfit.attribute.TypeAttribute;
-import com.genfit.attribute.attributevals.Color;
-import com.genfit.attribute.attributevals.FormalityEnum;
-import com.genfit.attribute.attributevals.PatternEnum;
-import com.genfit.attribute.attributevals.SeasonEnum;
-import com.genfit.attribute.attributevals.SubtypeEnum;
-import com.genfit.attribute.attributevals.TypeEnum;
 import com.genfit.database.AWSConnection;
 import com.genfit.database.Database;
 
@@ -20,10 +8,11 @@ import java.sql.Connection;
 public class DatabaseTest {
   private static final String bucket_name = "cs32-term-project-s3-bucket";
   private static final String access_key = "AKIAUSTN5WVYFTHPLBSU";
-  private static final String secret_key = "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";
+  private static final String secret_key = "uetUyr0W+vuI"
+          + "+iFZBl6HCWB9kgYNoXgYPTX6kCei";
   private static final String region = "us-east-1";
 
-  public void dBMethods() throws Exception{
+  public static void main(String[] args) throws Exception {
     Connection connection = AWSConnection.getDBConnectionUsingIam();
     Database db = new Database(connection);
 //    db.editItem(103, 95,
