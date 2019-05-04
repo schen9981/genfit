@@ -408,6 +408,34 @@ em {
     font-size: 1.2em;
 }
 
+.delete, button#suggest, button#addOutfitSuggest {
+    background-color: white;
+    border: 2px black solid;
+    border-radius: 5px;
+}
+
+.addButton {
+    background-color: white;
+    border: 2px black dashed;
+    border-radius: 5px;
+}
+
+button#suggest:hover, button#addOutfitSuggest:hover {
+    background: rgba(102, 204, 204, 0.6);
+    transition: background-color 100ms linear;
+}
+
+.addButton:hover {
+    background: #ECEFF1;
+    transition: background-color 100ms linear;
+}
+
+.delete:hover {
+    /*cursor: pointer;*/
+    background: #EF9A9A;
+    transition: background-color 100ms linear;
+}
+
 
 div.suggestionsDisplayDiv {
     display: flex;

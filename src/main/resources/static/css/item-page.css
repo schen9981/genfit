@@ -75,6 +75,25 @@ hr {
   margin-top: 16px ;
 }
 
+.edit-button, .delete-button, .submit-change-button, .submit-div input{
+    background-color: white;
+    border: 1px black solid;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.submit-change-button:hover, .submit-div input:hover {
+    cursor: pointer;
+    background: rgba(102, 204, 204, 0.6);
+    transition: background-color 200ms linear;
+}
+
+.delete-button:hover {
+    cursor: pointer;
+    background: #EF9A9A;
+    transition: background-color 100ms linear;
+}
+
 .buttons {
   margin-top: 2em;
 }
