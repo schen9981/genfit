@@ -156,6 +156,7 @@ function outfitSuggestModal() {
     // close modal when user clicks 'x'
     span.click(function () {
         modal.css("display", "none");
+        resetForm();
     });
 }
 
@@ -210,6 +211,18 @@ function getSuggestions() {
     })
 }
 
+// repopulates the from with the initial buttons
+function resetForm() {
+    $("#outer-item").html('<button id="suggest-outer-item"' +
+        'onclick="navigateToSuggestTab(event, 1)">Add Outer</button>');
+    $("#top-item").html('<button id="suggest-top-item"' +
+        'onclick="navigateToSuggestTab(event, 2)">Add Top</button>');
+    $("#bottom-item").html('<button id="suggest-bottom-item"' +
+        'onclick="navigateToSuggestTab(event, 3)">Add Bottom</button>');
+    $("#shoes-item").html('<button id="suggest-shoes-item"' +
+        'onclick="navigateToSuggestTab(event, 4)">Add Shoes</button>');
+}
+
 // function that adds a fully constructed outfit to the database
 function addOutfit() {
     $('#addOutfitSuggest').on("click", function (e) {
@@ -235,7 +248,7 @@ function addOutfit() {
             let outfitList = [outfit];
             generateOutfitCards(outfitList);
             $("#suggestOutfitModal").css("display", "none");
-            resetForm(e);
+            resetForm();
         });
     });
 }

@@ -12,8 +12,7 @@
           href="<#if cssPath?has_content>${cssPath}</#if>css/html5bp.css">
     <link rel="stylesheet"
           href="<#if cssPath?has_content>${cssPath}</#if>css/main.css">
-    <link href="https://fonts.googleapis.com/css?family=Poppins"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
 
     <#if additionalCSS?has_content>
         ${additionalCSS}
@@ -22,6 +21,7 @@
 <body>
 <!-- Again, we're serving up the unminified source for clarity. -->
 <script src="<#if cssPath?has_content>${cssPath}</#if>js/jquery-2.1.1.js"></script>
+<script src="<#if cssPath?has_content>${cssPath}</#if>js/main.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
 <script src="/js/jquery-2.1.1.js"></script>
 <script src="js/authentication.js"></script>
@@ -33,18 +33,47 @@
 </#if>
 
 </body>
-<!-- Side navigation -->
-<div class="sidenav">
-  <a href="/user">Profile</a>
-  <a href="/items">Closet Items</a>
-  <a href="/outfits">User Outfits</a>
-  <a href="/discover">Discover</a>
-    <a id="signout" href="/" onclick="logout()">Sign Out</a>
+<!-- Top header -->
+<div class="top">
+  <img id="logo" src="/img/logo.svg"/>
+  <h1> GENFIT </h1>
+  <div id='welcome-message'>
+  </div>
 </div>
 
-<!-- Page content -->
-<div class="main">
-  ${content}
+<!-- Side navigation -->
+<div class="bottom">
+  <div class="sidenav">
+    <div class="sidenav-tab" id="first">
+      <img id="dashboard" src="/img/dashboard.svg"/>
+      <a href="/user">Dashboard</a>
+    </div>
+
+    <div class="sidenav-tab">
+      <img id="items" src="/img/items.svg"/>
+      <a href="/items">Items</a>
+    </div>
+
+    <div class="sidenav-tab">
+      <img id="outfits" src="/img/closet.svg"/>
+      <a href="/outfits">Outfits</a>
+    </div>
+
+    <div class="sidenav-tab" id="last">
+      <img id="discover" src="/img/discover.svg"/>
+      <a href="/discover">Discover</a>
+    </div>
+
+    <div class="signout-div">
+      <a id="signout" href="/" onclick="logout()">Sign Out</a>
+    </div>
+
+  </div>
+
+  <!-- Page content -->
+  <div class="main">
+    ${content}
+  </div>
 </div>
 
 </html>

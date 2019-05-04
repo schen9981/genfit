@@ -6,6 +6,8 @@
         if (getLoginStatus()) {
             window.location.replace("/user");
         }
+        $(".top").remove();
+        $(".bottom").css("height", "100%");
     </script>
 
     <div class="container">

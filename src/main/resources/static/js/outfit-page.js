@@ -87,8 +87,6 @@ function generateOutfitCards(listOfOutfits) {
         // get current item json
         let outfit = listOfOutfits[i];
 
-        console.log(outfit);
-
         // generate modal html
         let id = outfit[0];
         let outfitName = outfit[1];
