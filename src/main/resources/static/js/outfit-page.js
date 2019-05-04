@@ -138,7 +138,14 @@ function displayUserOutfits(username) {
         if (typeof userOutfits !== "undefined" && userOutfits.length > 0) {
             generateOutfitCards(userOutfits);
         } else {
-            $("div#outfits-div").append("<h3>No outfits yet :)</h3>")
+            $outfitsDiv = $("div#outfits-div");
+            $outfitsDiv.append('<div class="outfit-card"' +
+                ' id="no-outfits-card">' +
+                'No outfits yet :)</div>')
+            $noOutfitsCard = $("#no-outfits-card");
+
+            $noOutfitsCard.css("text-align", "center");
+            $noOutfitsCard.css("border", "1px solid grey");
         }
     });
 }
