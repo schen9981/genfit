@@ -19,14 +19,13 @@ function generateOutfitContent(outfit, id) {
 
     // post request to get outfit components as array
     $.post("/outfitComponents", postParams, responseJSON => {
-        let outfitContent = '<div class="fullOutfit">';
-        outfitContent += generateItemContent(JSON.parse(responseJSON).outer, outfit[2]);
-        outfitContent += generateItemContent(JSON.parse(responseJSON).top, outfit[3]);
-        outfitContent += generateItemContent(JSON.parse(responseJSON).bottom, outfit[4]);
-        outfitContent += generateItemContent(JSON.parse(responseJSON).shoes, outfit[5]);
-        outfitContent += '</div>';
-
-        $('#modal-' + id + ' .modal-content').append(outfitContent);
+        let $outfitContent = $('#modal-' + id + ' .modal-content' +
+            ' div.fullOutfit');
+        $outfitContent.append(generateItemContent(JSON.parse(responseJSON).outer, outfit[2]));
+        $outfitContent.append(generateItemContent(JSON.parse(responseJSON).top, outfit[3]));
+        $outfitContent.append(generateItemContent(JSON.parse(responseJSON).bottom, outfit[4]));
+        $outfitContent.append(generateItemContent(JSON.parse(responseJSON).shoes, outfit[5]));
+        $outfitContent.append('</div>');
     });
 }
 
@@ -55,7 +54,8 @@ function generateItemContent(item, id) {
 // generate item icons to display when users are adding to an outfit
 function generateItemIcon(item, id, imageSource) {
     return '<div tabindex="-1" class="item" id="item-' + id + '" ' +
-        'style="background-image: url(' + imageSource + '); background-size: 100%">' + item[1] + '</div>';
+        'style="background-image: url(' + imageSource + '); ' +
+        'background-size: 100%"><span>' + item[1] + '</span></div>';
 }
 
 // animate modal for popup functionality of outfit modal
@@ -87,23 +87,35 @@ function generateOutfitCards(listOfOutfits) {
         // get current item json
         let outfit = listOfOutfits[i];
 
+        console.log(outfit);
+
         // generate modal html
         let id = outfit[0];
-        let buttonHTML = '<div class="outfit-card"><button class="outfit" id="outfit-' + id + '">' + outfit[1] + '</button></div>';
+        let outfitName = outfit[1];
+
+        if (typeof outfitName === "undefined"
+            || outfitName === null
+            || outfitName === "") {
+            outfitName = "<em>Unnamed outfit</em>";
+        }
+
+        let buttonHTML = '<div class="outfit-card">' +
+            '<button class="outfit" id="outfit-' + id + '">' + outfitName
+            + '</button></div>';
         let modalHTML = '<div class="modal" id="modal-' + id + '">';
         modalHTML += '<div class="modal-content">';
         modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
+        modalHTML += '<div class="fullOutfit"></div>'
         modalHTML += '<button class="delete" id="delete-outfit-' + id + '">Delete Outfit</button>';
         modalHTML += '</div></div>';
 
-        // add modal to div 'items'
+        // add modal to div id='outfits'
         $('#outfits').append(buttonHTML);
         $('#outfits').append(modalHTML);
 
         let outfitCard = document.getElementById("outfit-" + id);
 
         displayLikes(username, id, 0, outfitCard);
-
         generateOutfitContent(outfit, id);
 
         // add popup functionality to given modal
@@ -124,7 +136,11 @@ function displayUserOutfits(username) {
 
     $.post("/userOutfits", postParams, responseJSON => {
         let userOutfits = JSON.parse(responseJSON).outfits;
-        generateOutfitCards(userOutfits);
+        if (typeof userOutfits !== "undefined" && userOutfits.length > 0) {
+            generateOutfitCards(userOutfits);
+        } else {
+            $("div#outfits").append("<h3>No outfits yet :)</h3>")
+        }
     });
 }
 
@@ -217,8 +233,6 @@ function like(outfitId) {
         $.post("/like", postParams, responseJSON => {
             let likes = JSON.parse(responseJSON).likes;
             document.getElementById('like-num-' + outfitId).innerHTML = likes + " Likes";
-            // console.log(document.getElementById('like-num-' +
-            // outfitId).innerHTML)
         })
     }
 
@@ -228,7 +242,5 @@ function like(outfitId) {
 $(document).ready(() => {
     username = localStorage.username;
     displayUserOutfits(username);
-    // showTab(0);
-    // addOutfit();
     $(".name").html(localStorage.getItem('name'));
 });
