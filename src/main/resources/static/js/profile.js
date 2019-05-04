@@ -43,7 +43,7 @@ function displayItemsInfo(username) {
             allColors.push(item[2]);
         }
         // console.log(allFormality);
-        visualizeItemSeason(allSeaons);
+        visualizeItemSeason(listOfItems);
         visualizeFormality(listOfItems);
         visualizeItemColors(allColors);
     });
@@ -83,27 +83,108 @@ function visualizeItemColors(colorsList) {
 
 
 function visualizeItemSeason(seasonsList) {
-    let typeNumMap = {
+    let outerTypeNumMap = {
         "SPRING": 0,
         "SUMMER": 0,
         "FALL": 0,
         "WINTER": 0
     };
 
-    for (let i = 0; i < seasonsList.length; i++) {
-        typeNumMap[seasonsList[i]] = typeNumMap[seasonsList[i]] += 1;
-    }
+    let topTypeNumMap = {
+        "SPRING": 0,
+        "SUMMER": 0,
+        "FALL": 0,
+        "WINTER": 0
+    };
+
+
+    let bottomTypeNumMap = {
+        "SPRING": 0,
+        "SUMMER": 0,
+        "FALL": 0,
+        "WINTER": 0
+    };
+
+
+    let shoesTypeNumMap = {
+        "SPRING": 0,
+        "SUMMER": 0,
+        "FALL": 0,
+        "WINTER": 0
+    };
+
+    seasonsList.forEach(function(item) {
+        let type = item[3];
+        let season = item[6];
+        if (type === "OUTER") {
+            outerTypeNumMap[season] += 1
+        } else if (type === "TOP") {
+            topTypeNumMap[season] += 1
+        } else if (type === "BOTTOM") {
+            bottomTypeNumMap[season] += 1
+        } else if (type === "SHOES") {
+            shoesTypeNumMap[season] += 1
+        }
+    });
+
+    console.log(outerTypeNumMap);
+    console.log(topTypeNumMap);
+    console.log(bottomTypeNumMap);
+    console.log(shoesTypeNumMap);
+
+    // let typeNumMap = {
+    //     "SPRING": 0,
+    //     "SUMMER": 0,
+    //     "FALL": 0,
+    //     "WINTER": 0
+    // };
+
+    // for (let i = 0; i < seasonsList.length; i++) {
+    //     typeNumMap[seasonsList[i]] = typeNumMap[seasonsList[i]] += 1;
+    // }
+    // console.log(typeNumMap);
 
     new Chart(document.getElementById("typePie"), {
-        type: 'pie',
+        type: 'doughnut',
         data: {
-            labels: Object.keys(typeNumMap),
+
             datasets: [{
+                label: "one",
+                labels: Object.keys(outerTypeNumMap),
                 backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
-                data: Object.values(typeNumMap)
-            }]
+                data: Object.values(outerTypeNumMap)
+            },
+            {
+                label: "two",
+                labels: Object.keys(topTypeNumMap),
+                backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
+                data: Object.values(topTypeNumMap)
+            },
+            {
+                label: "two",
+                labels: Object.keys(bottomTypeNumMap),
+                backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
+                data: Object.values(bottomTypeNumMap)
+            },
+            {
+                label: "two",
+                labels: Object.keys(shoesTypeNumMap),
+                backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
+                data: Object.values(shoesTypeNumMap)
+            }],
+            labels: Object.keys(topTypeNumMap)
         },
-        options: {}
+        options: {
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        let dataset = data.datasets[tooltipItem.datasetIndex];
+                        let index = tooltipItem.index;
+                        return dataset.labels[index] + ': ' + dataset.data[index];
+                    }
+                }
+            }
+        }
     });
 
 }
@@ -182,7 +263,7 @@ function visualizeFormality(formalityList) {
             // console.log(formalityPercentMap[type][formality]);
         })
     });
-    console.log(formalityPercentMap);
+    // console.log(formalityPercentMap);
 
     new Chart(document.getElementById("formalityRadar"), {
         type: 'radar',

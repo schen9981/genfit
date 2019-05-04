@@ -158,7 +158,7 @@ function sortColors(colors) {
         }
     }
     distances.sort((a, b) => a[2] - b[2]);
-    console.log(distances);
+    // console.log(distances);
     // Put each color into separate cluster initially
     const colorToCluster = {};
     for (let i = 0; i < colors.length; i++) { colorToCluster[colors[i]] = [colors[i]]; }
