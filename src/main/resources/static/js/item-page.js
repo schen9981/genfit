@@ -25,7 +25,7 @@ $(".name").html(localStorage.getItem('name'));
 function generateCardContent(item) {
   // item represented as array [id, name, color, type, subtype, pattern, season, formality, image src]
   let itemContent = '<div class="item-content">';
-  itemContent += '<h1>' +  item[1]  + '</h1><hr>';
+  itemContent += '<h1 id="name-item-' + item[0] + '">' +  item[1]  + '</h1><hr>';
   itemContent += '<div class="item-content-1">';
   itemContent += '<div class="content-elem">';
   itemContent += '<img src="' + item[8] + '"></div>';
@@ -330,7 +330,6 @@ function populateFormalityEdit(formality) {
 }
 
 
-
 function editItem(itemId, item) {
   let colorEdit = populateColorEdit(parseHex(item[2]));
   let typeEdit = populateTypeEdit(item[3], item[4]);
@@ -348,52 +347,85 @@ function editItem(itemId, item) {
     $('.season-div').html(seasonEdit);
     $('.formality-div').html(formalityEdit);
 
+    // event listeners for change input
+    let newColor = $('#item-color').val();
+    let newType1 = $('#type-1').val();
+    let newType2 = $('#type-2').val();
+    console.log(newType2);
+    let newPattern = $('#item-pattern').val();
+    let newSeason = $('#item-season').val();
+    let newFormality = $('#item-formality').val();
+
+    $('.color-div #item-colors #item-color').on('change', function(e) {
+      newColor = e.target.value;
+    });
+
+    $('.type-div #type-1').on('change', function(e) {
+      newType1 = e.target.value;
+    });
+
+    $('.type-div #type-2').on('change', function(e) {
+      newType2 = e.target.value;
+    });
+
+    $('.pattern-div #item-pattern').on('change', function(e) {
+      newPattern = e.target.value;
+    });
+
+    $('.season-div #item-season').on('change', function(e) {
+      newSeason = e.target.value;
+    });
+
+    $('.formality-div #item-formality').on('change', function(e) {
+      newFormality = e.target.value;
+    });
+
     dynamicTypeDropdown("type-div");
 
     // hide edit button
     $('#edit-item-' + itemId).css("display", "none");
 
     // add submit changes button
-    submitChanges(itemId);
+    let submitChangesButton = '<button class="submit-change-button" id="submit-edit-' + itemId + '">Submit Changes</button>';
+    $('#modal-' + itemId + ' .modal-content .buttons').append(submitChangesButton);
+    $('#submit-edit-' + itemId).on('click', function (e) {
+      let postParams = {
+        itemId: itemId,
+        itemName: $('#name-item-' + itemId).text(),
+        itemColor: newColor,
+        itemType1: newType1,
+        itemType2: newType2,
+        itemPattern: newPattern,
+        itemSeason: newSeason,
+        itemFormality: newFormality
+      };
+
+      // post request to update item in database
+      $.post("/editItem", postParams, responseJSON => {
+          let item = JSON.parse(responseJSON);
+          let newCardContent = '<span class="close" id="close-' + itemId + '">&times;</span>';
+          newCardContent += generateCardContent(item);
+          newCardContent += "<div class='buttons'>";
+          newCardContent += '<button class="edit-button" id="edit-item-' + itemId + '">Edit Item</button></div>';
+          newCardContent += '</div>';
+
+          // repopulate modal with new card contents
+          $('#modal-' + itemId + ' .modal-content').html(newCardContent);
+
+          animateItemModal(itemId);
+      });
+    });
+
 
     // show delete button
     deleteUserItem(itemId);
   })
-
-
-  // post request
 }
 
-// button that handles submtting changes
-function submitChanges(itemId) {
-  let submitChangesButton = '<button class="submit-change-button" id="submit-edit-' + itemId + '">Submit Changes</button>';
-  $('#modal-' + itemId + ' .modal-content .buttons').append(submitChangesButton);
-  $('#submit-edit-' + itemId).on('click', function (e) {
-    let postParams = {
-      username: username,
-      itemId: itemId,
-      itemName: $('#item-name').val(),
-      itemColor: $('#item-color').val(),
-      itemType1: $('#type-1').val(),
-      itemType2: $('#type-2').val(),
-      itemPattern: $('#item-pattern').val(),
-      itemSeason: $('#item-season').val(),
-      itemFormality: $('#item-formality').val()
-    };
-
-    // post request to update item in database
-    $.post("/editItem", postParams, responseJSON => {
-        let item = JSON.parse(responseJSON);
-        let newCardContent = '<span class="close" id="close-' + id + '">&times;</span>';
-        newCardContent += generateCardContent(item);
-        newCardContent += "<div class='buttons'>";
-        modalHTML += '<button class="edit-button" id="edit-item-' + id + '">Edit Item</button></div>';
-        modalHTML += '</div>';
-        // repopulate modal with new card contents
-        $('#modal-' + itemId + '.modal-content').html(newCardContent);
-    });
-  });
-}
+// // button that handles submtting changes
+// function submitChanges(itemId, color, type1, type2, pattern, season, formality) {
+//
+// }
 
 // add button functionality to remove an item
 function deleteUserItem(itemId) {
@@ -412,7 +444,6 @@ function deleteUserItem(itemId) {
       $.post("/getOutfitWithItem", postParams, responseJSON => {
 
           let outfitIds = JSON.parse(responseJSON).outfitIds;
-          console.log(outfitIds);
 
           if (outfitIds.length !== 0) {
               let confrimation = confirm("Do you have " + outfitIds.length + " outfits with this item. " +
@@ -487,17 +518,17 @@ function dynamicTypeDropdown(className) {
     type1Selector = '#type-1';
     type2Selector = '#type-2';
   }
-  $(type1Selector).on('change', function(){
+  $(type1Selector).on('change', function(e){
     $(type2Selector).html('');
-    if ($(type1Selector).val() == "OUTER") {
+    if (e.target.value == "OUTER") {
         $(type2Selector).append('<option value="OUTER_COAT">Outer Coat</option>');
         $(type2Selector).append('<option value="SUIT">Suit</option>');
-    } else if ($(type1Selector).val() == "TOP") {
+    } else if (e.target.value == "TOP") {
       $(type2Selector).append('<option value="SHIRT_BLOUSE">Shirt/Blouse</option>');
       $(type2Selector).append('<option value="T_SHIRT">T-Shirt</option>');
       $(type2Selector).append('<option value="SWEATER">Sweater</option>');
       $(type2Selector).append('<option value="JACKET">Jacket</option>');
-    } else if ($(type1Selector).val() == "BOTTOM") {
+    } else if (e.target.value == "BOTTOM") {
       $(type2Selector).append('<option value="PANTS">Pants</option>');
       $(type2Selector).append('<option value="SKIRT">Skirt</option>');
       $(type2Selector).append('<option value="DRESS">Dress</option>');
@@ -522,7 +553,7 @@ function additionalColorForm() {
 // function that animates the add item modal
 function itemModalAnimation() {
   additionalColorForm();
-  dynamicTypeDropdown(null);
+  dynamicTypeDropdown();
 
   let modal = $('#addItemModal');
   let btn = $('#addItem');
