@@ -207,7 +207,7 @@ button {
 }
 
 .outfit-btn {
-    border: 1px solid black;
+    /*border: 1px solid black;*/
     display: flex;
     justify-content: center;
     flex-flow: row;
@@ -215,6 +215,7 @@ button {
     font-weight: bold;
     height: 90%;
     width: 100%;
+    border-radius: 10px 10px 0 0;
 }
 
 #add {
@@ -239,7 +240,7 @@ button {
 
 .outfit-card p {
     width: 50%;
-    border: black solid 1px;
+    /*border: black solid 1px;*/
     margin: 0;
     text-align: center;
 }
@@ -249,18 +250,24 @@ button {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    border: black solid 1px;
 }
 
 .like-button {
+    border: none;
     width: 50%;
+    outline:none;
 }
 
-.like-button.not-liked {
+.like-button.not-liked{
+    color: gray;
     background: white;
 }
 
-.like-button.liked {
-    background: blue;
+.like-button.liked{
+    /*background: #2196F3;*/
+    background: none;
+    color: #2196F3;
 }
 
 #outfit-info {

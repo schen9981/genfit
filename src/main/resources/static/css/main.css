@@ -4,7 +4,7 @@ body {
 
 /* Top navigation */
 .top {
-  background-color: #666666;
+  background-color: #757575;
   height: 10%;
   display: flex;
   align-items: center;
@@ -45,7 +45,7 @@ body {
     z-index: 1; /* Stay on top */
     top: 10%; /* Stay at the top */
     left: 0;
-    background-color: #66CCCC; /* Black */
+    background-color: rgba(102, 204, 204, 0.6); /* Black */
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 0px;
     box-shadow: -3px 0 5px 0 #999;
@@ -73,6 +73,8 @@ body {
   height: auto;
   margin-left: 0.8em;
   float: left;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 #first {
@@ -98,14 +100,15 @@ body {
     margin-left: 15%; /* Same as the width of the sidebar */
     /*margin-top: 10%;*/
     /*padding: 0px 10px;*/
-    padding: 0% 3%;
-    padding-top: 7%;
+    padding: 6% 3%;
+    /*padding-top: 7%;*/
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidenav-tab {
-        padding-top: 15px;
+        padding-bottom: 20px;
+        padding-top: 20px;
     }
 
     .sidenav-tab a {

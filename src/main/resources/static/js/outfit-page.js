@@ -198,7 +198,7 @@ function displayLikes(username, outfitId, change, outfitCard) {
             }
             // console.log(likes + " " + likeClass);
             outfitCard.insertAdjacentHTML("afterend", "<div class='like-wrapper'>" +
-                "<button onclick='like(" + outfitId + ")' class='like-button " + likeClass + "' id='like-button-" + outfitId + "'>Like</button>" +
+                "<button onclick='like(" + outfitId + ")' class='like-button " + likeClass + "' id='like-button-" + outfitId + "'><i class=\"fas fa-thumbs-up\"></i></button>" +
                 "<p id='like-num-" + outfitId + "'>" + likes + " Likes</p>" +
                 "</div>");
         });

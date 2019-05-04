@@ -628,6 +628,7 @@ function addItemPost(postParams) {
       $('#addItemModal').css("display", "none");
       $('#image-input').val('');
       $('#image-preview').get(0).src = '';
+      $("addItemForm").reset();
   });
 }
 

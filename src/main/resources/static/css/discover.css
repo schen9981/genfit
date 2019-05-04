@@ -155,42 +155,77 @@
 .outfit {
     border: 1px solid black;
     /*width: 100px;*/
-    height: 100px;
+    height: 100%;
     /*max-width: 100%;*/
     display: flex;
     /*flex-direction: row;*/
     /*box-sizing: border-box;*/
     flex-flow: row;
     /*flex-wrap: wrap;*/
+    justify-content: center;
+    font-weight: bold;
+    border-radius: 10px 10px 0 0;
 }
 
 .outfit-card {
-    display: flex;
-    /*width: 25%;*/
-    /*min-width: 50px;*/
-    flex-flow: column;
-    /*flex-wrap: wrap;*/
-    /*flex-grow: 1;*/
-    /*padding: 5px;*/
+    /*display: flex;*/
+    /*flex-flow: column;*/
+    /*min-width: 200px;*/
     /*box-sizing: border-box;*/
-    min-width: 200px;
+    height: 12em;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
     box-sizing: border-box;
-    /*flex-grow: 1;*/
+    width: 23%;
+    margin: 1%;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    text-align: center;
 }
 
 .outfit-card p {
+    width: 50%;
+    /*border: black solid 1px;*/
     margin: 0;
+    text-align: center;
 }
 
+/*.like-wrapper {*/
+/*    padding-bottom: 10px;*/
+/*    display: flex;*/
+/*}*/
+
 .like-wrapper {
-    padding-bottom: 10px;
+    padding-bottom: 0;
     display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border: black solid 1px;
+}
+
+.like-button {
+    border: none;
+    width: 50%;
+    outline:none;
 }
 
 .like-button.not-liked{
+    color: gray;
     background: white;
 }
 
 .like-button.liked{
-    background: blue;
+    /*background: #2196F3;*/
+    background: none;
+    color: #2196F3;
+}
+
+.save-button {
+    display: block;
+    margin: 0 auto;
+    width: 30%;
+    margin-top: 20px;
+    padding: 5px;
 }
