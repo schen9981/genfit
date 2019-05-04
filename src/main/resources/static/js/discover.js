@@ -191,9 +191,12 @@ function generateItemContent(item, id) {
 }
 
 function generateItemIcon(item, id, imageSource) {
+    // return '<div tabindex="-1" class="item" id="item-' + id + '" ' +
+    //     'style="background: url("' + imageSource + '") no-repeat; background-size: 100%">' +
+    //     '<span>' + item[1] + '</span></div>';
     return '<div tabindex="-1" class="item" id="item-' + id + '" ' +
-        'style="background: url("' + imageSource + '") no-repeat; background-size: 100%">' +
-        '<span>' + item[1] + '</span></div>';
+        'style="background-image: url(\'' + imageSource + '\'); ' +
+        'background-size: 100%"><span>' + item[1] + '</span></div>';
 }
 
 
