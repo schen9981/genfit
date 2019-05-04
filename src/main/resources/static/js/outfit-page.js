@@ -97,8 +97,8 @@ function generateOutfitCards(listOfOutfits) {
         modalHTML += '</div></div>';
 
         // add modal to div 'items'
-        $('#outfits').append(buttonHTML);
-        $('#outfits').append(modalHTML);
+        $('.bottom .main #outfits').append(buttonHTML);
+        $('.bottom .main #outfits').append(modalHTML);
 
         let outfitCard = document.getElementById("outfit-" + id);
 
