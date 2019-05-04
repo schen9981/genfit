@@ -12,19 +12,28 @@
     background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
+div.fullOutfit {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 /* Modal Content/Box */
 .modal-content {
+    /*display: table;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: #fefefe;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 60vw; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button */
 .close {
     color: #aaa;
-    float: right;
+    margin-left: auto;
     font-size: 28px;
     font-weight: bold;
 }
@@ -73,16 +82,48 @@ input {
     border: 1px solid #ccc;
 }
 
+.fullOutfit .item {
+    width: 15vw;
+    height: 15vw;
+}
+
+.fullOutfit div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.fullOutfit .item span {
+    vertical-align: center;
+    background-color: white;
+    border: 2px black solid;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 1em;
+    padding: 0.3em;
+}
+
 .description {
     display: table-row;
 }
 
-/*.item:hover {*/
-    /*box-shadow: 0 0 11px rgba(33, 33, 33, .2);*/
-/*}*/
+#suggestSpan {
+    text-align: right;
+}
 
-.modal-content {
-    display: table;
+
+.tab-suggest.item-display {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.item:hover {
+    box-shadow: 0 0 11px rgba(33, 33, 33, .2);
 }
 
 /*.item {*/
@@ -118,13 +159,17 @@ input {
 }
 
 .delete {
-    margin-bottom: 10px;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    display: inline-block;
+    min-width: auto;
+    width: 50%;
+    font-size: 1.4em;
 }
 
 #outfits {
     display: flex;
     flex-wrap: wrap;
-
 }
 
 .outfit {
@@ -133,10 +178,13 @@ input {
     height: 100px;
     /*max-width: 100%;*/
     display: flex;
+    justify-content: center;
     /*flex-direction: row;*/
     /*box-sizing: border-box;*/
     flex-flow: row;
     /*flex-wrap: wrap;*/
+    text-align: center;
+    font-weight: bold;
 }
 
 .outfit-card {
@@ -168,4 +216,18 @@ input {
 
 .like-button.liked {
     background: blue;
+}
+
+#outfit-info {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#suggestOutfitForm {
+    width: auto;
+
+}
+
+div#suggestDiv {
+    width: 100%;
 }

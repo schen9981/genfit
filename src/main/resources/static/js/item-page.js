@@ -30,13 +30,14 @@ function generateCardContent(item) {
   itemContent += '<div class="content-elem">';
   itemContent += '<img src="' + item[8] + '"></div>';
   itemContent += '<div class="content-elem">';
-  itemContent += '<div class="color-type-div">';
+  itemContent += '<div class="color-div">';
   itemContent += '<h3>Color</h3><hr>';
   itemContent += '<div class="rect-color" style="background-color:#' + parseHex(item[2]) + ';"></div>'
-  itemContent += '<span>#' + parseHex(item[2]) + '</span>';
+  itemContent += '<span>#' + parseHex(item[2]) + '</span></div>';
+  itemContent += '<div class="type-div">';
   itemContent += '<h3>Type</h3><hr>';
-  itemContent += '<p>' + parseItemText(item[3]) + ' - ' + parseItemText(item[4]) + '</p>';
-  itemContent += '</div></div></div>';
+  itemContent += '<p>' + parseItemText(item[3]) + ' - ' + parseItemText(item[4]) + '</p></div>';
+  itemContent += '</div></div>';
   itemContent += '<div class="item-content-2">';
   itemContent += '<div class="pattern-div">';
   itemContent += '<h3>Pattern</h3><hr>';
@@ -110,13 +111,13 @@ function generateCards(listOfItems) {
     modalHTML += '<div class="modal-content">';
     modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
     modalHTML += generateCardContent(item);
-    modalHTML += '<button id="edit-item-' + id + '">Edit Item</button>';
-    modalHTML += '<button id="delete-item-' + id + '">Delete Item</button>';
+    modalHTML += "<div class='buttons'>";
+    modalHTML += '<button class="edit-button" id="edit-item-' + id + '">Edit Item</button></div>';
     modalHTML += '</div></div>';
 
     // add modal to div 'items'
-    $('#items').append(buttonHTML);
-    $('#items').append(modalHTML);
+    $('.bottom .main #items').append(buttonHTML);
+    $('.bottom .main #items').append(modalHTML);
 
     // Set image
     let imageSource = item[8];
@@ -126,13 +127,279 @@ function generateCards(listOfItems) {
     // add popup functionality to given modal
     animateItemModal(id);
 
-    // add delete button functionality
-    deleteUserItem(id);
+    // add edit/delete button functionality
+    editItem(id, item);
   }
+}
+
+// return input element for color
+function populateColorEdit(color) {
+  let colorEdit = '<h3>Color</h3><hr><div id="item-colors" style="display:inline-block;">';
+  colorEdit += '<input type="color" id="item-color" name="item-color" value="#' + color + '"></div>';
+
+  return colorEdit;
+}
+
+// return input element for type/subtype
+function populateTypeEdit(type, subtype) {
+
+  let typeEdit = '<h3>Type</h3><hr><select id="type-1" name="item-type-1">';
+
+  if (type == 'OUTER') {
+    typeEdit += '<option value="OUTER" selected>Outerwear</option>';
+    typeEdit += '<option value="TOP">Top</option>';
+    typeEdit += '<option value="BOTTOM">Bottom</option>';
+    typeEdit += '<option value="SHOES">Shoes</option></select>';
+    typeEdit += '<select id="type-2" name="item-type-2">';
+    if (subtype == 'OUTER_COAT') {
+      typeEdit += '<option value="OUTER_COAT" selected>Outer Coat</option>';
+      typeEdit += '<option value="SUIT">Suit</option></select>';
+    } else if (subtype == 'SUIT') {
+      typeEdit += '<option value="OUTER_COAT">Outer Coat</option>';
+      typeEdit += '<option value="SUIT" selected>Suit</option></select>';
+    }
+  } else if (type == 'TOP') {
+    typeEdit += '<option value="OUTER" selected>Outerwear</option>';
+    typeEdit += '<option value="TOP" selected>Top</option>';
+    typeEdit += '<option value="BOTTOM">Bottom</option>';
+    typeEdit += '<option value="SHOES">Shoes</option></select>';
+    typeEdit += '<select id="type-2" name="item-type-2">';
+    if (subtype == 'SHIRT_BLOUSE') {
+      typeEdit += '<option value="SHIRT_BLOUSE" selected>Shirt/Blouse</option>';
+      typeEdit += '<option value="T_SHIRT">T-Shirt</option>';
+      typeEdit += '<option value="SWEATER">Sweater</option>';
+      typeEdit += '<option value="JACKET">Jacket</option>';
+    } else if (subtype == 'T_SHIRT') {
+      typeEdit += '<option value="SHIRT_BLOUSE">Shirt/Blouse</option>';
+      typeEdit += '<option value="T_SHIRT" selected>T-Shirt</option>';
+      typeEdit += '<option value="SWEATER">Sweater</option>';
+      typeEdit += '<option value="JACKET">Jacket</option>';
+    } else if (subtype == 'SWEATER') {
+      typeEdit += '<option value="SHIRT_BLOUSE">Shirt/Blouse</option>';
+      typeEdit += '<option value="T_SHIRT">T-Shirt</option>';
+      typeEdit += '<option value="SWEATER" selected>Sweater</option>';
+      typeEdit += '<option value="JACKET">Jacket</option>';
+    } else if (subtype == 'JACKET') {
+      typeEdit += '<option value="SHIRT_BLOUSE">Shirt/Blouse</option>';
+      typeEdit += '<option value="T_SHIRT">T-Shirt</option>';
+      typeEdit += '<option value="SWEATER">Sweater</option>';
+      typeEdit += '<option value="JACKET" selected>Jacket</option>';
+    }
+  } else if (type == 'BOTTOM') {
+    typeEdit += '<option value="OUTER" selected>Outerwear</option>';
+    typeEdit += '<option value="TOP">Top</option>';
+    typeEdit += '<option value="BOTTOM" selected>Bottom</option>';
+    typeEdit += '<option value="SHOES">Shoes</option></select>';
+    typeEdit += '<select id="type-2" name="item-type-2">';
+    if (subtype == 'PANTS') {
+      typeEdit += '<option value="PANTS" selected>Pants</option>';
+      typeEdit += '<option value="SKIRT">Skirt</option>';
+      typeEdit += '<option value="DRESS">Dress</option>';
+      typeEdit += '<option value="SHORTS">Shorts</option>';
+    } else if (subtype == 'SKIRT') {
+      typeEdit += '<option value="PANTS">Pants</option>';
+      typeEdit += '<option value="SKIRT" selected>Skirt</option>';
+      typeEdit += '<option value="DRESS">Dress</option>';
+      typeEdit += '<option value="SHORTS">Shorts</option>';
+    } else if (subtype == 'DRESS') {
+      typeEdit += '<option value="PANTS">Pants</option>';
+      typeEdit += '<option value="SKIRT">Skirt</option>';
+      typeEdit += '<option value="DRESS" selected>Dress</option>';
+      typeEdit += '<option value="SHORTS">Shorts</option>';
+    } else if (subtype == 'SHORTS') {
+      typeEdit += '<option value="PANTS">Pants</option>';
+      typeEdit += '<option value="SKIRT">Skirt</option>';
+      typeEdit += '<option value="DRESS">Dress</option>';
+      typeEdit += '<option value="SHORTS" selected>Shorts</option>';
+    }
+  } else if (type == 'SHOES') {
+    typeEdit += '<option value="OUTER">Outerwear</option>';
+    typeEdit += '<option value="TOP">Top</option>';
+    typeEdit += '<option value="BOTTOM">Bottom</option>';
+    typeEdit += '<option value="SHOES" selected>Shoes</option></select>';
+    typeEdit += '<select id="type-2" name="item-type-2">';
+    if (subtype == 'SNEAKERS') {
+      typeEdit += '<option value="SNEAKERS" selected>Sneakers</option>';
+      typeEdit += '<option value="BOOTS">Boots</option>';
+      typeEdit += '<option value="SANDALS">Sandals</option>';
+      typeEdit += '<option value="DRESS_SHOES">Dress Shoes</option>';
+    } else if (subtype == 'BOOTS') {
+      typeEdit += '<option value="SNEAKERS">Sneakers</option>';
+      typeEdit += '<option value="BOOTS" selected>Boots</option>';
+      typeEdit += '<option value="SANDALS">Sandals</option>';
+      typeEdit += '<option value="DRESS_SHOES">Dress Shoes</option>';
+    } else if (subtype == 'SANDALS') {
+      typeEdit += '<option value="SNEAKERS">Sneakers</option>';
+      typeEdit += '<option value="BOOTS">Boots</option>';
+      typeEdit += '<option value="SANDALS" selected>Sandals</option>';
+      typeEdit += '<option value="DRESS_SHOES">Dress Shoes</option>';
+    } else if (subtype == 'DRESS_SHOES') {
+      typeEdit += '<option value="SNEAKERS">Sneakers</option>';
+      typeEdit += '<option value="BOOTS">Boots</option>';
+      typeEdit += '<option value="SANDALS">Sandals</option>';
+      typeEdit += '<option value="DRESS_SHOES" selected>Dress Shoes</option>';
+    }
+  }
+
+  return typeEdit;
+}
+
+function populatePatternEdit(pattern) {
+  let patternEdit = '<h3>Pattern</h3><hr><select id="item-pattern" name="item-pattern">';
+
+  if (pattern == 'SOLID') {
+    patternEdit += '<option value="SOLID" selected>Solid</option>';
+    patternEdit += '<option value="STRIPED">Striped</option>';
+    patternEdit += '<option value="CHECKERED">Checkered</option>';
+    patternEdit += '<option value="OTHER">Other</option></select>';
+  } else if (pattern == 'STRIPED') {
+    patternEdit += '<option value="SOLID">Solid</option>';
+    patternEdit += '<option value="STRIPED" selected>Striped</option>';
+    patternEdit += '<option value="CHECKERED">Checkered</option>';
+    patternEdit += '<option value="OTHER">Other</option></select>';
+  } else if (pattern == 'CHECKERED') {
+    patternEdit += '<option value="SOLID">Solid</option>';
+    patternEdit += '<option value="STRIPED">Striped</option>';
+    patternEdit += '<option value="CHECKERED" selected>Checkered</option>';
+    patternEdit += '<option value="OTHER">Other</option></select>';
+  } else if (pattern == 'OTHER') {
+    patternEdit += '<option value="SOLID">Solid</option>';
+    patternEdit += '<option value="STRIPED">Striped</option>';
+    patternEdit += '<option value="CHECKERED">Checkered</option>';
+    patternEdit += '<option value="OTHER" selected>Other</option></select>';
+  }
+
+  return patternEdit;
+}
+
+function populateSeasonEdit(season) {
+  let seasonEdit = '<h3>Season</h3><hr><select id="item-season" name="item-season">';
+
+  if (season == 'SPRING') {
+    seasonEdit += '<option value="SPRING" selected>Spring</option>';
+    seasonEdit += '<option value="SUMMER">Summer</option>';
+    seasonEdit += '<option value="FALL">Fall</option>';
+    seasonEdit += '<option value="WINTER">Winter</option></select>';
+  } else if (season == 'SUMMER') {
+    seasonEdit += '<option value="SPRING">Spring</option>';
+    seasonEdit += '<option value="SUMMER" selected>Summer</option>';
+    seasonEdit += '<option value="FALL">Fall</option>';
+    seasonEdit += '<option value="WINTER">Winter</option></select>';
+  } else if (season == 'FALL') {
+    seasonEdit += '<option value="SPRING">Spring</option>';
+    seasonEdit += '<option value="SUMMER">Summer</option>';
+    seasonEdit += '<option value="FALL" selected>Fall</option>';
+    seasonEdit += '<option value="WINTER">Winter</option></select>';
+  } else if (season == 'WINTER') {
+    seasonEdit += '<option value="SPRING">Spring</option>';
+    seasonEdit += '<option value="SUMMER">Summer</option>';
+    seasonEdit += '<option value="FALL">Fall</option>';
+    seasonEdit += '<option value="WINTER" selected>Winter</option></select>';
+  }
+
+  return seasonEdit;
+}
+
+function populateFormalityEdit(formality) {
+  let formalityEdit = '<h3>Formality</h3><hr><select id="item-formality" name="item-formality">';
+
+  if (formality == 'FORMAL') {
+    formalityEdit += '<option value="FORMAL" selected>Formal</option>';
+    formalityEdit += '<option value="BUSINESS_CASUAL">Business Casual</option>';
+    formalityEdit += '<option value="CASUAL">Casual</option>';
+    formalityEdit += '<option value="ULTRA_CASUAL">Ultra Casual</option></select>';
+  } else if (formality == 'BUSINESS_CASUAL') {
+    formalityEdit += '<option value="FORMAL">Formal</option>';
+    formalityEdit += '<option value="BUSINESS_CASUAL" selected>Business Casual</option>';
+    formalityEdit += '<option value="CASUAL">Casual</option>';
+    formalityEdit += '<option value="ULTRA_CASUAL">Ultra Casual</option></select>';
+  } else if (formality == 'CASUAL') {
+    formalityEdit += '<option value="FORMAL">Formal</option>';
+    formalityEdit += '<option value="BUSINESS_CASUAL">Business Casual</option>';
+    formalityEdit += '<option value="CASUAL" selected>Casual</option>';
+    formalityEdit += '<option value="ULTRA_CASUAL">Ultra Casual</option></select>';
+  } else if (formality == 'ULTRA_CASUAL') {
+    formalityEdit += '<option value="FORMAL">Formal</option>';
+    formalityEdit += '<option value="BUSINESS_CASUAL">Business Casual</option>';
+    formalityEdit += '<option value="CASUAL">Casual</option>';
+    formalityEdit += '<option value="ULTRA_CASUAL" selected>Ultra Casual</option></select>';
+  }
+
+  return formalityEdit;
+}
+
+
+
+function editItem(itemId, item) {
+  let colorEdit = populateColorEdit(parseHex(item[2]));
+  let typeEdit = populateTypeEdit(item[3], item[4]);
+  let patternEdit = populatePatternEdit(item[5]);
+  let seasonEdit = populateSeasonEdit(item[6]);
+  let formalityEdit = populateFormalityEdit(item[7]);
+
+  // event handler for edit item button
+  $('#edit-item-' + itemId).on('click', function (e) {
+
+    // replace div contents with input fields
+    $('.color-div').html(colorEdit);
+    $('.type-div').html(typeEdit);
+    $('.pattern-div').html(patternEdit);
+    $('.season-div').html(seasonEdit);
+    $('.formality-div').html(formalityEdit);
+
+    dynamicTypeDropdown("type-div");
+
+    // hide edit button
+    $('#edit-item-' + itemId).css("display", "none");
+
+    // add submit changes button
+    submitChanges(itemId);
+
+    // show delete button
+    deleteUserItem(itemId);
+  })
+
+
+  // post request
+}
+
+// button that handles submtting changes
+function submitChanges(itemId) {
+  let submitChangesButton = '<button class="submit-change-button" id="submit-edit-' + itemId + '">Submit Changes</button>';
+  $('#modal-' + itemId + ' .modal-content .buttons').append(submitChangesButton);
+  $('#submit-edit-' + itemId).on('click', function (e) {
+    let postParams = {
+      username: username,
+      itemId: itemId,
+      itemName: $('#item-name').val(),
+      itemColor: $('#item-color').val(),
+      itemType1: $('#type-1').val(),
+      itemType2: $('#type-2').val(),
+      itemPattern: $('#item-pattern').val(),
+      itemSeason: $('#item-season').val(),
+      itemFormality: $('#item-formality').val()
+    };
+
+    // post request to update item in database
+    $.post("/editItem", postParams, responseJSON => {
+        let item = JSON.parse(responseJSON);
+        let newCardContent = '<span class="close" id="close-' + id + '">&times;</span>';
+        newCardContent += generateCardContent(item);
+        newCardContent += "<div class='buttons'>";
+        modalHTML += '<button class="edit-button" id="edit-item-' + id + '">Edit Item</button></div>';
+        modalHTML += '</div>';
+        // repopulate modal with new card contents
+        $('#modal-' + itemId + '.modal-content').html(newCardContent);
+    });
+  });
 }
 
 // add button functionality to remove an item
 function deleteUserItem(itemId) {
+  // add delete button
+  let deleteButton = '<button class="delete-button" id="delete-item-' + itemId + '">Delete Item</button>';
+  $('#modal-' + itemId + ' .modal-content .buttons').append(deleteButton);
+
   // event handler for removing item
   $('#delete-item-' + itemId).on('click', function(e) {
 
@@ -209,27 +476,36 @@ function displayUserItems(username) {
 }
 
 // function that dynamically populates second type dropdown
-function dynamicTypeDropdown() {
-  $('#type-1').on('change', function(){
-    $('#type-2').html('');
-    if ($('#type-1').val() == "OUTER") {
-        $('#type-2').append('<option value="OUTER_COAT">Outer Coat</option>');
-        $('#type-2').append('<option value="SUIT">Suit</option>');
-    } else if ($('#type-1').val() == "TOP") {
-      $('#type-2').append('<option value="SHIRT_BLOUSE">Shirt/Blouse</option>');
-      $('#type-2').append('<option value="T_SHIRT">T-Shirt</option>');
-      $('#type-2').append('<option value="SWEATER">Sweater</option>');
-      $('#type-2').append('<option value="JACKET">Jacket</option>');
-    } else if ($('#type-1').val() == "BOTTOM") {
-      $('#type-2').append('<option value="PANTS">Pants</option>');
-      $('#type-2').append('<option value="SKIRT">Skirt</option>');
-      $('#type-2').append('<option value="DRESS">Dress</option>');
-      $('#type-2').append('<option value="SHORTS">Shorts</option>');
+function dynamicTypeDropdown(className) {
+  let type1Selector;
+  let type2Selector;
+  if (className != null) {
+    type1Selector = '.' + className + ' #type-1';
+    type2Selector = '.' + className + ' #type-2';
+  } else {
+    type1Selector = '#type-1';
+    type2Selector = '#type-2';
+  }
+  $(type1Selector).on('change', function(){
+    $(type2Selector).html('');
+    if ($(type1Selector).val() == "OUTER") {
+        $(type2Selector).append('<option value="OUTER_COAT">Outer Coat</option>');
+        $(type2Selector).append('<option value="SUIT">Suit</option>');
+    } else if ($(type1Selector).val() == "TOP") {
+      $(type2Selector).append('<option value="SHIRT_BLOUSE">Shirt/Blouse</option>');
+      $(type2Selector).append('<option value="T_SHIRT">T-Shirt</option>');
+      $(type2Selector).append('<option value="SWEATER">Sweater</option>');
+      $(type2Selector).append('<option value="JACKET">Jacket</option>');
+    } else if ($(type1Selector).val() == "BOTTOM") {
+      $(type2Selector).append('<option value="PANTS">Pants</option>');
+      $(type2Selector).append('<option value="SKIRT">Skirt</option>');
+      $(type2Selector).append('<option value="DRESS">Dress</option>');
+      $(type2Selector).append('<option value="SHORTS">Shorts</option>');
     } else {
-      $('#type-2').append('<option value="SNEAKERS">Sneakers</option>');
-      $('#type-2').append('<option value="BOOTS">Boots</option>');
-      $('#type-2').append('<option value="SANDALS">Sandals</option>');
-      $('#type-2').append('<option value="DRESS_SHOES">Dress Shoes</option>');
+      $(type2Selector).append('<option value="SNEAKERS">Sneakers</option>');
+      $(type2Selector).append('<option value="BOOTS">Boots</option>');
+      $(type2Selector).append('<option value="SANDALS">Sandals</option>');
+      $(type2Selector).append('<option value="DRESS_SHOES">Dress Shoes</option>');
     }
   });
 }
@@ -237,7 +513,7 @@ function dynamicTypeDropdown() {
 // function that allows for users to add more colors to outfit
 function additionalColorForm() {
   $('#addColor').on('click', function(e) {
-    $('#item-colors').append('<input type="color" name="item-color" value="#ff0000"><br>');
+    $('#item-colors').append('<input type="color" name="item-color" value="#ff0000">');
     e.preventDefault();
   });
 }
@@ -245,7 +521,7 @@ function additionalColorForm() {
 // function that animates the add item modal
 function itemModalAnimation() {
   additionalColorForm();
-  dynamicTypeDropdown();
+  dynamicTypeDropdown(null);
 
   let modal = $('#addItemModal');
   let btn = $('#addItem');
