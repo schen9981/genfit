@@ -83,6 +83,11 @@ function animateOutfitModal(outfitId) {
 
 // generates the modal/cards for each outfit from a list
 function generateOutfitCards(listOfOutfits) {
+    let $noOutfitsCard = $("#no-outfits-card");
+    // hide no outfits card if there are actual items to display
+    if (listOfOutfits.length > 0 && typeof $noOutfitsCard.html() !== "undefined") {
+        $noOutfitsCard.css("display", "none");
+    }
     for (i = 0; i < listOfOutfits.length; i++) {
         // get current item json
         let outfit = listOfOutfits[i];
@@ -135,14 +140,23 @@ function displayUserOutfits(username) {
 
     $.post("/userOutfits", postParams, responseJSON => {
         let userOutfits = JSON.parse(responseJSON).outfits;
+        let $noOutfitsCard = $("#no-outfits-card");
+        // has outfits
         if (typeof userOutfits !== "undefined" && userOutfits.length > 0) {
+            if (typeof $noOutfitsCard.html() !== "undefined") {
+                $noOutfitsCard.css("display", "none");
+            }
             generateOutfitCards(userOutfits);
         } else {
-            $outfitsDiv = $("div#outfits-div");
-            $outfitsDiv.append('<div class="outfit-card"' +
-                ' id="no-outfits-card">' +
-                'No outfits yet :)</div>')
-            $noOutfitsCard = $("#no-outfits-card");
+            let $outfitsDiv = $("div#outfits-div");
+            if (typeof $noOutfitsCard.html() !== "undefined") {
+                $noOutfitsCard.css("display", "flex");
+            } else {
+                $outfitsDiv.append('<div class="outfit-card"' +
+                    ' id="no-outfits-card">' +
+                    'No outfits yet 🙃</div>')
+                $noOutfitsCard = $("#no-outfits-card");
+            }
 
             $noOutfitsCard.css("text-align", "center");
             $noOutfitsCard.css("border", "1px solid grey");
