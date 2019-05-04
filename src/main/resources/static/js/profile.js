@@ -82,6 +82,7 @@ function visualizeItemColors(colorsList) {
 }
 
 
+
 function visualizeItemSeason(seasonsList) {
     let outerTypeNumMap = {
         "SPRING": 0,
@@ -154,40 +155,46 @@ function visualizeItemSeason(seasonsList) {
                 backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
                 data: Object.values(outerTypeNumMap)
             },
-            {
-                label: "two",
-                labels: Object.keys(topTypeNumMap),
-                backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
-                data: Object.values(topTypeNumMap)
-            },
-            {
-                label: "two",
-                labels: Object.keys(bottomTypeNumMap),
-                backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
-                data: Object.values(bottomTypeNumMap)
-            },
-            {
-                label: "two",
-                labels: Object.keys(shoesTypeNumMap),
-                backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
-                data: Object.values(shoesTypeNumMap)
-            }],
+                {
+                    label: "two",
+                    labels: Object.keys(topTypeNumMap),
+                    backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
+                    data: Object.values(topTypeNumMap)
+                },
+                {
+                    label: "two",
+                    labels: Object.keys(bottomTypeNumMap),
+                    backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
+                    data: Object.values(bottomTypeNumMap)
+                },
+                {
+                    label: "two",
+                    labels: Object.keys(shoesTypeNumMap),
+                    backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
+                    data: Object.values(shoesTypeNumMap)
+                }],
             labels: Object.keys(topTypeNumMap)
         },
         options: {
-            tooltips: {
-                callbacks: {
-                    label: function(tooltipItem, data) {
-                        let dataset = data.datasets[tooltipItem.datasetIndex];
-                        let index = tooltipItem.index;
-                        return dataset.labels[index] + ': ' + dataset.data[index];
-                    }
-                }
+            title: {
+                display: true,
+                text: 'OUTER->TOP->BOTTOM->SHOES'
             }
+
+            // tooltips: {
+            //     callbacks: {
+            //         label: function(tooltipItem, data) {
+            //             let dataset = data.datasets[tooltipItem.datasetIndex];
+            //             let index = tooltipItem.index;
+            //             return dataset.labels[index] + ': ' + dataset.data[index];
+            //         }
+            //     }
+            // }
         }
     });
 
 }
+
 
 function visualizeFormality(formalityList) {
     // console.log(formalityList);
