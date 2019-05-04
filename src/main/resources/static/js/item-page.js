@@ -104,10 +104,9 @@ function generateCards(listOfItems) {
     // generate modal html
 
     let id = item[0];
-    let imageWidth = $(window).width() * 0.1;
-    let imageHeight = imageWidth * 1.2;
     let buttonHTML = '<div class="item"><button class="item-button" id="item-'
-        + id + '"></button><div style="text-align:center;">' + item[1] + '</div></div>';
+        + id + '"></button><div style="text-align: center; overflow: hidden; text-overflow: ellipsis">'
+        + item[1] + '</div></div>';
     let modalHTML = '<div class="modal" id="modal-' + id + '">';
     modalHTML += '<div class="modal-content">';
     modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
@@ -419,8 +418,6 @@ function deleteUserItem(itemId) {
                   "Are you sure you want to delete it?");
               if (confrimation === true) {
                   console.log("delete");
-
-
                   outfitIds.forEach(function(outfitId) {
                       let postParams = {
                           username : username,
@@ -432,35 +429,43 @@ function deleteUserItem(itemId) {
                       })
                   });
 
-                  let postParams = {
-                      username: username,
-                      itemId: itemId
-                  };
-                    console.log("delete item");
-                  // post request to remove item
-                  $.post("/deleteItem", postParams, responseJSON => {
-                      $('#item-' + itemId).remove();
-                      $('#modal-' + itemId).remove();
-                      let imageKey = JSON.parse(responseJSON)[0];
-                      if (imageKey !== "default") {
-                          s3.deleteObject({Key: imageKey}, function(err, data) {
-                              if (err) {
-                                  alert('There was an error deleting your photo: ', err.message);
-                              } else {
-                                  console.log('Successfully deleted photo.');
-                              }
-                          });
-                      }
-                  });
-                  window.location.reload();
+                  deleteItem(itemId);
               } else {
                   console.log("dont delete");
               }
+          } else {
+              deleteItem(itemId);
           }
       });
 
   });
 }
+
+
+function deleteItem(itemId) {
+    let postParams = {
+        username: username,
+        itemId: itemId
+    };
+    console.log("delete item");
+    // post request to remove item
+    $.post("/deleteItem", postParams, responseJSON => {
+        $('#item-' + itemId).remove();
+        $('#modal-' + itemId).remove();
+        let imageKey = JSON.parse(responseJSON)[0];
+        if (imageKey !== "default") {
+            s3.deleteObject({Key: imageKey}, function(err, data) {
+                if (err) {
+                    alert('There was an error deleting your photo: ', err.message);
+                } else {
+                    console.log('Successfully deleted photo.');
+                }
+            });
+        }
+    });
+    window.location.reload();
+}
+
 
 // function to retrieve and display user items
 function displayUserItems(username) {
@@ -538,8 +543,6 @@ function itemModalAnimation() {
     modal.css("display", "none");
   });
 }
-
-let encodedImage = "";
 
 //function fot previewing user uploaded images
 function previewFile(){

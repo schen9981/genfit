@@ -70,6 +70,7 @@ input {
 
 .tab-suggest {
     display: none;
+    width: 100%;
 }
 
 #addOutfitModal .item {
@@ -114,6 +115,7 @@ input {
     text-align: right;
 }
 
+
 .tab-suggest.item-display {
     display: flex;
     flex-wrap: wrap;
@@ -124,10 +126,36 @@ input {
     box-shadow: 0 0 11px rgba(33, 33, 33, .2);
 }
 
+/*.item {*/
+    /*display: table-cell;*/
+    /*!*width: 20%;*!*/
+    /*!*height: 200px;*!*/
+/*}*/
+
+
+.item-div{
+    border: 0;
+    vertical-align: top;
+    width: 10%;
+    display: inline-block;
+    padding: 8px;
+    margin: 8px;
+}
+
+.item-div:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 .item {
-    display: table-cell;
-    /*width: 20%;*/
-    /*height: 200px;*/
+    border: 0;
+    width: 100%;
+    height: 100px;
+}
+
+.item-label {
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .delete {
