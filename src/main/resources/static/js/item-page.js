@@ -185,7 +185,7 @@ function deleteUserItem(itemId) {
                           });
                       }
                   });
-                  // window.location.reload();
+                  window.location.reload();
               } else {
                   console.log("dont delete");
               }

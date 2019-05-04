@@ -5,25 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import com.genfit.userfacing.handlers.AddItemHandler;
-import com.genfit.userfacing.handlers.AddOutfitHandler;
-import com.genfit.userfacing.handlers.DeleteItemHandler;
-import com.genfit.userfacing.handlers.DeleteOutfitHandler;
-import com.genfit.userfacing.handlers.DiscoverOutfitRetriever;
-import com.genfit.userfacing.handlers.DiscoverPageHandler;
-import com.genfit.userfacing.handlers.FrontpageHandler;
-import com.genfit.userfacing.handlers.ItemPageHandler;
-import com.genfit.userfacing.handlers.LikedOutfitRetriever;
-import com.genfit.userfacing.handlers.ItemSuggestionRetriever;
-import com.genfit.userfacing.handlers.OutfitByAttributeRetriever;
-import com.genfit.userfacing.handlers.OutfitComponentsRetriever;
-import com.genfit.userfacing.handlers.OutfitLikeHandler;
-import com.genfit.userfacing.handlers.OutfitPageHandler;
-import com.genfit.userfacing.handlers.OutfitWithItemRetriever;
-import com.genfit.userfacing.handlers.UserItemRetriever;
-import com.genfit.userfacing.handlers.UserOutfitRetriever;
-import com.genfit.userfacing.handlers.UserPageHandler;
-import com.genfit.userfacing.handlers.UserformHandler;
+import com.genfit.userfacing.handlers.*;
 import com.google.gson.Gson;
 
 import freemarker.template.Configuration;
@@ -123,6 +105,7 @@ public final class Main {
     Spark.post("/addItem", new AddItemHandler(this.mainApp));
     Spark.post("/deleteItem", new DeleteItemHandler(this.mainApp));
     Spark.post("/getOutfitWithItem", new OutfitWithItemRetriever(this.mainApp));
+    Spark.post("/singleItem", new SingleItemRetriever(this.mainApp));
 
     Spark.post("/like", new OutfitLikeHandler(this.mainApp));
     Spark.post("/discover", new DiscoverOutfitRetriever(this.mainApp));
