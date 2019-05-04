@@ -1,6 +1,6 @@
 function displayOutfitSuggestions(username) {
     const postParams = {
-        username : username
+        username: username
     };
 
     $.post("/discover", postParams, responseJSON => {
@@ -134,9 +134,9 @@ function generateIncompleteSuggestionContent(suggestion) {
     let communityOutfitContent = "<h2>You have these items:</h2><div class='itemListContainer' id='userItems-" + communityOutfit.id +"'></div>";
     $('#modal-' + communityOutfit.id + ' .modal-content').append(communityOutfitContent);
     // console.log(userItems);
-    Object.values(userItems).forEach(function(id) {
+    Object.values(userItems).forEach(function (id) {
         let postParams = {
-            id : id
+            id: id
         };
         $.post("/singleItem", postParams, responseJSON => {
             let item = JSON.parse(responseJSON);
@@ -149,9 +149,9 @@ function generateIncompleteSuggestionContent(suggestion) {
     let communityOutfitContentt = "<h2>You need these items:</h2><div class='itemListContainer' id='stillNeeded-" + communityOutfit.id +"'></div>";
     $('#modal-' + communityOutfit.id + ' .modal-content').append(communityOutfitContentt);
     // console.log(userItems);
-    Object.values(stillNeeded).forEach(function(id) {
+    Object.values(stillNeeded).forEach(function (id) {
         let postParams = {
-            id : id
+            id: id
         };
         $.post("/singleItem", postParams, responseJSON => {
             let item = JSON.parse(responseJSON);
@@ -183,18 +183,18 @@ function generateItemContent(item, id) {
         // console.log(imageSource);
         // console.log(item);
         // console.log("url(" + imageSource + ") no-repeat");
-        // $('#item-' + id + "-" + outfitId).css("background", "url(" + imageSource + ") no-repeat");
-        // $('#item-' + id + "-" +outfitId).css("background-size", "100%");
+        // $('#item-' + id + "-" + outfitId).css("background", "url(" +
+        // imageSource + ") no-repeat"); $('#item-' + id + "-"
+        // +outfitId).css("background-size", "100%");
     }
     return itemContent;
 }
 
 function generateItemIcon(item, id, imageSource) {
-    return '<div tabindex="-1" class="item" id="item-' + id +  '" ' +
-        'style="background: url(' + imageSource + ') no-repeat; background-size: 100%">' +
+    return '<div tabindex="-1" class="item" id="item-' + id + '" ' +
+        'style="background: url("' + imageSource + '") no-repeat; background-size: 100%">' +
         '<span>' + item[1] + '</span></div>';
 }
-
 
 
 function displayLikes(username, outfitId, change, outfitCard) {
@@ -292,7 +292,6 @@ function like(outfitId) {
     }
 
 }
-
 
 
 $(document).ready(() => {

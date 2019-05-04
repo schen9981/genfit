@@ -60,7 +60,8 @@
 
                             <div class="tab-suggest" id="outer-select">
                                 <div class="description">
-                                    <h2>Select an outer:</h2><br>
+                                    <h2>Select an outer:</h2>
+                                    <br>
                                 </div>
                                 <div class="item-display">
                                 </div>

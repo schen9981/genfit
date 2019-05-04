@@ -13,18 +13,22 @@ function generateSuggestItemCards(listOfItems, tabId) {
         let $itemSelector = $('.tab-suggest #item-' + id);
 
         // check if item already exists on page
-        if ($itemSelector.html() == null) {
+        if (typeof $itemSelector.html() === "undefined") {
             // set item html
             // function from outfit-page.js
             let divHTML = generateItemIcon(item, id);
-            $('#' + tabId + '.tab-suggest').append(divHTML);
+            $('#' + tabId + '.tab-suggest .item-display').append(divHTML);
 
             // add image for icon
             let imageSource = item[8];
+            if (item[0] == 206) {
+                console.log(imageSource);
+                console.log(item);
+            }
             // reselect item
             $itemSelector = $('.tab-suggest #item-' + id);
             $itemSelector.css("background",
-                "url(" + imageSource + ") no-repeat");
+                "url(\"" + imageSource + "\") no-repeat");
             $itemSelector.css("background-size", "100%");
             $itemSelector.css("background-position", "center");
 
@@ -53,7 +57,7 @@ function generateSuggestionsCards(listOfItems, tabId) {
 
             // add image for icon
             let imageSource = item[8];
-            $('.tab-suggest #item-' + id).css("background", "url(" + imageSource + ") no-repeat");
+            $('.tab-suggest #item-' + id).css("background", "url(\"" + imageSource + "\") no-repeat");
             $('.tab-suggest #item-' + id).css("background-size", "100%");
 
             // add event listener for focus (ie user selection)
@@ -117,7 +121,8 @@ function showSuggestTab(compId) {
         document.getElementById("suggest").style.display = "inline";
         document.getElementById("addOutfitSuggest").style.display = "inline";
         document.getElementById("suggestOutfitBtn").style.display = "inline";
-        document.getElementById("outfit-name-div").style.display = "flex";
+        document.getElementById("outfit-name-label").style.display = "flex";
+        document.getElementById("outfit-name").style.display = "flex";
     } else if (compId == 5) { // suggestions tab
         populateSuggestTabItems(compId, tabs[compId].id);
         tabs[compId].style.display = "table";
@@ -127,7 +132,8 @@ function showSuggestTab(compId) {
         // document.getElementById("suggestOutfit").style.display = "none";
         document.getElementById("addFromSuggest").style.display = "inline";
         document.getElementById("addOutfitSuggest").style.display = "none";
-        document.getElementById("outfit-name-div").style.display = "none";
+        document.getElementById("outfit-name-label").style.display = "none";
+        document.getElementById("outfit-name").style.display = "none";
     } else { // specific outfit page
         populateSuggestTabItems(compId, tabs[compId].id);
         tabs[compId].style.display = "table";
@@ -135,13 +141,16 @@ function showSuggestTab(compId) {
         document.getElementById("backSuggest").style.display = "inline";
         document.getElementById("suggest").style.display = "none";
         document.getElementById("addOutfitSuggest").style.display = "none";
-        document.getElementById("outfit-name-div").style.display = "none";
+        document.getElementById("outfit-name-label").style.display = "none";
+        document.getElementById("outfit-name").style.display = "none";
     }
 }
 
 // navigate to appropriate tab for suggest modal upon click of button
 function navigateToSuggestTab(event, tabInd) {
-    event.preventDefault();
+    if (event !== null) {
+        event.preventDefault();
+    }
     let tabs = document.getElementsByClassName("tab-suggest");
     // hide the current tab
     tabs[currentSuggestTab].style.display = "none";
@@ -154,6 +163,7 @@ function navigateToSuggestTab(event, tabInd) {
 // function that animates the suggest outfit modal
 function outfitSuggestModal() {
     let modal = $('#suggestOutfitModal');
+    // to add a new outfit button
     let btn = $('#suggestOutfitBtn');
     let span = $('#suggestSpan');
 
@@ -164,8 +174,9 @@ function outfitSuggestModal() {
 
     // close modal when user clicks 'x'
     span.click(function () {
+        navigateToSuggestTab(null, 0);
         modal.css("display", "none");
-        resetForm();
+        // resetForm();
     });
 }
 
@@ -178,6 +189,15 @@ function getSuggestions() {
         let top = document.getElementsByClassName("add-suggest")[1].getElementsByClassName("item")[0];
         let bottom = document.getElementsByClassName("add-suggest")[2].getElementsByClassName("item")[0];
         let shoes = document.getElementsByClassName("add-suggest")[3].getElementsByClassName("item")[0];
+
+        // need at least one item to get suggestions
+        if (typeof outer === "undefined"
+            && typeof top === "undefined"
+            && typeof bottom === "undefined"
+            && typeof shoes === "undefined") {
+            alert("You must input at least one item to get suggestions.");
+            return;
+        }
 
         let postParams = {
             username: username,
@@ -223,12 +243,16 @@ function getSuggestions() {
 // repopulates the from with the initial buttons
 function resetForm() {
     $("#outer-item").html('<button id="suggest-outer-item"' +
-        'onclick="navigateToSuggestTab(event, 1)">Add Outer</button>');
+        'onclick="navigateToSuggestTab(event, 1) ' +
+        'class="addButton">Add Outer</button>');
     $("#top-item").html('<button id="suggest-top-item"' +
-        'onclick="navigateToSuggestTab(event, 2)">Add Top</button>');
-    $("#bottom-item").html('<button id="suggest-bottom-item"' +
+        'onclick="navigateToSuggestTab(event, 2) ' +
+        'class="addButton">Add Top</button>');
+    $("#bottom-item").html('<button id="suggest-bottom-item" ' +
+        'class="addButton" ' +
         'onclick="navigateToSuggestTab(event, 3)">Add Bottom</button>');
-    $("#shoes-item").html('<button id="suggest-shoes-item"' +
+    $("#shoes-item").html('<button id="suggest-shoes-item" ' +
+        'class="addButton" ' +
         'onclick="navigateToSuggestTab(event, 4)">Add Shoes</button>');
 }
 
@@ -236,6 +260,9 @@ function resetForm() {
 function addOutfit() {
     $('#addOutfitSuggest').on("click", function (e) {
         e.preventDefault();
+
+        $("#id-name").innerHTML
+
         // get all items in the div
         let outer = document.getElementsByClassName("add-suggest")[0].getElementsByClassName("item")[0];
         let top = document.getElementsByClassName("add-suggest")[1].getElementsByClassName("item")[0];

@@ -54,7 +54,7 @@ function generateItemContent(item, id) {
 // generate item icons to display when users are adding to an outfit
 function generateItemIcon(item, id, imageSource) {
     return '<div tabindex="-1" class="item" id="item-' + id + '" ' +
-        'style="background-image: url(' + imageSource + '); ' +
+        'style="background-image: url(\'' + imageSource + '\'); ' +
         'background-size: 100%"><span>' + item[1] + '</span></div>';
 }
 
