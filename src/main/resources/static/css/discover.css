@@ -88,6 +88,7 @@
     display: table-cell;
     width: 20%;
     height: 200px;
+    border-radius: 5px;
 }
 
 .item span {
@@ -153,7 +154,7 @@
 }
 
 .outfit {
-    border: 1px solid black;
+    border: 1px solid #d1d1d1;
     /*width: 100px;*/
     height: 100%;
     /*max-width: 100%;*/
@@ -165,6 +166,10 @@
     justify-content: center;
     font-weight: bold;
     border-radius: 10px 10px 0 0;
+}
+
+.outfit:hover{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .outfit-card {
@@ -198,6 +203,7 @@
 /*}*/
 
 .like-wrapper {
+    background-color: white;
     padding-bottom: 0;
     display: flex;
     align-items: center;
@@ -207,13 +213,23 @@
 
 .like-button {
     border: none;
-    width: 50%;
+    width: 48%;
     outline:none;
+}
+
+.like-button.not-liked:hover {
+  background: none;
+  color: #2196F3;
 }
 
 .like-button.not-liked{
     color: gray;
     background: white;
+}
+
+.like-button.liked:hover {
+  color: gray;
+  background: white;
 }
 
 .like-button.liked{
