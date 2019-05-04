@@ -621,14 +621,15 @@ function addItemFormSubmit() {
 
 // post request to addItems
 function addItemPost(postParams) {
-    $.post("/addItem", postParams, responseJSON => {
-        let item = JSON.parse(responseJSON);
-        let itemList = [item];
-        generateCards(itemList);
-        $('#addItemModal').css("display", "none");
-        $('#image-input').val('');
-        $('#image-preview').get(0).src = '';
-    });
+  $.post("/addItem", postParams, responseJSON => {
+      let item = JSON.parse(responseJSON);
+      let itemList = [item];
+      generateCards(itemList);
+      $('#addItemModal').css("display", "none");
+      $('#image-input').val('');
+      $('#image-preview').get(0).src = '';
+      $("addItemForm").reset();
+  });
 }
 
 //attempts to upload image and calls addItemPost accordingly

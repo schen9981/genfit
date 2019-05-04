@@ -69,10 +69,15 @@ function visualizeItemColors(colorsList) {
             colors.push("#" + finalColor);
         }
     });
-    console.log(colors);
+    // console.log(colors);
     const rgbArr = colors.map(hexToRgb);
+    // console.log(rgbArr);
+
+    // something went wrong
     const sortedRgbArr = sortColors(rgbArr);
+    // console.log(sortedRgbArr);
     const finalArray = sortedRgbArr.map(rgbToHex);
+    // console.log(finalArray);
     displayColors('clothingGradient', finalArray);
 }
 

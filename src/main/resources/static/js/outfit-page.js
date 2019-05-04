@@ -54,7 +54,7 @@ function generateItemContent(item, id) {
 // generate item icons to display when users are adding to an outfit
 function generateItemIcon(item, id, imageSource) {
     return '<div tabindex="-1" class="item" id="item-' + id + '" ' +
-        'style="background-image: url("' + imageSource + '"); ' +
+        'style="background-image: url(\'' + imageSource + '\'); ' +
         'background-size: 100%"><span>' + item[1] + '</span></div>';
 }
 
@@ -198,7 +198,7 @@ function displayLikes(username, outfitId, change, outfitCard) {
             }
             // console.log(likes + " " + likeClass);
             outfitCard.insertAdjacentHTML("afterend", "<div class='like-wrapper'>" +
-                "<button onclick='like(" + outfitId + ")' class='like-button " + likeClass + "' id='like-button-" + outfitId + "'>Like</button>" +
+                "<button onclick='like(" + outfitId + ")' class='like-button " + likeClass + "' id='like-button-" + outfitId + "'><i class=\"fas fa-thumbs-up\"></i></button>" +
                 "<p id='like-num-" + outfitId + "'>" + likes + " Likes</p>" +
                 "</div>");
         });

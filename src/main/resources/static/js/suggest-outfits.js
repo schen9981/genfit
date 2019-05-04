@@ -250,6 +250,9 @@ function resetForm() {
 function addOutfit() {
     $('#addOutfitSuggest').on("click", function (e) {
         e.preventDefault();
+
+        $("#id-name").innerHTML
+
         // get all items in the div
         let outer = document.getElementsByClassName("add-suggest")[0].getElementsByClassName("item")[0];
         let top = document.getElementsByClassName("add-suggest")[1].getElementsByClassName("item")[0];
