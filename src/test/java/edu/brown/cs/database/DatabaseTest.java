@@ -1,11 +1,5 @@
-package com.genfit.database;
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.ListObjectsV2Result;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
+package edu.brown.cs.database;
+
 import com.genfit.attribute.ColorAttribute;
 import com.genfit.attribute.FormalityAttribute;
 import com.genfit.attribute.PatternAttribute;
@@ -18,45 +12,27 @@ import com.genfit.attribute.attributevals.PatternEnum;
 import com.genfit.attribute.attributevals.SeasonEnum;
 import com.genfit.attribute.attributevals.SubtypeEnum;
 import com.genfit.attribute.attributevals.TypeEnum;
-import com.genfit.clothing.Item;
-import com.genfit.proxy.ItemProxy;
-import com.genfit.proxy.OutfitProxy;
-import com.genfit.proxy.UserProxy;
-import com.genfit.users.User;
-import sun.misc.BASE64Decoder;
+import com.genfit.database.AWSConnection;
+import com.genfit.database.Database;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Statement;
-import java.util.List;
 
-import static com.genfit.database.AWSConnection.getDBConnectionUsingIam;
-
-/**
- * Created by ericwang on 2019/4/24.
- */
 public class DatabaseTest {
   private static final String bucket_name = "cs32-term-project-s3-bucket";
   private static final String access_key = "AKIAUSTN5WVYFTHPLBSU";
   private static final String secret_key = "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";
   private static final String region = "us-east-1";
 
-  public static void main(String[] args) throws Exception {
-      Connection connection = AWSConnection.getDBConnectionUsingIam();
-      Database db = new Database(connection);
-
-
-      db.editItem(103, 95,
-              new TypeAttribute(TypeEnum.values()[1]),
-              new SubtypeAttribute(SubtypeEnum.values()[1]),
-              new FormalityAttribute(FormalityEnum.values()[1]),
-              new ColorAttribute(new Color(0x111111)),
-              new PatternAttribute(PatternEnum.values()[1]),
-              new SeasonAttribute(SeasonEnum.values()[1]));
+  public void dBMethods() throws Exception{
+    Connection connection = AWSConnection.getDBConnectionUsingIam();
+    Database db = new Database(connection);
+    db.editItem(103, 95,
+            new TypeAttribute(TypeEnum.values()[1]),
+            new SubtypeAttribute(SubtypeEnum.values()[1]),
+            new FormalityAttribute(FormalityEnum.values()[1]),
+            new ColorAttribute(new Color(0x111111)),
+            new PatternAttribute(PatternEnum.values()[1]),
+            new SeasonAttribute(SeasonEnum.values()[1]));
 
 //      db.addItem(103, "someshirt",
 //              new TypeAttribute(TypeEnum.TOP),
@@ -78,5 +54,4 @@ public class DatabaseTest {
 //    db.deleteOutfit(0, 2);
     connection.close();
   }
-
 }
