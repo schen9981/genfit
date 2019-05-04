@@ -229,6 +229,6 @@ $(document).ready(() => {
     username = localStorage.username;
     displayUserOutfits(username);
     // showTab(0);
-    // addOutfit();
+    addOutfit();
     $(".name").html(localStorage.getItem('name'));
 });

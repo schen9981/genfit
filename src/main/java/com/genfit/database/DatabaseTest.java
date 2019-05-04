@@ -48,6 +48,16 @@ public class DatabaseTest {
   public static void main(String[] args) throws Exception {
       Connection connection = AWSConnection.getDBConnectionUsingIam();
       Database db = new Database(connection);
+
+
+      db.editItem(103, 95,
+              new TypeAttribute(TypeEnum.values()[1]),
+              new SubtypeAttribute(SubtypeEnum.values()[1]),
+              new FormalityAttribute(FormalityEnum.values()[1]),
+              new ColorAttribute(new Color(0x111111)),
+              new PatternAttribute(PatternEnum.values()[1]),
+              new SeasonAttribute(SeasonEnum.values()[1]));
+
 //      db.addItem(103, "someshirt",
 //              new TypeAttribute(TypeEnum.TOP),
 //              new FormalityAttribute(FormalityEnum.CASUAL),
@@ -56,9 +66,13 @@ public class DatabaseTest {
 //              new SeasonAttribute(SeasonEnum.SPRING),
 //              "default",
 //              new SubtypeAttribute(SubtypeEnum.T_SHIRT));
-      Item item = db.getItemBean(173);
-      System.out.println(item.getType());
-      System.out.println(item.getSubtype());
+
+
+//      Item item = db.getItemBean(173);
+//      System.out.println(item.getType());
+//      System.out.println(item.getSubtype());
+
+
 //    UserProxy user = new UserProxy(db, "wenhuang_zeng@brown.edu");
 //    OutfitProxy outfitProxy = new OutfitProxy(db, 16);
 //    db.deleteOutfit(0, 2);

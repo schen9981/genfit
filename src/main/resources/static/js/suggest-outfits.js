@@ -74,6 +74,7 @@ function populateSuggestTabItems(compId, currTabId) {
         username: username,
         component: compInd[compId]
     }
+    console.log(postParams);
     $.post("/outfitByAttribute", postParams, responseJSON => {
         let itemList = JSON.parse(responseJSON).items;
         generateSuggestItemCards(itemList, currTabId);
@@ -122,7 +123,7 @@ function showSuggestTab(compId) {
         document.getElementById("addOutfitSuggest").style.display = "inline";
         document.getElementById("suggestOutfit").style.display = "inline";
     } else if (compId == 5) {
-        populateSuggestTabItems(compId, tabs[compId].id);
+        //populateSuggestTabItems(compId, tabs[compId].id);
         tabs[compId].style.display = "table";
         document.getElementById("addItemSuggest").style.display = "none";
         document.getElementById("backSuggest").style.display = "inline";
@@ -167,6 +168,7 @@ function outfitSuggestModal() {
     // close modal when user clicks 'x'
     span.click(function () {
         modal.css("display", "none");
+        resetForm();
     });
 }
 
@@ -221,6 +223,13 @@ function getSuggestions() {
     })
 }
 
+function resetForm() {
+    $("#outer-item").html('<button id="suggest-outer-item"onclick="navigateToSuggestTab(event, 1)">Add Outer</button>');
+    $("#top-item").html('<button id="suggest-top-item"onclick="navigateToSuggestTab(event, 2)">Add Top</button>');
+    $("#bottom-item").html('<button id="suggest-bottom-item"onclick="navigateToSuggestTab(event, 3)">Add Bottom</button>');
+    $("#shoes-item").html('<button id="suggest-shoes-item"onclick="navigateToSuggestTab(event, 4)">Add Shoes</button>');
+}
+
 // function that adds a fully constructed outfit to the database
 function addOutfit() {
     $('#addOutfitSuggest').on("click", function (e) {
@@ -240,15 +249,13 @@ function addOutfit() {
             shoes: shoes.id.split('-')[1]
         }
 
-        // console.log(postParams);
-
         // post request to addItems
         $.post("/addOutfit", postParams, responseJSON => {
             let outfit = JSON.parse(responseJSON);
             let outfitList = [outfit];
             generateOutfitCards(outfitList);
             $("#suggestOutfitModal").css("display", "none");
-            resetForm(e);
+            resetForm();
         });
     });
 }
