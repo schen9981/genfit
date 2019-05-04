@@ -125,7 +125,7 @@ input {
 }
 
 
-.tab-suggest.item-display {
+.item-display {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -163,6 +163,11 @@ input {
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
+}
+
+.item-display .item {
+    width: 25%;
+    height: 200px;
 }
 
 .item span {

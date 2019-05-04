@@ -1,6 +1,6 @@
 function displayOutfitSuggestions(username) {
     const postParams = {
-        username : username
+        username: username
     };
 
     $.post("/discover", postParams, responseJSON => {
@@ -30,7 +30,8 @@ function generateSuggestionCards(listOfSuggestions) {
         let modalHTML = '<div class="modal" id="modal-' + communityOutfitId + '">';
         modalHTML += '<div class="modal-content">';
         modalHTML += '<span class="close" id="close-' + communityOutfitId + '">&times;</span>';
-        // modalHTML += '<button class="delete" id="delete-outfit-' + communityOutfitId + '">Delete Outfit</button>';
+        // modalHTML += '<button class="delete" id="delete-outfit-' +
+        // communityOutfitId + '">Delete Outfit</button>';
         modalHTML += '</div></div>';
 
         if (outfitSuggestion.completeness) {
@@ -90,8 +91,8 @@ function generateCompleteSuggestionContent(suggestion) {
             $('#modal-' + suggestion.communityOutfit.id + ' .modal-content').append("<hr></h4><h1>Can Be Yours With:</h1>");
             $('#modal-' + suggestion.communityOutfit.id + ' .modal-content').append(potentialOutfitContent);
             $('#modal-' + suggestion.communityOutfit.id + ' .modal-content').append(
-            "<button class='save-button' id='save-button-" + suggestion.communityOutfit.id + "'>Save Outfit</button>");
-            document.getElementById("save-button-" + suggestion.communityOutfit.id).onclick = function() {
+                "<button class='save-button' id='save-button-" + suggestion.communityOutfit.id + "'>Save Outfit</button>");
+            document.getElementById("save-button-" + suggestion.communityOutfit.id).onclick = function () {
                 saveSuggestion(username, suggestion.communityOutfit.name, suggestion.userItems.outer, suggestion.userItems.top, suggestion.userItems.bottom, suggestion.userItems.feet);
                 alert("Oufit added to your closet!");
                 window.location.replace("/discover");
@@ -126,12 +127,12 @@ function generateIncompleteSuggestionContent(suggestion) {
     // console.log(stillNeeded);
     // console.log(userItems);
 
-    let communityOutfitContent = "<h1>You have these items:</h1><div class='itemListContainer' id='userItems-" + communityOutfit.id +"'></div>";
+    let communityOutfitContent = "<h1>You have these items:</h1><div class='itemListContainer' id='userItems-" + communityOutfit.id + "'></div>";
     $('#modal-' + communityOutfit.id + ' .modal-content').append(communityOutfitContent);
     // console.log(userItems);
-    Object.values(userItems).forEach(function(id) {
+    Object.values(userItems).forEach(function (id) {
         let postParams = {
-            id : id
+            id: id
         };
         $.post("/singleItem", postParams, responseJSON => {
             let item = JSON.parse(responseJSON);
@@ -141,12 +142,12 @@ function generateIncompleteSuggestionContent(suggestion) {
     });
 
 
-    let communityOutfitContentt = "<h1>You need these items:</h1><div class='itemListContainer' id='stillNeeded-" + communityOutfit.id +"'></div>";
+    let communityOutfitContentt = "<h1>You need these items:</h1><div class='itemListContainer' id='stillNeeded-" + communityOutfit.id + "'></div>";
     $('#modal-' + communityOutfit.id + ' .modal-content').append(communityOutfitContentt);
     // console.log(userItems);
-    Object.values(stillNeeded).forEach(function(id) {
+    Object.values(stillNeeded).forEach(function (id) {
         let postParams = {
-            id : id
+            id: id
         };
         $.post("/singleItem", postParams, responseJSON => {
             let item = JSON.parse(responseJSON);
@@ -178,18 +179,18 @@ function generateItemContent(item, id) {
         // console.log(imageSource);
         // console.log(item);
         // console.log("url(" + imageSource + ") no-repeat");
-        // $('#item-' + id + "-" + outfitId).css("background", "url(" + imageSource + ") no-repeat");
-        // $('#item-' + id + "-" +outfitId).css("background-size", "100%");
+        // $('#item-' + id + "-" + outfitId).css("background", "url(" +
+        // imageSource + ") no-repeat"); $('#item-' + id + "-"
+        // +outfitId).css("background-size", "100%");
     }
     return itemContent;
 }
 
 function generateItemIcon(item, id, imageSource) {
-    return '<div tabindex="-1" class="item" id="item-' + id +  '" ' +
-        'style="background: url(' + imageSource + ') no-repeat; background-size: 100%">' +
+    return '<div tabindex="-1" class="item" id="item-' + id + '" ' +
+        'style="background: url("' + imageSource + '") no-repeat; background-size: 100%">' +
         '<span>' + item[1] + '</span></div>';
 }
-
 
 
 function displayLikes(username, outfitId, change, outfitCard) {
@@ -287,7 +288,6 @@ function like(outfitId) {
     }
 
 }
-
 
 
 $(document).ready(() => {
