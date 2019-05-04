@@ -8,14 +8,16 @@
             </button>
             <div id="suggestOutfitModal" class="modal">
                 <div class="modal-content">
-                    <div id="suggestSpan" class="close">&times;</div>
                     <div id="suggestDiv">
                         <form id="suggestOutfitForm">
                             <div id="outfit-name-div">
-                                <label id="outfit-name-label"
-                                       for="outfit-name">Name
-                                    your
-                                    outfit!</label>
+                                <div id="rowDiv">
+                                    <label id="outfit-name-label"
+                                           for="outfit-name">Name your
+                                        outfit</label>
+                                    <span id="suggestSpan" class="close">&times;
+                                </span>
+                                </div>
                                 <input type="text" id="outfit-name"
                                        name="outfit-name" required>
                             </div>
@@ -23,6 +25,7 @@
                             <div class="tab-suggest" id="outfit-info">
                                 <div class="add-suggest" id="outer-item">
                                     <button id="suggest-outer-item"
+                                            class="addButton"
                                             onclick="navigateToSuggestTab(event, 1)">
                                         Add
                                         Outer
@@ -31,6 +34,7 @@
 
                                 <div class="add-suggest" id="top-item">
                                     <button id="suggest-top-item"
+                                            class="addButton"
                                             onclick="navigateToSuggestTab(event, 2)">
                                         Add
                                         Top
@@ -38,6 +42,7 @@
                                 </div>
                                 <div class="add-suggest" id="bottom-item">
                                     <button id="suggest-bottom-item"
+                                            class="addButton"
                                             onclick="navigateToSuggestTab(event, 3)">
                                         Add
                                         Bottom
@@ -45,6 +50,7 @@
                                 </div>
                                 <div class="add-suggest" id="shoes-item">
                                     <button id="suggest-shoes-item"
+                                            class="addButton"
                                             onclick="navigateToSuggestTab(event, 4)">
                                         Add
                                         Shoes
@@ -54,7 +60,7 @@
 
                             <div class="tab-suggest" id="outer-select">
                                 <div class="description">
-                                    <p>Select an outer:</p><br>
+                                    <h2>Select an outer:</h2><br>
                                 </div>
                                 <div class="item-display">
                                 </div>
@@ -62,7 +68,7 @@
 
                             <div class="tab-suggest" id="top-select">
                                 <div class="description">
-                                    <p>Select a top:</p><br>
+                                    <h2>Select a top:</h2><br>
                                 </div>
                                 <div class="item-display">
                                 </div>
@@ -70,7 +76,7 @@
 
                             <div class="tab-suggest" id="bottom-select">
                                 <div class="description">
-                                    <p>Select a bottom:</p><br>
+                                    <h2>Select a bottom:</h2><br>
                                 </div>
                                 <div class="item-display">
                                 </div>
@@ -78,7 +84,7 @@
 
                             <div class="tab-suggest" id="shoes-select">
                                 <div class="description">
-                                    <p>Select a pair of shoes:</p><br>
+                                    <h2>Select a pair of shoes:</h2><br>
                                 </div>
                                 <div class="item-display">
                                 </div>
@@ -99,7 +105,7 @@
                                 </div>
                             </div>
 
-                            <div style="overflow:auto;">
+                            <div id="suggestSubmitDiv">
                                 <button id="suggest">Generate Suggestions
                                 </button>
                                 <div style="float:right;">

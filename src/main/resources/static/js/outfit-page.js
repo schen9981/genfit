@@ -33,7 +33,7 @@ function generateOutfitContent(outfit, id) {
 function generateItemContent(item, id) {
     let itemContent;
     if (item.length == 0) {
-        itemContent = '<div class="item" id="item-empty">' + N / A + "</div>";
+        itemContent = '<div class="item" id="item-empty"> N/A </div>';
     } else {
         // itemContent = '<div tabindex="-1" class="item" id="item-' + id +
         // '">'; itemContent += '<h5>' + item[1] + '</h5><br>'; itemContent +=

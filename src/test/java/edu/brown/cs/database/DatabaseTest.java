@@ -1,4 +1,5 @@
-package com.genfit.database;
+package edu.brown.cs.database;
+
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -19,6 +20,8 @@ import com.genfit.attribute.attributevals.SeasonEnum;
 import com.genfit.attribute.attributevals.SubtypeEnum;
 import com.genfit.attribute.attributevals.TypeEnum;
 import com.genfit.clothing.Item;
+import com.genfit.database.AWSConnection;
+import com.genfit.database.Database;
 import com.genfit.proxy.ItemProxy;
 import com.genfit.proxy.OutfitProxy;
 import com.genfit.proxy.UserProxy;
@@ -42,21 +45,22 @@ import static com.genfit.database.AWSConnection.getDBConnectionUsingIam;
 public class DatabaseTest {
   private static final String bucket_name = "cs32-term-project-s3-bucket";
   private static final String access_key = "AKIAUSTN5WVYFTHPLBSU";
-  private static final String secret_key = "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";
+  private static final String secret_key = "uetUyr0W+vuI"
+          + "+iFZBl6HCWB9kgYNoXgYPTX6kCei";
   private static final String region = "us-east-1";
 
   public static void main(String[] args) throws Exception {
-      Connection connection = AWSConnection.getDBConnectionUsingIam();
-      Database db = new Database(connection);
+    Connection connection = AWSConnection.getDBConnectionUsingIam();
+    Database db = new Database(connection);
 
 
-      db.editItem(103, 95,
-              new TypeAttribute(TypeEnum.values()[1]),
-              new SubtypeAttribute(SubtypeEnum.values()[1]),
-              new FormalityAttribute(FormalityEnum.values()[1]),
-              new ColorAttribute(new Color(0x111111)),
-              new PatternAttribute(PatternEnum.values()[1]),
-              new SeasonAttribute(SeasonEnum.values()[1]));
+    //db.editItem(103, 95,
+    //        new TypeAttribute(TypeEnum.values()[1]),
+    //        new SubtypeAttribute(SubtypeEnum.values()[1]),
+    //        new FormalityAttribute(FormalityEnum.values()[1]),
+    //        new ColorAttribute(new Color(0x111111)),
+    //        new PatternAttribute(PatternEnum.values()[1]),
+    //        new SeasonAttribute(SeasonEnum.values()[1]));
 
 //      db.addItem(103, "someshirt",
 //              new TypeAttribute(TypeEnum.TOP),

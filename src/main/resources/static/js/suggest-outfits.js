@@ -10,19 +10,26 @@ function generateSuggestItemCards(listOfItems, tabId) {
         // generate modal html
         let id = item[0];
 
+        let $itemSelector = $('.tab-suggest #item-' + id);
+
         // check if item already exists on page
-        if ($('.tab-suggest #item-' + id).html() == null) {
+        if ($itemSelector.html() == null) {
             // set item html
+            // function from outfit-page.js
             let divHTML = generateItemIcon(item, id);
             $('#' + tabId + '.tab-suggest').append(divHTML);
 
             // add image for icon
             let imageSource = item[8];
-            $('.tab-suggest #item-' + id).css("background", "url(" + imageSource + ") no-repeat");
-            $('.tab-suggest #item-' + id).css("background-size", "100%");
+            // reselect item
+            $itemSelector = $('.tab-suggest #item-' + id);
+            $itemSelector.css("background",
+                "url(" + imageSource + ") no-repeat");
+            $itemSelector.css("background-size", "100%");
+            $itemSelector.css("background-position", "center");
 
             // add event listener for focus (ie user selection)
-            $('.tab-suggest #item-' + id).focus(function () {
+            $itemSelector.focus(function () {
                 $selected = this;
             });
         }
@@ -110,6 +117,7 @@ function showSuggestTab(compId) {
         document.getElementById("suggest").style.display = "inline";
         document.getElementById("addOutfitSuggest").style.display = "inline";
         document.getElementById("suggestOutfitBtn").style.display = "inline";
+        document.getElementById("outfit-name-div").style.display = "flex";
     } else if (compId == 5) { // suggestions tab
         populateSuggestTabItems(compId, tabs[compId].id);
         tabs[compId].style.display = "table";
@@ -119,14 +127,15 @@ function showSuggestTab(compId) {
         // document.getElementById("suggestOutfit").style.display = "none";
         document.getElementById("addFromSuggest").style.display = "inline";
         document.getElementById("addOutfitSuggest").style.display = "none";
+        document.getElementById("outfit-name-div").style.display = "none";
     } else { // specific outfit page
         populateSuggestTabItems(compId, tabs[compId].id);
         tabs[compId].style.display = "table";
         document.getElementById("addItemSuggest").style.display = "inline";
         document.getElementById("backSuggest").style.display = "inline";
         document.getElementById("suggest").style.display = "none";
-        // document.getElementById("suggestOutfit").style.display = "none";
         document.getElementById("addOutfitSuggest").style.display = "none";
+        document.getElementById("outfit-name-div").style.display = "none";
     }
 }
 
