@@ -12,19 +12,28 @@
     background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
+div.fullOutfit {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 /* Modal Content/Box */
 .modal-content {
+    /*display: table;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: #fefefe;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 60vw; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button */
 .close {
     color: #aaa;
-    float: right;
+    margin-left: auto;
     font-size: 28px;
     font-weight: bold;
 }
@@ -61,6 +70,7 @@ input {
 
 .tab-suggest {
     display: none;
+    width: 100%;
 }
 
 #addOutfitModal .item {
@@ -72,58 +82,116 @@ input {
     border: 1px solid #ccc;
 }
 
+.fullOutfit .item {
+    width: 15vw;
+    height: 15vw;
+}
+
+.fullOutfit div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.fullOutfit .item span {
+    vertical-align: center;
+    background-color: white;
+    border: 2px black solid;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 1em;
+    padding: 0.3em;
+}
+
 .description {
     display: table-row;
+}
+
+#suggestSpan {
+    text-align: right;
+}
+
+
+.tab-suggest.item-display {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }
 
 .item:hover {
     box-shadow: 0 0 11px rgba(33, 33, 33, .2);
 }
 
-.modal-content {
-    display: table;
+/*.item {*/
+/*display: table-cell;*/
+/*!*width: 20%;*!*/
+/*!*height: 200px;*!*/
+/*}*/
+
+
+.item-div {
+    border: 0;
+    vertical-align: top;
+    width: 10%;
+    display: inline-block;
+    padding: 8px;
+    margin: 8px;
+}
+
+.item-div:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .item {
-    display: table-cell;
-    /*width: 20%;*/
-    /*height: 200px;*/
+    border: 0;
+    width: 100%;
+    height: 100px;
+}
+
+.item-label {
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .delete {
-    margin-bottom: 10px;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    display: inline-block;
+    min-width: auto;
+    width: 50%;
+    font-size: 1.4em;
 }
 
 #outfits {
     display: flex;
     flex-wrap: wrap;
-
 }
 
-.outfit {
+input#outfit-name {
+    width: 80%;
+}
+
+.outfit-btn {
     border: 1px solid black;
-    /*width: 100px;*/
-    height: 100px;
-    /*max-width: 100%;*/
+    height: 10em;
     display: flex;
-    /*flex-direction: row;*/
-    /*box-sizing: border-box;*/
+    justify-content: center;
     flex-flow: row;
-    /*flex-wrap: wrap;*/
+    text-align: center;
+    font-weight: bold;
 }
 
 .outfit-card {
     display: flex;
-    /*width: 25%;*/
-    /*min-width: 50px;*/
     flex-flow: column;
-    /*flex-wrap: wrap;*/
-    /*flex-grow: 1;*/
-    /*padding: 5px;*/
-    /*box-sizing: border-box;*/
-    min-width: 200px;
     box-sizing: border-box;
-    /*flex-grow: 1;*/
+    width: 23%;
+    margin: 1%;
 }
 
 .outfit-card p {
@@ -141,4 +209,41 @@ input {
 
 .like-button.liked {
     background: blue;
+}
+
+#outfit-info {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#suggestOutfitForm {
+    width: auto;
+
+}
+
+div#suggestDiv {
+    width: 100%;
+}
+
+input#outfit-name {
+    width: 85%;
+    margin-bottom: 1em;
+}
+
+div#outfit-name-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label#outfit-name-label {
+    margin-right: auto;
+    margin-left: 7%;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+div#outfits-div {
+    display: flex;
+    flex-wrap: wrap;
 }

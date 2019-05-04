@@ -35,45 +35,45 @@
 </body>
 <!-- Top header -->
 <div class="top">
-  <img id="logo" src="/img/logo.svg"/>
-  <h1> GENFIT </h1>
-  <div id='welcome-message'>
-  </div>
+    <img id="logo" src="/img/logo.svg"/>
+    <h1> GENFIT </h1>
+    <div id='welcome-message'>
+    </div>
 </div>
 
 <!-- Side navigation -->
 <div class="bottom">
-  <div class="sidenav">
-    <div class="sidenav-tab" id="first">
-      <img id="dashboard" src="/img/dashboard.svg"/>
-      <a href="/user">Dashboard</a>
+    <div class="sidenav">
+        <div class="sidenav-tab" id="first">
+            <img id="dashboard-img" src="/img/dashboard.svg"/>
+            <a href="/user">Dashboard</a>
+        </div>
+
+        <div class="sidenav-tab">
+            <img id="items-img" src="/img/items.svg"/>
+            <a href="/items">Items</a>
+        </div>
+
+        <div class="sidenav-tab">
+            <img id="outfits-img" src="/img/closet.svg"/>
+            <a href="/outfits">Outfits</a>
+        </div>
+
+        <div class="sidenav-tab" id="last">
+            <img id="discover-img" src="/img/discover.svg"/>
+            <a href="/discover">Discover</a>
+        </div>
+
+        <div class="signout-div">
+            <a id="signout-img" href="/" onclick="logout()">Sign Out</a>
+        </div>
+
     </div>
 
-    <div class="sidenav-tab">
-      <img id="items" src="/img/items.svg"/>
-      <a href="/items">Items</a>
+    <!-- Page content -->
+    <div class="main">
+        ${content}
     </div>
-
-    <div class="sidenav-tab">
-      <img id="outfits" src="/img/closet.svg"/>
-      <a href="/outfits">Outfits</a>
-    </div>
-
-    <div class="sidenav-tab" id="last">
-      <img id="discover" src="/img/discover.svg"/>
-      <a href="/discover">Discover</a>
-    </div>
-
-    <div class="signout-div">
-      <a id="signout" href="/" onclick="logout()">Sign Out</a>
-    </div>
-
-  </div>
-
-  <!-- Page content -->
-  <div class="main">
-    ${content}
-  </div>
 </div>
 
 </html>

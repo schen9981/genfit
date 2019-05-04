@@ -10,6 +10,12 @@
         <div class="chart-container">
             <canvas id="formalityRadar"></canvas>
         </div>
+
+        <div id="colors-container">
+            <h3>Your Colors:</h3>
+            <div id="clothingGradient"></div>
+        </div>
+
     </div>
     <div id="outfit-overview">
 <#--        <h2>Outfits</h2>-->
@@ -38,4 +44,5 @@
 
 <#include "main.ftl">
 <script src="js/profile.js"></script>
+<script src="js/color.js"></script>
 <script src="js/user-form.js"></script>
