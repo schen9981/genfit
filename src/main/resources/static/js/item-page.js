@@ -123,6 +123,7 @@ function generateCards(listOfItems) {
     let imageSource = item[8];
     $('#item-' + id).css("background", "url(" + imageSource + ") no-repeat");
     $('#item-' + id).css("background-size", "contain");
+    $('#item-' + id).css("background-position", "center");
 
     // add popup functionality to given modal
     animateItemModal(id);
@@ -652,6 +653,7 @@ function uploadImageAndPost(username, file, postParams) {
 }
 
 $(document).ready(() => {
+  $('#items-tab-button').css("color", "white");
   username = localStorage.username;
   displayUserItems(username);
   itemModalAnimation();

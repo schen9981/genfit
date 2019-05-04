@@ -126,7 +126,7 @@ function generateIncompleteSuggestionContent(suggestion) {
     // console.log(stillNeeded);
     // console.log(userItems);
 
-    let communityOutfitContent = "<h1>You have these items:</h1><div id='userItems-" + communityOutfit.id +"'></div>";
+    let communityOutfitContent = "<h1>You have these items:</h1><div class='itemListContainer' id='userItems-" + communityOutfit.id +"'></div>";
     $('#modal-' + communityOutfit.id + ' .modal-content').append(communityOutfitContent);
     // console.log(userItems);
     Object.values(userItems).forEach(function(id) {
@@ -135,15 +135,13 @@ function generateIncompleteSuggestionContent(suggestion) {
         };
         $.post("/singleItem", postParams, responseJSON => {
             let item = JSON.parse(responseJSON);
-            console.log(item);
-            let i = generateItemContent(item, id);
-            console.log(i);
+            let i = generateItemContent(item.item, id);
             $('#userItems-' + communityOutfit.id).append(i);
         })
     });
 
 
-    let communityOutfitContentt = "<h1>You need these items:</h1><div id='stillNeeded-" + communityOutfit.id +"'></div>";
+    let communityOutfitContentt = "<h1>You need these items:</h1><div class='itemListContainer' id='stillNeeded-" + communityOutfit.id +"'></div>";
     $('#modal-' + communityOutfit.id + ' .modal-content').append(communityOutfitContentt);
     // console.log(userItems);
     Object.values(stillNeeded).forEach(function(id) {
@@ -152,9 +150,7 @@ function generateIncompleteSuggestionContent(suggestion) {
         };
         $.post("/singleItem", postParams, responseJSON => {
             let item = JSON.parse(responseJSON);
-            console.log(item);
             let i = generateItemContent(item.item, id);
-            console.log(i);
             $('#stillNeeded-' + communityOutfit.id).append(i);
         })
     });
@@ -174,8 +170,8 @@ function generateItemContent(item, id) {
         // '</p><br>'; itemContent += '<p>Season:' + item[5] + '</p><br>';
         // itemContent += '<p>Formality:' + item[6] + '</p><br>'; itemContent
         // += '</div>';
-        let imageSource = item[7];
-        console.log(imageSource);
+        let imageSource = item[8];
+        //console.log(imageSource);
         itemContent = generateItemIcon(item, id, imageSource);
 
         // let imageSource = item[7];
@@ -190,7 +186,8 @@ function generateItemContent(item, id) {
 
 function generateItemIcon(item, id, imageSource) {
     return '<div tabindex="-1" class="item" id="item-' + id +  '" ' +
-        'style="background-image: url(' + imageSource + '); background-size: 100%">' + item[1] + '</div>';
+        'style="background: url(' + imageSource + ') no-repeat; background-size: 100%">' +
+        '<span>' + item[1] + '</span></div>';
 }
 
 
@@ -294,6 +291,7 @@ function like(outfitId) {
 
 
 $(document).ready(() => {
+    $('#discover-tab-button').css("color", "white");
     username = localStorage.username;
     displayOutfitSuggestions(username);
 });

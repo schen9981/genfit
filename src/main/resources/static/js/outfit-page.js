@@ -246,6 +246,7 @@ function like(outfitId) {
 
 
 $(document).ready(() => {
+    $('#outfits-tab-button').css("color", "white");
     username = localStorage.username;
     displayUserOutfits(username);
     $(".name").html(localStorage.getItem('name'));
