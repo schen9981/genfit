@@ -227,6 +227,7 @@ function visualizeFormality(formalityList) {
 }
 
 $(document).ready(() => {
+    $('#user-tab-button').css("color", "white");
     displayItemsInfo(localStorage.getItem('username'));
     displayOutfitsInfo(localStorage.getItem('username'));
 });

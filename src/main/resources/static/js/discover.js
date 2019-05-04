@@ -294,6 +294,7 @@ function like(outfitId) {
 
 
 $(document).ready(() => {
+    $('#discover-tab-button').css("color", "white");
     username = localStorage.username;
     displayOutfitSuggestions(username);
 });

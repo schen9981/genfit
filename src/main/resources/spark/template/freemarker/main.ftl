@@ -46,22 +46,22 @@
     <div class="sidenav">
         <div class="sidenav-tab" id="first">
             <img id="dashboard-img" src="/img/dashboard.svg"/>
-            <a href="/user">Dashboard</a>
+            <a id='user-tab-button' href="/user">Dashboard</a>
         </div>
 
         <div class="sidenav-tab">
             <img id="items-img" src="/img/items.svg"/>
-            <a href="/items">Items</a>
+            <a id='items-tab-button'href="/items">Items</a>
         </div>
 
         <div class="sidenav-tab">
             <img id="outfits-img" src="/img/closet.svg"/>
-            <a href="/outfits">Outfits</a>
+            <a id='outfits-tab-button'href="/outfits">Outfits</a>
         </div>
 
         <div class="sidenav-tab" id="last">
             <img id="discover-img" src="/img/discover.svg"/>
-            <a href="/discover">Discover</a>
+            <a id='discover-tab-button'href="/discover">Discover</a>
         </div>
 
         <div class="signout-div">

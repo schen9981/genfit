@@ -1,12 +1,7 @@
 <#assign content>
 <h1>Items in <span class="name"></span>'s Closet</h1>
 
-<div id="items">
-</div>
-
 <div id="add">
-  <button id="addItem">Add Item</button>
-
   <div id="addItemModal" class="modal">
     <div class="modal-content">
       <span id="addSpan" class="close">&times;</span>
@@ -94,6 +89,12 @@
       </form>
     </div>
   </div>
+</div>
+
+<div id="items">
+  <button id="addItem">
+      <div id="addPlus">+</div>
+  </button>
 </div>
 
 </#assign>
