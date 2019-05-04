@@ -98,7 +98,7 @@ function generateOutfitCards(listOfOutfits) {
         }
 
         let buttonHTML = '<div class="outfit-card">' +
-            '<button class="outfit" id="outfit-' + id + '">' + outfitName
+            '<button class="outfit-btn" id="outfit-' + id + '">' + outfitName
             + '</button></div>';
         let modalHTML = '<div class="modal" id="modal-' + id + '">';
         modalHTML += '<div class="modal-content">';

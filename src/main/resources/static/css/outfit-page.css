@@ -127,13 +127,13 @@ input {
 }
 
 /*.item {*/
-    /*display: table-cell;*/
-    /*!*width: 20%;*!*/
-    /*!*height: 200px;*!*/
+/*display: table-cell;*/
+/*!*width: 20%;*!*/
+/*!*height: 200px;*!*/
 /*}*/
 
 
-.item-div{
+.item-div {
     border: 0;
     vertical-align: top;
     width: 10%;
@@ -176,7 +176,7 @@ input#outfit-name {
     width: 80%;
 }
 
-.outfit {
+.outfit-btn {
     border: 1px solid black;
     height: 10em;
     display: flex;
@@ -184,14 +184,14 @@ input#outfit-name {
     flex-flow: row;
     text-align: center;
     font-weight: bold;
-    width: 23%;
-    margin: 1%;
 }
 
 .outfit-card {
     display: flex;
     flex-flow: column;
     box-sizing: border-box;
+    width: 23%;
+    margin: 1%;
 }
 
 .outfit-card p {
@@ -241,4 +241,9 @@ label#outfit-name-label {
     margin-left: 7%;
     font-weight: bold;
     font-size: 1.5em;
+}
+
+div#outfits-div {
+    display: flex;
+    flex-wrap: wrap;
 }
