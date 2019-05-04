@@ -301,7 +301,7 @@ function visualizeFormality(formalityList) {
                     borderWidth: 2,
                     backgroundColor: "rgba(68,181,238,0.2)",
                     borderColor: "rgba(68,181,238,1)",
-                    pointBackgroundColor: "rgba(68,181,238,1)",
+                    pointBackgroundColor: "rgba(68,181,238,1)",  
                     pointBorderColor: "#fff",
                     data: Object.values(formalityPercentMap['BOTTOM'])
                 }, {
