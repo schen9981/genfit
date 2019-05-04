@@ -31,7 +31,7 @@ function generateSuggestionCards(listOfSuggestions) {
             || communityOutfitName === "") {
             communityOutfitName = "<em>Unnamed outfit</em>";
         }
-        let buttonHTML = '<div class="outfit-card"><button class="outfit" id="outfit-' + communityOutfitId + '">' + communityOutfitName + '</button></div>';
+        let buttonHTML = '<div class="outfit-card"><div class="outfit" id="outfit-' + communityOutfitId + '">' + communityOutfitName + '</div></div>';
         let modalHTML = '<div class="modal" id="modal-' + communityOutfitId + '">';
         modalHTML += '<div class="modal-content">';
         modalHTML += '<span class="close" id="close-' + communityOutfitId + '">&times;</span>';

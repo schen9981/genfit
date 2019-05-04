@@ -275,7 +275,7 @@ button {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    border: rgb(221,221,221) solid 1px;
+    border: rgb(221,221,221) solid 2px;
 }
 
 .like-button {
@@ -458,6 +458,6 @@ div.suggestionsDisplayDiv .item {
     height: 25vh;
 }
 
-div.outfit-btn em   {
-    /*padding: 5px;*/
-}
+/*div.outfit-btn em   {*/
+/*    !*padding: 5px;*!*/
+/*}*/

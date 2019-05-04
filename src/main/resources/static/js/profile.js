@@ -165,48 +165,50 @@ function visualizeItemSeason(seasonsList) {
     new Chart(document.getElementById("typePie"), {
         type: 'doughnut',
         data: {
-
+            // labels: ["OUTER", "OUTER", "OUTER", "OUTER"],
             datasets: [{
-                label: "one",
+                label: "OUTER",
+                // labels: ["OUTER", "OUTER", "OUTER", "OUTER"],
                 labels: Object.keys(outerTypeNumMap),
                 backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
                 data: Object.values(outerTypeNumMap)
             },
                 {
-                    label: "two",
+                    label: "TOP",
                     labels: Object.keys(topTypeNumMap),
+                    // labels: ["TOP", "TOP", "TOP", "TOP"],
                     backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
                     data: Object.values(topTypeNumMap)
                 },
                 {
-                    label: "two",
+                    label: "BOTTOM",
                     labels: Object.keys(bottomTypeNumMap),
+                    // labels: ["BOTTOM", "BOTTOM", "BOTTOM", "BOTTOM"],
                     backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
                     data: Object.values(bottomTypeNumMap)
                 },
                 {
-                    label: "two",
+                    label: "SHOES",
                     labels: Object.keys(shoesTypeNumMap),
+                    // labels: ["SHOES", "SHOES", "SHOES", "SHOES"],
                     backgroundColor: ['#C5E1A5', '#FFE082', '#EF9A9A', '#90CAF9'],
                     data: Object.values(shoesTypeNumMap)
                 }],
             labels: Object.keys(topTypeNumMap)
         },
         options: {
-            title: {
-                display: true,
-                text: 'OUTER > TOP > BOTTOM > SHOES'
+            // title: {
+            //     display: true,
+            //     text: 'OUTER > TOP > BOTTOM > SHOES'
+            // },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        let dataset = data.datasets[tooltipItem.datasetIndex];
+                        return dataset.label;
+                    }
+                }
             }
-
-            // tooltips: {
-            //     callbacks: {
-            //         label: function(tooltipItem, data) {
-            //             let dataset = data.datasets[tooltipItem.datasetIndex];
-            //             let index = tooltipItem.index;
-            //             return dataset.labels[index] + ': ' + dataset.data[index];
-            //         }
-            //     }
-            // }
         }
     });
 
@@ -296,6 +298,7 @@ function visualizeFormality(formalityList) {
             datasets: [
                 {
                     label: 'OUTER',
+                    labels: Object.keys(formalityNumMap["OUTER"]),
                     fill: true,
                     borderWidth: 2,
                     backgroundColor: "rgba(255, 204, 102, 0.2)",
@@ -305,6 +308,7 @@ function visualizeFormality(formalityList) {
                     data: Object.values(formalityPercentMap['OUTER'])
                 }, {
                     label: 'TOP',
+                    labels: Object.keys(formalityNumMap["TOP"]),
                     fill: true,
                     borderWidth: 2,
                     backgroundColor: "rgba(255,99,132,0.2)",
@@ -314,6 +318,7 @@ function visualizeFormality(formalityList) {
                     data: Object.values(formalityPercentMap['TOP'])
                 }, {
                     label: 'BOTTOM',
+                    labels: Object.keys(formalityNumMap["BOTTOM"]),
                     fill: true,
                     borderWidth: 2,
                     backgroundColor: "rgba(68,181,238,0.2)",
@@ -323,6 +328,7 @@ function visualizeFormality(formalityList) {
                     data: Object.values(formalityPercentMap['BOTTOM'])
                 }, {
                     label: 'SHOES',
+                    labels: Object.keys(formalityNumMap["SHOES"]),
                     fill: true,
                     borderWidth: 2,
                     backgroundColor: "rgba(75,192,192,0.3)",
