@@ -129,13 +129,13 @@ input {
 }
 
 /*.item {*/
-    /*display: table-cell;*/
-    /*!*width: 20%;*!*/
-    /*!*height: 200px;*!*/
+/*display: table-cell;*/
+/*!*width: 20%;*!*/
+/*!*height: 200px;*!*/
 /*}*/
 
 
-.item-div{
+.item-div {
     border: 0;
     vertical-align: top;
     width: 10%;
@@ -178,31 +178,53 @@ input#outfit-name {
     width: 80%;
 }
 
-.outfit {
+.outfit-btn {
     border: 1px solid black;
-    height: 10em;
     display: flex;
     justify-content: center;
     flex-flow: row;
     text-align: center;
     font-weight: bold;
-    width: 23%;
-    margin: 1%;
+    height: 90%;
+    width: 100%;
 }
 
-.outfit-card {
-    display: flex;
-    flex-flow: column;
+#add {
+    width: 23%;
+    margin: 1%;
     box-sizing: border-box;
 }
 
+
+.outfit-card {
+    height: 12em;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 23%;
+    margin: 1%;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
 .outfit-card p {
+    width: 50%;
+    border: black solid 1px;
     margin: 0;
+    text-align: center;
 }
 
 .like-wrapper {
-    padding-bottom: 10px;
+    padding-bottom: 0;
     display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.like-button {
+    width: 50%;
 }
 
 .like-button.not-liked {
@@ -221,6 +243,21 @@ input#outfit-name {
 #suggestOutfitForm {
     width: auto;
 
+}
+
+#suggestOutfitBtn {
+    width: 100%;
+    height: 100%;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 10px 10px 5px -6px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 10px 5px -6px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 10px 5px -6px rgba(0, 0, 0, 0.75);
+}
+
+#suggestOutfitBtn:active {
+    transform: translateY(8px);
 }
 
 div#suggestDiv {
@@ -243,4 +280,21 @@ label#outfit-name-label {
     margin-left: 7%;
     font-weight: bold;
     font-size: 1.5em;
+}
+
+div#outfits-div {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#suggestPlus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8em;
+    vertical-align: center;
+    width: 100%;
+    height: 100%;
+    font-weight: lighter;
+    opacity: .6;
 }

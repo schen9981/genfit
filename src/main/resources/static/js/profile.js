@@ -1,5 +1,6 @@
 document.getElementById("form-wrapper").style.display = "none";
 $(".name").html(localStorage.getItem('name'));
+
 function openForm() {
     document.getElementById("change-btn").style.display = "none";
     document.getElementById("form-wrapper").style.display = "block";
@@ -51,22 +52,24 @@ function displayItemsInfo(username) {
 function visualizeItemColors(colorsList) {
     // console.log(colorsList);
     let colors = [];
+    // console.log(colors);
 
-    colorsList.forEach(function(color){
+
+    colorsList.forEach(function (color) {
         if (color === "0") {
             colors.push("#000000");
         } else {
             let finalColor = color;
             if (color.length !== 6) {
-                let zeroNum = 6-color.length;
+                let zeroNum = 6 - color.length;
                 for (let i = 1; i <= zeroNum; i++) {
                     finalColor = "0" + finalColor;
                 }
             }
-            colors.push("#"+finalColor);
+            colors.push("#" + finalColor);
         }
     });
-    // console.log(colors);
+    console.log(colors);
     const rgbArr = colors.map(hexToRgb);
     const sortedRgbArr = sortColors(rgbArr);
     const finalArray = sortedRgbArr.map(rgbToHex);
@@ -76,13 +79,13 @@ function visualizeItemColors(colorsList) {
 
 function visualizeItemSeason(seasonsList) {
     let typeNumMap = {
-        "SPRING" : 0,
-        "SUMMER" : 0,
-        "FALL" : 0,
-        "WINTER" : 0
+        "SPRING": 0,
+        "SUMMER": 0,
+        "FALL": 0,
+        "WINTER": 0
     };
 
-    for(let i = 0; i < seasonsList.length; i++) {
+    for (let i = 0; i < seasonsList.length; i++) {
         typeNumMap[seasonsList[i]] = typeNumMap[seasonsList[i]] += 1;
     }
 
@@ -95,8 +98,7 @@ function visualizeItemSeason(seasonsList) {
                 data: Object.values(typeNumMap)
             }]
         },
-        options: {
-        }
+        options: {}
     });
 
 }
@@ -104,72 +106,72 @@ function visualizeItemSeason(seasonsList) {
 function visualizeFormality(formalityList) {
     // console.log(formalityList);
     let formalityNumMap = {
-        "OUTER" : {
-            "FORMAL" : 0,
-            "BUSINESS_CASUAL" : 0,
-            "CASUAL" : 0,
-            "ULTRA_CASUAL" : 0
+        "OUTER": {
+            "FORMAL": 0,
+            "BUSINESS_CASUAL": 0,
+            "CASUAL": 0,
+            "ULTRA_CASUAL": 0
         },
-        "TOP" : {
-            "FORMAL" : 0,
-            "BUSINESS_CASUAL" : 0,
-            "CASUAL" : 0,
-            "ULTRA_CASUAL" : 0
+        "TOP": {
+            "FORMAL": 0,
+            "BUSINESS_CASUAL": 0,
+            "CASUAL": 0,
+            "ULTRA_CASUAL": 0
         },
-        "BOTTOM" : {
-            "FORMAL" : 0,
-            "BUSINESS_CASUAL" : 0,
-            "CASUAL" : 0,
-            "ULTRA_CASUAL" : 0
+        "BOTTOM": {
+            "FORMAL": 0,
+            "BUSINESS_CASUAL": 0,
+            "CASUAL": 0,
+            "ULTRA_CASUAL": 0
         },
-        "SHOES" : {
-            "FORMAL" : 0,
-            "BUSINESS_CASUAL" : 0,
-            "CASUAL" : 0,
-            "ULTRA_CASUAL" : 0
+        "SHOES": {
+            "FORMAL": 0,
+            "BUSINESS_CASUAL": 0,
+            "CASUAL": 0,
+            "ULTRA_CASUAL": 0
         }
     };
     // console.log(formalityNumMap);
 
-    formalityList.forEach(function(item) {
+    formalityList.forEach(function (item) {
         formalityNumMap[item[3]][item[7]] = formalityNumMap[item[3]][item[7]] + 1;
     });
 
     // console.log(formalityNumMap);
 
     let formalityPercentMap = {
-        "OUTER" : {
-            "FORMAL" : 0,
-            "BUSINESS_CASUAL" : 0,
-            "CASUAL" : 0,
-            "ULTRA_CASUAL" : 0
+        "OUTER": {
+            "FORMAL": 0,
+            "BUSINESS_CASUAL": 0,
+            "CASUAL": 0,
+            "ULTRA_CASUAL": 0
         },
-        "TOP" : {
-            "FORMAL" : 0,
-            "BUSINESS_CASUAL" : 0,
-            "CASUAL" : 0,
-            "ULTRA_CASUAL" : 0
+        "TOP": {
+            "FORMAL": 0,
+            "BUSINESS_CASUAL": 0,
+            "CASUAL": 0,
+            "ULTRA_CASUAL": 0
         },
-        "BOTTOM" : {
-            "FORMAL" : 0,
-            "BUSINESS_CASUAL" : 0,
-            "CASUAL" : 0,
-            "ULTRA_CASUAL" : 0
+        "BOTTOM": {
+            "FORMAL": 0,
+            "BUSINESS_CASUAL": 0,
+            "CASUAL": 0,
+            "ULTRA_CASUAL": 0
         },
-        "SHOES" : {
-            "FORMAL" : 0,
-            "BUSINESS_CASUAL" : 0,
-            "CASUAL" : 0,
-            "ULTRA_CASUAL" : 0
+        "SHOES": {
+            "FORMAL": 0,
+            "BUSINESS_CASUAL": 0,
+            "CASUAL": 0,
+            "ULTRA_CASUAL": 0
         }
     };
 
-    Object.keys(formalityNumMap).forEach(function(type) {
+    Object.keys(formalityNumMap).forEach(function (type) {
         let values = Object.values(formalityNumMap[type]);
         // console.log(values);
         let sum = values.reduce((accumulator, currentValue) => accumulator + currentValue);
         // console.log(sum);
-        Object.keys(formalityNumMap[type]).forEach(function(formality) {
+        Object.keys(formalityNumMap[type]).forEach(function (formality) {
             // console.log(formality);
             formalityPercentMap[type][formality] = (formalityNumMap[type][formality] / sum) * 100;
             // console.log(formalityPercentMap[type][formality]);
@@ -225,6 +227,7 @@ function visualizeFormality(formalityList) {
 }
 
 $(document).ready(() => {
-   displayItemsInfo(localStorage.getItem('username'));
-   displayOutfitsInfo(localStorage.getItem('username'));
+    $('#user-tab-button').css("color", "white");
+    displayItemsInfo(localStorage.getItem('username'));
+    displayOutfitsInfo(localStorage.getItem('username'));
 });

@@ -98,7 +98,7 @@ function generateOutfitCards(listOfOutfits) {
         }
 
         let buttonHTML = '<div class="outfit-card">' +
-            '<button class="outfit" id="outfit-' + id + '">' + outfitName
+            '<button class="outfit-btn" id="outfit-' + id + '">' + outfitName
             + '</button></div>';
         let modalHTML = '<div class="modal" id="modal-' + id + '">';
         modalHTML += '<div class="modal-content">';
@@ -138,7 +138,14 @@ function displayUserOutfits(username) {
         if (typeof userOutfits !== "undefined" && userOutfits.length > 0) {
             generateOutfitCards(userOutfits);
         } else {
-            $("div#outfits-div").append("<h3>No outfits yet :)</h3>")
+            $outfitsDiv = $("div#outfits-div");
+            $outfitsDiv.append('<div class="outfit-card"' +
+                ' id="no-outfits-card">' +
+                'No outfits yet :)</div>')
+            $noOutfitsCard = $("#no-outfits-card");
+
+            $noOutfitsCard.css("text-align", "center");
+            $noOutfitsCard.css("border", "1px solid grey");
         }
     });
 }
@@ -239,6 +246,7 @@ function like(outfitId) {
 
 
 $(document).ready(() => {
+    $('#outfits-tab-button').css("color", "white");
     username = localStorage.username;
     displayUserOutfits(username);
     $(".name").html(localStorage.getItem('name'));
