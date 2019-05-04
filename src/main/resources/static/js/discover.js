@@ -153,7 +153,7 @@ function generateIncompleteSuggestionContent(suggestion) {
         $.post("/singleItem", postParams, responseJSON => {
             let item = JSON.parse(responseJSON);
             console.log(item);
-            let i = generateItemContent(item, id);
+            let i = generateItemContent(item.item, id);
             console.log(i);
             $('#stillNeeded-' + communityOutfit.id).append(i);
         })
@@ -176,7 +176,7 @@ function generateItemContent(item, id) {
         // += '</div>';
         let imageSource = item[7];
         console.log(imageSource);
-        itemContent = generateItemIcon(item.item, id, imageSource);
+        itemContent = generateItemIcon(item, id, imageSource);
 
         // let imageSource = item[7];
         // console.log(imageSource);
