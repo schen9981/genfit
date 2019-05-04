@@ -21,6 +21,27 @@
 }
 
 .chart-container {
-    width: 45%;
+    margin-top: 10px;
+    margin-left: -90px;
+    width: 680px;
     display: inline-block;
+    /*align-items: flex-start;*/
+}
+
+#colorBox:hover {
+    box-shadow: 0 6px 10px -4px #666;
+    -moz-box-shadow: 0 6px 10px -4px #666;
+    -webkit-box-shadow: 0 6px 10px -4px #666;
+}
+
+#colors-container {
+    margin-top: 4em;
+}
+#clothingGradient {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    box-shadow: 0 4px 4px -4px black;
+    -moz-box-shadow: 0 4px 4px -4px black;
+    -webkit-box-shadow: 0 4px 4px -4px black;
 }

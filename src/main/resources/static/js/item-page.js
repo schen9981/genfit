@@ -152,8 +152,6 @@ function deleteUserItem(itemId) {
                   "Are you sure you want to delete it?");
               if (confrimation === true) {
                   console.log("delete");
-
-
                   outfitIds.forEach(function(outfitId) {
                       let postParams = {
                           username : username,
@@ -165,35 +163,43 @@ function deleteUserItem(itemId) {
                       })
                   });
 
-                  let postParams = {
-                      username: username,
-                      itemId: itemId
-                  };
-                    console.log("delete item");
-                  // post request to remove item
-                  $.post("/deleteItem", postParams, responseJSON => {
-                      $('#item-' + itemId).remove();
-                      $('#modal-' + itemId).remove();
-                      let imageKey = JSON.parse(responseJSON)[0];
-                      if (imageKey !== "default") {
-                          s3.deleteObject({Key: imageKey}, function(err, data) {
-                              if (err) {
-                                  alert('There was an error deleting your photo: ', err.message);
-                              } else {
-                                  console.log('Successfully deleted photo.');
-                              }
-                          });
-                      }
-                  });
-                  window.location.reload();
+                  deleteItem(itemId);
               } else {
                   console.log("dont delete");
               }
+          } else {
+              deleteItem(itemId);
           }
       });
 
   });
 }
+
+
+function deleteItem(itemId) {
+    let postParams = {
+        username: username,
+        itemId: itemId
+    };
+    console.log("delete item");
+    // post request to remove item
+    $.post("/deleteItem", postParams, responseJSON => {
+        $('#item-' + itemId).remove();
+        $('#modal-' + itemId).remove();
+        let imageKey = JSON.parse(responseJSON)[0];
+        if (imageKey !== "default") {
+            s3.deleteObject({Key: imageKey}, function(err, data) {
+                if (err) {
+                    alert('There was an error deleting your photo: ', err.message);
+                } else {
+                    console.log('Successfully deleted photo.');
+                }
+            });
+        }
+    });
+    window.location.reload();
+}
+
 
 // function to retrieve and display user items
 function displayUserItems(username) {
