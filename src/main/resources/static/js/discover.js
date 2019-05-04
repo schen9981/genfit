@@ -12,9 +12,10 @@ function displayOutfitSuggestions(username) {
 
         // console.log(likedOutfitIds);
 
-        console.log(completeOutfits);
-        console.log(incompleteOutfits);
-        generateSuggestionCards(completeOutfits);
+        // console.log(completeOutfits);
+        // console.log(incompleteOutfits);
+        // console.log(suggestedOutfits);
+        generateSuggestionCards(suggestedOutfits);
     })
 }
 
@@ -25,7 +26,6 @@ function generateSuggestionCards(listOfSuggestions) {
         let communityOutfitId = outfitSuggestion.communityOutfit.id;
         // console.log(communityOutfitId);
         let communityOutfitName = outfitSuggestion.communityOutfit.name;
-
         let buttonHTML = '<div class="outfit-card"><button class="outfit" id="outfit-' + communityOutfitId + '">' + communityOutfitName + '</button></div>';
         let modalHTML = '<div class="modal" id="modal-' + communityOutfitId + '">';
         modalHTML += '<div class="modal-content">';
@@ -33,24 +33,26 @@ function generateSuggestionCards(listOfSuggestions) {
         // modalHTML += '<button class="delete" id="delete-outfit-' + communityOutfitId + '">Delete Outfit</button>';
         modalHTML += '</div></div>';
 
-        $('#complete-outfits').append(buttonHTML);
-        $('#complete-outfits').append(modalHTML);
+        if (outfitSuggestion.completeness) {
+            $('#complete-outfits').append(buttonHTML);
+            $('#complete-outfits').append(modalHTML);
+            generateCompleteSuggestionContent(outfitSuggestion);
+        } else {
+            $('#incomplete-outfits').append(buttonHTML);
+            $('#incomplete-outfits').append(modalHTML);
+            generateIncompleteSuggestionContent(outfitSuggestion);
 
-        // $('#incomplete-outfits').append(buttonHTML);
-        // $('#incomplete-outfits').append(modalHTML);
-
+        }
+        animateOutfitModal(communityOutfitId);
         let outfitCard = document.getElementById("outfit-" + communityOutfitId);
         displayLikes(username, communityOutfitId, 0, outfitCard);
 
-        generateSuggestionContent(outfitSuggestion);
-
-        animateOutfitModal(communityOutfitId);
     }
 }
 
 
 // generate html content for modal popup when user clicks on an outfit
-function generateSuggestionContent(suggestion) {
+function generateCompleteSuggestionContent(suggestion) {
     let postParams = {
         outer: suggestion.communityOutfit.outer,
         top: suggestion.communityOutfit.top,
@@ -112,11 +114,55 @@ function saveSuggestion(username, outfitName, outerId, topId, bottomId, feetId) 
     $.post("/addOutfit", postParams, responseJSON => {
         let outfit = JSON.parse(responseJSON);
         let outfitList = [outfit];
-        console.log(outfit)
+        // console.log(outfit)
     })
 }
 
+function generateIncompleteSuggestionContent(suggestion) {
+
+    let communityOutfit = suggestion.communityOutfit;
+    let stillNeeded = suggestion.stillNeeded;
+    let userItems = suggestion.userItems;
+    // console.log(stillNeeded);
+    // console.log(userItems);
+
+    let communityOutfitContent = "<h1>You have these items:</h1><div id='userItems-" + communityOutfit.id +"'></div>";
+    $('#modal-' + communityOutfit.id + ' .modal-content').append(communityOutfitContent);
+    // console.log(userItems);
+    Object.values(userItems).forEach(function(id) {
+        let postParams = {
+            id : id
+        };
+        $.post("/singleItem", postParams, responseJSON => {
+            let item = JSON.parse(responseJSON);
+            console.log(item);
+            let i = generateItemContent(item, id);
+            console.log(i);
+            $('#userItems-' + communityOutfit.id).append(i);
+        })
+    });
+
+
+    let communityOutfitContentt = "<h1>You need these items:</h1><div id='stillNeeded-" + communityOutfit.id +"'></div>";
+    $('#modal-' + communityOutfit.id + ' .modal-content').append(communityOutfitContentt);
+    // console.log(userItems);
+    Object.values(stillNeeded).forEach(function(id) {
+        let postParams = {
+            id : id
+        };
+        $.post("/singleItem", postParams, responseJSON => {
+            let item = JSON.parse(responseJSON);
+            console.log(item);
+            let i = generateItemContent(item.item, id);
+            console.log(i);
+            $('#stillNeeded-' + communityOutfit.id).append(i);
+        })
+    });
+}
+
 function generateItemContent(item, id) {
+    // console.log(item);
+    // console.log(id);
     let itemContent;
     if (item.length == 0) {
         itemContent = '<div class="item" id="item-empty">' + N / A + "</div>";
@@ -129,6 +175,7 @@ function generateItemContent(item, id) {
         // itemContent += '<p>Formality:' + item[6] + '</p><br>'; itemContent
         // += '</div>';
         let imageSource = item[7];
+        console.log(imageSource);
         itemContent = generateItemIcon(item, id, imageSource);
 
         // let imageSource = item[7];

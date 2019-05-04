@@ -15,7 +15,7 @@ function generateOutfitContent(outfit, id) {
         top: outfit[3],
         bottom: outfit[4],
         shoes: outfit[5]
-    }
+    };
 
     // post request to get outfit components as array
     $.post("/outfitComponents", postParams, responseJSON => {
@@ -229,6 +229,6 @@ $(document).ready(() => {
     username = localStorage.username;
     displayUserOutfits(username);
     // showTab(0);
-    // addOutfit();
+    addOutfit();
     $(".name").html(localStorage.getItem('name'));
 });

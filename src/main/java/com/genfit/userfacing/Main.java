@@ -21,6 +21,7 @@ import com.genfit.userfacing.handlers.OutfitComponentsRetriever;
 import com.genfit.userfacing.handlers.OutfitLikeHandler;
 import com.genfit.userfacing.handlers.OutfitPageHandler;
 import com.genfit.userfacing.handlers.OutfitWithItemRetriever;
+import com.genfit.userfacing.handlers.SingleItemRetriever;
 import com.genfit.userfacing.handlers.UserItemRetriever;
 import com.genfit.userfacing.handlers.UserOutfitRetriever;
 import com.genfit.userfacing.handlers.UserPageHandler;
@@ -124,6 +125,7 @@ public final class Main {
     Spark.post("/addItem", new AddItemHandler(this.mainApp));
     Spark.post("/deleteItem", new DeleteItemHandler(this.mainApp));
     Spark.post("/getOutfitWithItem", new OutfitWithItemRetriever(this.mainApp));
+    Spark.post("/singleItem", new SingleItemRetriever(this.mainApp));
 
     Spark.post("/like", new OutfitLikeHandler(this.mainApp));
     Spark.post("/discover", new DiscoverOutfitRetriever(this.mainApp));

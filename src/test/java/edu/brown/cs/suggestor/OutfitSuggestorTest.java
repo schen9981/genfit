@@ -15,11 +15,15 @@ public class OutfitSuggestorTest {
       Database db = new Database(AWSConnection.getDBConnectionUsingIam());
       OutfitSuggester os = new OutfitSuggester();
 
-      List<OutfitSuggestion> l = os.suggestOutfits(db, 104);
+      List<OutfitSuggestion> l = os.suggestOutfits(db, 110);
+      System.out.println(l.size());
 
       for (int i = 0; i < l.size(); i++) {
         OutfitSuggestion suggestion = l.get(i);
-        System.out.println(suggestion.getCommunityOutfit().getId());
+        suggestion.getCommunityOutfit().getId();
+        suggestion.isComplete();
+        suggestion.getCommunityOutfit().getItems();
+        suggestion.getItemsNeeded();
       }
     } catch (Exception e) {
       e.printStackTrace();

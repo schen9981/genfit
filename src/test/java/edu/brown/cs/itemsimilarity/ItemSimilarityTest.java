@@ -57,9 +57,9 @@ public class ItemSimilarityTest {
     Database db = null;
     try {
       db = new Database(AWSConnection.getDBConnectionUsingIam());
-      System.out.println(ItemDistanceCalculator.areSimilar(
-              new ItemProxy(db, 184),
-              new ItemProxy(db, 196)));
+      ItemDistanceCalculator.areSimilar(
+              new ItemProxy(db, 145),
+              new ItemProxy(db, 211));
     } catch (Exception e) {
       e.printStackTrace();
     }
