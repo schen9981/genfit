@@ -297,10 +297,10 @@ button {
 /*  color: gray;*/
 /*}*/
 
-/*.like-button.not-liked:hover {*/
-/*  background: none;*/
-/*  color: #2196F3;*/
-/*}*/
+.like-button.not-liked:hover {
+    background: none;
+    color: #2196F3;
+}
 
 /*.like-button:hover {*/
 /*    background: none;*/

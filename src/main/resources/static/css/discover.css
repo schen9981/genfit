@@ -8,8 +8,8 @@
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
@@ -77,7 +77,7 @@
 }
 
 .item:hover {
-    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    box-shadow: 0 0 11px rgba(33, 33, 33, .2);
 }
 
 .modal-content {
@@ -169,8 +169,8 @@
     border-radius: 10px 10px 0 0;
 }
 
-.outfit:hover{
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+.outfit:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .outfit-card {
@@ -215,25 +215,25 @@
 .like-button {
     border: none;
     width: 48%;
-    outline:none;
+    outline: none;
 }
 
 .like-button.not-liked:hover {
-  background: none;
-  color: #2196F3;
+    background: none;
+    color: #2196F3;
 }
 
-.like-button.not-liked{
+.like-button.not-liked {
     color: gray;
     background: white;
 }
 
-.like-button.liked:hover {
-  color: gray;
-  background: white;
-}
+/*.like-button.liked:hover {*/
+/*    color: gray;*/
+/*    background: white;*/
+/*}*/
 
-.like-button.liked{
+.like-button.liked {
     /*background: #2196F3;*/
     background: none;
     color: #2196F3;
