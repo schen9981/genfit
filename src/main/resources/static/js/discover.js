@@ -196,7 +196,7 @@ function generateItemIcon(item, id, imageSource) {
     //     '<span>' + item[1] + '</span></div>';
     return '<div tabindex="-1" class="item" id="item-' + id + '" ' +
         'style="background-image: url(\'' + imageSource + '\'); ' +
-        'background-size: 100%"><span>' + item[1] + '</span></div>';
+        'background-size: 100%; background-repeat: no-repeat;"><span>' + item[1] + '</span></div>';
 }
 
 
