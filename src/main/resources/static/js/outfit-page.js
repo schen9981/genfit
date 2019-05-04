@@ -54,8 +54,9 @@ function generateItemContent(item, id) {
 
 // generate item icons to display when users are adding to an outfit
 function generateItemIcon(item, id, imageSource) {
-    return '<div tabindex="-1" class="item" id="item-' + id + '" ' +
-        'style="background-image: url(' + imageSource + '); background-size: 100%">' + item[1] + '</div>';
+    return '<div class="item-div"><div tabindex="-1" class="item" id="item-' + id + '" ' +
+        'style="background: url(' + imageSource + ') no-repeat; background-size: 100%"' +
+        '></div><div class="item-label">' + item[1] + '</div></div>';
 }
 
 // animate modal for popup functionality of outfit modal

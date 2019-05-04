@@ -103,10 +103,9 @@ function generateCards(listOfItems) {
     // generate modal html
 
     let id = item[0];
-    let imageWidth = $(window).width() * 0.1;
-    let imageHeight = imageWidth * 1.2;
     let buttonHTML = '<div class="item"><button class="item-button" id="item-'
-        + id + '"></button><div style="text-align: center">' + item[1] + '</div></div>';
+        + id + '"></button><div style="text-align: center; overflow: hidden; text-overflow: ellipsis">'
+        + item[1] + '</div></div>';
     let modalHTML = '<div class="modal" id="modal-' + id + '">';
     modalHTML += '<div class="modal-content">';
     modalHTML += '<span class="close" id="close-' + id + '">&times;</span>';
@@ -262,8 +261,6 @@ function itemModalAnimation() {
     modal.css("display", "none");
   });
 }
-
-let encodedImage = "";
 
 //function fot previewing user uploaded images
 function previewFile(){
