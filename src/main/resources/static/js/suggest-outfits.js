@@ -163,6 +163,7 @@ function navigateToSuggestTab(event, tabInd) {
 // function that animates the suggest outfit modal
 function outfitSuggestModal() {
     let modal = $('#suggestOutfitModal');
+    // to add a new outfit button
     let btn = $('#suggestOutfitBtn');
     let span = $('#suggestSpan');
 
@@ -188,6 +189,15 @@ function getSuggestions() {
         let top = document.getElementsByClassName("add-suggest")[1].getElementsByClassName("item")[0];
         let bottom = document.getElementsByClassName("add-suggest")[2].getElementsByClassName("item")[0];
         let shoes = document.getElementsByClassName("add-suggest")[3].getElementsByClassName("item")[0];
+
+        // need at least one item to get suggestions
+        if (typeof outer === "undefined"
+            && typeof top === "undefined"
+            && typeof bottom === "undefined"
+            && typeof shoes === "undefined") {
+            alert("You must input at least one item to get suggestions.");
+            return;
+        }
 
         let postParams = {
             username: username,
