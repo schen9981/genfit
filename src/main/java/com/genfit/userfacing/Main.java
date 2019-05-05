@@ -89,11 +89,6 @@ public final class Main {
 ////    if (options.has("gui")) {
 //    this.runSparkServer((int) options.valueOf("port"));
 ////    }
-    if (options.has(portSpec)) {
-      Spark.port(options.valueOf(portSpec));
-    } else {
-      Spark.port(DEFAULT_PORT);
-    }
 
     runSparkServer();
 
