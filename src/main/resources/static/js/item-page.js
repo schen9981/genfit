@@ -414,6 +414,9 @@ function editItem(itemId, item) {
                 $('#modal-' + itemId + ' .modal-content').html(newCardContent);
 
                 animateItemModal(itemId);
+
+                // event handler again
+                editItem(itemId, item);
             });
         });
 
