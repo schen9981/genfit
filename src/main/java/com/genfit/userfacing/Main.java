@@ -85,9 +85,9 @@ public final class Main {
     OptionSet options = parser.parse(this.args);
     this.mainApp = new GenFitApp();
     this.repl = new MainREPL(this.mainApp);
-    if (options.has("gui")) {
-      this.runSparkServer((int) options.valueOf("port"));
-    }
+//    if (options.has("gui")) {
+    this.runSparkServer((int) options.valueOf("port"));
+//    }
 
     this.repl.runREPL();
     // if reached here, IREPL has exited
@@ -96,7 +96,8 @@ public final class Main {
   }
 
   private void runSparkServer(int port) {
-    Spark.port(port);
+    Spark.port(getHerokuAssignedPort());
+//    Spark.port(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
 
@@ -134,6 +135,15 @@ public final class Main {
     Spark.post("/deleteOutfit", new DeleteOutfitHandler(this.mainApp));
 
     Spark.post("/editItem", new EditItemHandler(this.mainApp));
+  }
+
+  public static int getHerokuAssignedPort() {
+    ProcessBuilder processBuilder = new ProcessBuilder();
+    if (processBuilder.environment().get("PORT") != null) {
+      return Integer.parseInt(processBuilder.environment().get("PORT"));
+    }
+    return 4567; // return default port if heroku-port isn't set (i.e. on
+                 // localhost)
   }
 
   /**
