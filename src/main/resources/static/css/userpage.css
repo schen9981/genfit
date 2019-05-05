@@ -49,6 +49,7 @@
 }
 
 #chart-1 {
+  background-color: white;
   margin-top: 0px;
   margin-bottom: 0px;
   margin-left: 0px;
@@ -56,6 +57,7 @@
 }
 
 #chart-2 {
+  background-color: white;
   margin-top: 0px;
   margin-bottom: 0px;
   margin-right: 0px;
@@ -74,6 +76,7 @@
     border-radius: 10px;
     margin-top: 2em;
     margin-bottom: 2em;
+    background-color: white;
 }
 
 #colors-container h3 {
