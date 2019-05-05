@@ -31,7 +31,7 @@ function generateSuggestionCards(listOfSuggestions) {
             || communityOutfitName === "") {
             communityOutfitName = "<em>Unnamed outfit</em>";
         }
-        let buttonHTML = '<div class="outfit-card"><button class="outfit" id="outfit-' + communityOutfitId + '">' + communityOutfitName + '</button></div>';
+        let buttonHTML = '<div class="outfit-card"><div class="outfit" id="outfit-' + communityOutfitId + '">' + communityOutfitName + '</div></div>';
         let modalHTML = '<div class="modal" id="modal-' + communityOutfitId + '">';
         modalHTML += '<div class="modal-content">';
         modalHTML += '<span class="close" id="close-' + communityOutfitId + '">&times;</span>';
@@ -68,6 +68,19 @@ function generateCompleteSuggestionContent(suggestion) {
 
     // post request to get outfit components as array
     $.post("/outfitComponents", postParams, responseJSON => {
+
+        let outerImg = JSON.parse(responseJSON).outer[8];
+        let topImg = JSON.parse(responseJSON).top[8];
+        let bottommImg = JSON.parse(responseJSON).bottom[8];
+        let shoesImg = JSON.parse(responseJSON).shoes[8];
+
+        document.getElementById("outfit-" + suggestion.communityOutfit.id).style.backgroundImage = "url(\""+outerImg+"\"), url(\""+topImg+"\"), url(\""+bottommImg+"\"), url(\""+shoesImg+"\")";
+        document.getElementById("outfit-"+suggestion.communityOutfit.id).style.backgroundPosition = "center center, right center, left center, center bottom";
+        document.getElementById("outfit-"+suggestion.communityOutfit.id).style.backgroundRepeat = "no-repeat";
+        document.getElementById("outfit-"+suggestion.communityOutfit.id).style.backgroundSize = "3em";
+
+
+
         let communityOutfitContent = '<div class="communityOutfit">';
         communityOutfitContent += generateItemContent(JSON.parse(responseJSON).outer, suggestion.communityOutfit.outer);
         communityOutfitContent += generateItemContent(JSON.parse(responseJSON).top, suggestion.communityOutfit.top);
@@ -134,6 +147,7 @@ function generateIncompleteSuggestionContent(suggestion) {
 
     let communityOutfitContent = "<h2>You have these items:</h2><div class='itemListContainer' id='userItems-" + communityOutfit.id + "'></div>";
     $('#modal-' + communityOutfit.id + ' .modal-content').append(communityOutfitContent);
+
     // console.log(userItems);
     Object.values(userItems).forEach(function (id) {
         let postParams = {
@@ -142,9 +156,19 @@ function generateIncompleteSuggestionContent(suggestion) {
         $.post("/singleItem", postParams, responseJSON => {
             let item = JSON.parse(responseJSON);
             let i = generateItemContent(item.item, id);
+            // console.log(item.item[8]);
             $('#userItems-' + communityOutfit.id).append(i);
+
+
+            if (document.getElementById("outfit-" + suggestion.communityOutfit.id).style.backgroundImage === "") {
+                document.getElementById("outfit-" + suggestion.communityOutfit.id).style.backgroundImage = 'url(\"' + item.item[8] + '\")';
+            } else {
+                document.getElementById("outfit-" + suggestion.communityOutfit.id).style.backgroundImage += ', url(\"' + item.item[8] + '\")';
+                // console.log(document.getElementById("outfit-" + suggestion.communityOutfit.id).style.backgroundImage);
+            }
         })
     });
+
 
 
     let communityOutfitContentt = "<h2>You need these items:</h2><div class='itemListContainer' id='stillNeeded-" + communityOutfit.id + "'></div>";
@@ -158,8 +182,24 @@ function generateIncompleteSuggestionContent(suggestion) {
             let item = JSON.parse(responseJSON);
             let i = generateItemContent(item.item, id);
             $('#stillNeeded-' + communityOutfit.id).append(i);
+
+            if (suggestion.communityOutfit.id === 79) {
+                console.log(item.item[8]);
+            }
+
+            if (document.getElementById("outfit-" + suggestion.communityOutfit.id).style.backgroundImage === "") {
+                document.getElementById("outfit-" + suggestion.communityOutfit.id).style.backgroundImage = 'url(\"' + item.item[8] + '\")';
+            } else {
+                document.getElementById("outfit-" + suggestion.communityOutfit.id).style.backgroundImage += ', url(\"' + item.item[8] + '\")';
+            }
         })
     });
+
+    document.getElementById("outfit-" + suggestion.communityOutfit.id).style.backgroundPosition = "center center, right center, left center, center bottom";
+    document.getElementById("outfit-" + suggestion.communityOutfit.id).style.backgroundRepeat = "no-repeat";
+    document.getElementById("outfit-" + suggestion.communityOutfit.id).style.backgroundSize = "3em";
+
+
 }
 
 function generateItemContent(item, id) {
