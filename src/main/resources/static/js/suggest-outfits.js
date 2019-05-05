@@ -83,11 +83,30 @@ function populateSuggestTabItems(compId, currTabId) {
 function addItemToOutfitSuggest(event) {
     if ($selected !== null) {
         let compDiv = document.getElementsByClassName("add-suggest")[currentSuggestTab - 1];
-        // TODO: change this to allow replacements
         compDiv.innerHTML = $selected.outerHTML;
+        // get current item div id
+        let itemId = $($selected.outerHTML).attr('id');
+        // add event listener to the new div
+        $('#' + itemId).on('click', function(e) {
+          // get id of parent div
+          let parent = $(this).parent().attr("id");
+          navigateToSuggestTab(event, determineParentNavId(parent));
+        })
         $selected = null;
         navigateToSuggestTab(event, 0);
     }
+}
+
+function determineParentNavId(parentId) {
+  if (parentId == 'outer-item') {
+    return 1;
+  } else if (parentId == 'top-item') {
+    return 2;
+  } else if (parentId == 'bottom-item') {
+    return 3;
+  } else if (parentId == 'shoes-item') {
+    return 4;
+  }
 }
 
 function getCompId(idName) {
@@ -121,6 +140,7 @@ function showSuggestTab(compId) {
         tabs[0].style.display = "flex";
         $selected = null;
         // hide and show appropriate buttons
+        document.getElementById('outfit-name-div').style.display = "flex";
         document.getElementById("addItemSuggest").style.display = "none";
         document.getElementById("backSuggest").style.display = "none";
         document.getElementById("addFromSuggest").style.display = "none";
@@ -160,6 +180,8 @@ function navigateToSuggestTab(event, tabInd) {
     let tabs = document.getElementsByClassName("tab-suggest");
     // hide the current tab
     tabs[currentSuggestTab].style.display = "none";
+    // hide the name div
+    document.getElementById('outfit-name-div').style.display = "none";
     // set current tab index to new tab index
     currentSuggestTab = tabInd;
     // show the correct tab
