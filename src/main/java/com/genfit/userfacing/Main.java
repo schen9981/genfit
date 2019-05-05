@@ -114,7 +114,7 @@ public final class Main {
     // Setup spark routes for main pages
 
 //    Spark.get("/", new UserPageHandler(this.mainApp), freeMarker);
-    Spark.get("/", new FrontpageHandler(), freeMarker);
+    Spark.get("/login", new FrontpageHandler(), freeMarker);
     Spark.get("/user", new UserPageHandler(this.mainApp), freeMarker);
     Spark.get("/items", new ItemPageHandler(this.mainApp), freeMarker);
     Spark.get("/outfits", new OutfitPageHandler(this.mainApp), freeMarker);
