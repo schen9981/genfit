@@ -56,7 +56,7 @@ public class Database {
   private final String getOutfitLikesSQL = "SELECT * FROM outfit WHERE id=?;";
   private final String getLikedOutfitIdsSQL = "SELECT * FROM user_liked WHERE"
       + " user_id=?";
-  private final String getOutfitsWithItemIdSQL = "SELECT * FROM outfit as a JOIN user_outfit as b WHERE a.id = b.outfit_id AND a.d = ? AND ('outer' = ? " + "OR top = ? OR bottom = ? OR feet = ?);";
+  private final String getOutfitsWithItemIdSQL = "SELECT * FROM outfit as a JOIN user_outfit as b WHERE a.id = b.outfit_id AND b.user_id = ? AND (a.outer = ? " + "OR a.top = ? OR a.bottom = ? OR a.feet = ?);";
 
   // Add Statements
   private final String addUserSQL = "INSERT INTO user (name, email, password)"
