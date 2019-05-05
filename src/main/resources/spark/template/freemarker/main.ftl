@@ -67,7 +67,7 @@
         </div>
 
         <div class="signout-div">
-            <a id="signout-img" href="/" onclick="logout()">Sign Out</a>
+            <a id="signout-img" href="/login" onclick="logout()">Sign Out</a>
         </div>
 
     </div>
