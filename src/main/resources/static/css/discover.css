@@ -155,7 +155,6 @@
 }
 
 .outfit {
-    border: 1px solid #d1d1d1;
     /*width: 100px;*/
     height: 100%;
     /*max-width: 100%;*/
@@ -167,9 +166,14 @@
     justify-content: center;
     font-weight: bold;
     border-radius: 10px 10px 0 0;
+    font-size: 20px;
+    padding-top: 5%;
+    border: rgb(221,221,221) solid 1px;
+
 }
 
 .outfit:hover {
+    cursor: pointer;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -178,7 +182,7 @@
     /*flex-flow: column;*/
     /*min-width: 200px;*/
     /*box-sizing: border-box;*/
-    height: 12em;
+    height: 15em;
     display: flex;
     flex-flow: column;
     justify-content: center;
@@ -189,6 +193,7 @@
     -moz-border-radius: 5px;
     border-radius: 5px;
     text-align: center;
+    /*padding-top: 5%;*/
 }
 
 .outfit-card p {
@@ -209,7 +214,8 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    border: black solid 1px;
+    /*border: black solid 1px;*/
+    border: rgb(221,221,221) solid 1px;
 }
 
 .like-button {

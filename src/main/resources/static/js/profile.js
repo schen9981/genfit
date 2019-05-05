@@ -197,15 +197,12 @@ function visualizeItemSeason(seasonsList) {
             labels: Object.keys(topTypeNumMap)
         },
         options: {
-            // title: {
-            //     display: true,
-            //     text: 'OUTER > TOP > BOTTOM > SHOES'
-            // },
             tooltips: {
                 callbacks: {
                     label: function(tooltipItem, data) {
                         let dataset = data.datasets[tooltipItem.datasetIndex];
-                        return dataset.label;
+                        let index = tooltipItem.index;
+                        return dataset.label+ ': ' + dataset.data[index];
                     }
                 }
             }

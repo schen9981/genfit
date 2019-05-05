@@ -28,7 +28,7 @@ function generateOutfitContent(outfit, id) {
         document.getElementById("outfit-" + id).style.backgroundImage = "url("+outerImg+"), url("+topImg+"), url("+bottommImg+"), url("+shoesImg+")";
         document.getElementById("outfit-"+id).style.backgroundPosition = "center center, right center, left center, center bottom";
         document.getElementById("outfit-"+id).style.backgroundRepeat = "no-repeat";
-        document.getElementById("outfit-"+id).style.backgroundSize = "25%";
+        document.getElementById("outfit-"+id).style.backgroundSize = "3em";
 
 
 
