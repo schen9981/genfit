@@ -97,10 +97,10 @@ public final class Main {
 
     runSparkServer();
 
-    this.repl.runREPL();
-    // if reached here, IREPL has exited
-    this.mainApp.getDb().closeConnection();
-    Spark.stop();
+//    this.repl.runREPL();
+//    // if reached here, IREPL has exited
+//    this.mainApp.getDb().closeConnection();
+//    Spark.stop();
   }
 
   private void runSparkServer() {
