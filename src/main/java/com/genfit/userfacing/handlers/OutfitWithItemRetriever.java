@@ -1,6 +1,7 @@
 package com.genfit.userfacing.handlers;
 
 import com.genfit.database.S3Connection;
+import com.genfit.proxy.UserProxy;
 import com.genfit.userfacing.GenFitApp;
 import com.genfit.userfacing.Main;
 import com.google.common.collect.ImmutableMap;
@@ -26,10 +27,13 @@ public class OutfitWithItemRetriever implements Route {
   public String handle(Request request, Response response) {
 
     QueryParamsMap qm = request.queryMap();
-    int id = Integer.parseInt(qm.value("id"));
+    int itemId = Integer.parseInt(qm.value("itemId"));
+    String username = qm.value("username");
     List<Integer> outfitIds = new ArrayList<>();
+    int userId;
     try {
-      outfitIds = this.genFitApp.getDb().getOutfitsWithItemId(id);
+      userId = new UserProxy(this.genFitApp.getDb(), username).getId();
+      outfitIds = this.genFitApp.getDb().getOutfitsWithItemId(userId, itemId);
     } catch (SQLException e) {
       e.printStackTrace();
     }

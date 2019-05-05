@@ -441,12 +441,14 @@ function deleteUserItem(itemId) {
 
         // let postParams = {}
         let postParams = {
-            id: itemId
+            itemId: itemId,
+            username: username
         };
 
         $.post("/getOutfitWithItem", postParams, responseJSON => {
 
             let outfitIds = JSON.parse(responseJSON).outfitIds;
+            console.log(outfitIds);
 
             if (outfitIds.length !== 0) {
                 let confrimation = confirm("Do you have " + outfitIds.length + " outfits with this item. " +
