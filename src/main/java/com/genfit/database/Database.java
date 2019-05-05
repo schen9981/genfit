@@ -56,8 +56,7 @@ public class Database {
   private final String getOutfitLikesSQL = "SELECT * FROM outfit WHERE id=?;";
   private final String getLikedOutfitIdsSQL = "SELECT * FROM user_liked WHERE"
       + " user_id=?";
-  private final String getOutfitsWithItemIdSQL = "SELECT * FROM outfit WHERE 'outer' = ? "
-      + "OR top = ? OR bottom = ? OR feet = ?;";
+  private final String getOutfitsWithItemIdSQL = "SELECT * FROM outfit as a JOIN user_outfit as b WHERE a.id = b.outfit_id AND a.d = ? AND ('outer' = ? " + "OR top = ? OR bottom = ? OR feet = ?);";
 
   // Add Statements
   private final String addUserSQL = "INSERT INTO user (name, email, password)"
@@ -737,13 +736,14 @@ public class Database {
     this.deleteUserOutfitPrep.executeUpdate();
   }
 
-  public synchronized List<Integer> getOutfitsWithItemId(int itemId)
+  public synchronized List<Integer> getOutfitsWithItemId(int userId, int itemId)
       throws SQLException {
 
-    this.getOutfitsWithItemIdPrep.setInt(1, itemId);
+    this.getOutfitsWithItemIdPrep.setInt(1, userId);
     this.getOutfitsWithItemIdPrep.setInt(2, itemId);
     this.getOutfitsWithItemIdPrep.setInt(3, itemId);
     this.getOutfitsWithItemIdPrep.setInt(4, itemId);
+    this.getOutfitsWithItemIdPrep.setInt(5, itemId);
     List<Integer> outfitIds = new ArrayList<>();
     ResultSet rs = this.getOutfitsWithItemIdPrep.executeQuery();
     while (rs.next()) {
