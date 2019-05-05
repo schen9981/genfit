@@ -226,7 +226,6 @@ button {
     text-align: center;
     font-weight: bold;
     height: 90%;
-    width: 100%;
     border-radius: 10px 10px 0 0;
     /*background-color: rgba(221,221,221, 0.5);*/
     border: 1px solid rgba(221,221,221);
@@ -249,6 +248,7 @@ button {
 }
 
 .outfit-card {
+    background-color: white;
     height: 30vh;
     display: flex;
     flex-flow: column;
@@ -258,7 +258,7 @@ button {
     margin: 1%;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 1.5em;
 }
 
@@ -289,26 +289,10 @@ button {
     background: white;
 }
 
-/* TODO: talk about this */
-/*.like-button:hover {*/
-/*    background: none;*/
-/*    color: #2196F3;*/
-/*}*/
-
-/*.like-button.liked:hover {*/
-/*  background: none;*/
-/*  color: gray;*/
-/*}*/
-
 .like-button.not-liked:hover {
     background: none;
     color: #2196F3;
 }
-
-/*.like-button:hover {*/
-/*    background: none;*/
-/*    color: #2196F3;*/
-/*}*/
 
 .like-button.liked {
     /*background: #2196F3;*/

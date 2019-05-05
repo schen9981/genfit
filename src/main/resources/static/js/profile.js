@@ -36,8 +36,27 @@ function displayItemCount(username) {
   };
   $.post("/userItems", postParams, responseJSON => {
     let userItems = JSON.parse(responseJSON).items;
+    let numOuter = 0;
+    let numTop = 0;
+    let numBottom = 0;
+    let numShoes = 0;
+    for (i = 0; i < userItems.length; i++) {
+      if (userItems[i][3] == 'OUTER') {
+        numOuter++;
+      } else if (userItems[i][3] == 'TOP') {
+        numTop++;
+      } else if (userItems[i][3] == 'BOTTOM') {
+        numBottom++;
+      } else if (userItems[i][3] == 'SHOES') {
+        numShoes++;
+      }
+    }
     document.getElementById('item-count').innerHTML = createStatCircle(userItems.length, 'items');
-  } )
+    document.getElementById('outer-count').innerHTML = createStatCircle(numOuter, 'outer');
+    document.getElementById('top-count').innerHTML = createStatCircle(numTop, 'tops');
+    document.getElementById('bottom-count').innerHTML = createStatCircle(numBottom, 'bottoms');
+    document.getElementById('shoes-count').innerHTML = createStatCircle(numShoes, 'shoes');
+  });
 }
 
 function displayItemsInfo(username) {
@@ -320,7 +339,7 @@ function visualizeFormality(formalityList) {
                     borderWidth: 2,
                     backgroundColor: "rgba(68,181,238,0.2)",
                     borderColor: "rgba(68,181,238,1)",
-                    pointBackgroundColor: "rgba(68,181,238,1)",  
+                    pointBackgroundColor: "rgba(68,181,238,1)",
                     pointBorderColor: "#fff",
                     data: Object.values(formalityPercentMap['BOTTOM'])
                 }, {

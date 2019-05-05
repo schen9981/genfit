@@ -2,6 +2,10 @@ body {
   font-family: 'Rubik', sans-serif;
 }
 
+.main {
+  background-color: #F5F5F5;
+}
+
 /* Top navigation */
 .top {
   background-color: #757575;

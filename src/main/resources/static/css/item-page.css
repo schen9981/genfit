@@ -206,6 +206,7 @@ div#items {
 }
 
 .item {
+    background-color: white;
     height: 12em;
     display: flex;
     flex-flow: column;

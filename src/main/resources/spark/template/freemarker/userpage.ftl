@@ -4,25 +4,37 @@
     <h1 class="name"></h1>
     <hr>
     <div class='stats'>
-      <div id="outfit-count">
+      <div id="overall">
+        <div id="outfit-count">
+        </div>
+        <div id="item-count">
+        </div>
       </div>
-      <div id="item-count">
+
+      <div id="type">
+        <div id="outer-count">
+        </div>
+        <div id="top-count">
+        </div>
+        <div id="bottom-count">
+        </div>
+        <div id="shoes-count">
+        </div>
       </div>
     </div>
     <div id="item-overview">
-        <h2>Items</h2>
-        <div class="chart-container">
+        <div class="chart-container" id="chart-1">
+            <h3>Item Season Distribution</h3>
             <canvas id="typePie"></canvas>
         </div>
-        <div class="chart-container">
+        <div class="chart-container" id="chart-2">
+            <h3>Item Formality Distribution</h3>
             <canvas id="formalityRadar"></canvas>
         </div>
-
-        <div id="colors-container">
-            <h3>Color Distribution of Your Closet</h3>
-            <div id="clothingGradient"></div>
-        </div>
-
+    </div>
+    <div id="colors-container">
+        <h3>Item Color Distribution</h3>
+        <div id="clothingGradient"></div>
     </div>
 
     <hr>
