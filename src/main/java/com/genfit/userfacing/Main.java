@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import freemarker.template.Configuration;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
 import spark.ExceptionHandler;
 import spark.Request;
 import spark.Response;
@@ -80,14 +81,21 @@ public final class Main {
     // Parse command line arguments
     OptionParser parser = new OptionParser();
     parser.accepts("gui");
-    parser.accepts("port").withRequiredArg().ofType(Integer.class)
-        .defaultsTo(DEFAULT_PORT);
+    OptionSpec<Integer> portSpec = parser.accepts("port").withRequiredArg()
+        .ofType(Integer.class).defaultsTo(DEFAULT_PORT);
     OptionSet options = parser.parse(this.args);
     this.mainApp = new GenFitApp();
     this.repl = new MainREPL(this.mainApp);
-//    if (options.has("gui")) {
-    this.runSparkServer((int) options.valueOf("port"));
-//    }
+////    if (options.has("gui")) {
+//    this.runSparkServer((int) options.valueOf("port"));
+////    }
+    if (options.has(portSpec)) {
+      Spark.port(options.valueOf(portSpec));
+    } else {
+      Spark.port(DEFAULT_PORT);
+    }
+
+    runSparkServer();
 
     this.repl.runREPL();
     // if reached here, IREPL has exited
@@ -95,7 +103,7 @@ public final class Main {
     Spark.stop();
   }
 
-  private void runSparkServer(int port) {
+  private void runSparkServer() {
     Spark.port(getHerokuAssignedPort());
 //    Spark.port(port);
     Spark.externalStaticFileLocation("src/main/resources/static");
