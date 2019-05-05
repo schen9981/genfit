@@ -124,7 +124,7 @@
         <version>2.0.8</version>
         <configuration>
             <jdkVersion>1.8</jdkVersion>
-            <appName>boggle_test</appName>
+            <appName>genfit</appName>
             <processTypes>
                 <!-- Tell Heroku how to launch your application -->
                 <web>java -jar ./target/javalin-heroku-example-1.0-jar-with-dependencies.jar</web>
