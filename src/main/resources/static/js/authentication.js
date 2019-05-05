@@ -2,7 +2,7 @@ let loginform = 0;
 let signupform = 1;
 let changepwdform = 2;
 
-if (window.location.pathname !== "/") {
+if (window.location.pathname !== "/login") {
     redirect();
 }
 
@@ -95,7 +95,7 @@ function getLoginStatus() {
 
 function redirect() {
     if (!getLoginStatus()) {
-        window.location.replace("/");
+        window.location.replace("/login");
     }
 }
 
@@ -121,7 +121,7 @@ function changePwd(username, currentPwd, newPwd) {
             $.post("/userform", postParameters, responseJSON => {
                 if (JSON.parse(responseJSON).success) {
                     alert("Password updated!");
-                    window.location.replace("/");
+                    window.location.replace("/login");
                 } else {
                     alert("Sorry, try again later!");
                 }
