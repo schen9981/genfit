@@ -12,6 +12,7 @@ import com.genfit.userfacing.handlers.DeleteOutfitHandler;
 import com.genfit.userfacing.handlers.DiscoverOutfitRetriever;
 import com.genfit.userfacing.handlers.DiscoverPageHandler;
 import com.genfit.userfacing.handlers.EditItemHandler;
+import com.genfit.userfacing.handlers.FrontpageHandler;
 import com.genfit.userfacing.handlers.ItemPageHandler;
 import com.genfit.userfacing.handlers.ItemSuggestionRetriever;
 import com.genfit.userfacing.handlers.LikedOutfitRetriever;
@@ -105,7 +106,7 @@ public final class Main {
     // Setup spark routes for main pages
 
 //    Spark.get("/", new UserPageHandler(this.mainApp), freeMarker);
-//    Spark.get("/", new FrontpageHandler(), freeMarker);
+    Spark.get("/", new FrontpageHandler(), freeMarker);
     Spark.get("/user", new UserPageHandler(this.mainApp), freeMarker);
     Spark.get("/items", new ItemPageHandler(this.mainApp), freeMarker);
     Spark.get("/outfits", new OutfitPageHandler(this.mainApp), freeMarker);
