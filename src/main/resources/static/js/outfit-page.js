@@ -25,7 +25,7 @@ function generateOutfitContent(outfit, id) {
         let topImg = JSON.parse(responseJSON).top[8];
         let bottommImg = JSON.parse(responseJSON).bottom[8];
         let shoesImg = JSON.parse(responseJSON).shoes[8];
-        document.getElementById("outfit-" + id).style.backgroundImage = "url("+outerImg+"), url("+topImg+"), url("+bottommImg+"), url("+shoesImg+")";
+        document.getElementById("outfit-" + id).style.backgroundImage = "url(\""+outerImg+"\"), url(\""+topImg+"\"), url(\""+bottommImg+"\"), url(\""+shoesImg+"\")";
         document.getElementById("outfit-"+id).style.backgroundPosition = "center center, right center, left center, center bottom";
         document.getElementById("outfit-"+id).style.backgroundRepeat = "no-repeat";
         document.getElementById("outfit-"+id).style.backgroundSize = "3em";
