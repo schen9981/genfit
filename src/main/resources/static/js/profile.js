@@ -359,7 +359,7 @@ function visualizeFormality(formalityList) {
 }
 
 $(document).ready(() => {
-    $('#user-tab-button').css("color", "white");
+    $("#user-tab-button" ).parent().css( "background-color", "#f1f1f1" );
     displayItemsInfo(localStorage.getItem('username'));
     displayOutfitsInfo(localStorage.getItem('username'));
     displayItemCount(localStorage.getItem('username'));

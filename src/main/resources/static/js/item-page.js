@@ -659,7 +659,7 @@ function uploadImageAndPost(username, file, postParams) {
 }
 
 $(document).ready(() => {
-    $('#items-tab-button').css("color", "white");
+    $("#items-tab-button" ).parent().css( "background-color", "#f1f1f1" );
     username = localStorage.username;
     displayUserItems(username);
     itemModalAnimation();
